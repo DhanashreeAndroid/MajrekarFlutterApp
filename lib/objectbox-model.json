@@ -1,0 +1,137 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:6636755008911549707",
+      "lastPropertyId": "22:782532491152360915",
+      "name": "EDetails",
+      "properties": [
+        {
+          "id": "1:1762073143439133799",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2834582806241126448",
+          "name": "dbId",
+          "type": 9
+        },
+        {
+          "id": "3:2772511510961918956",
+          "name": "wardNo",
+          "type": 9
+        },
+        {
+          "id": "4:1366990061502476744",
+          "name": "partNo",
+          "type": 9
+        },
+        {
+          "id": "5:5133627295665355016",
+          "name": "serialNo",
+          "type": 9
+        },
+        {
+          "id": "6:4352255438371112960",
+          "name": "cardNo",
+          "type": 9
+        },
+        {
+          "id": "7:1887852847113926454",
+          "name": "lnEnglish",
+          "type": 9
+        },
+        {
+          "id": "8:1058148144439741616",
+          "name": "fnEnglish",
+          "type": 9
+        },
+        {
+          "id": "9:1754694413920988681",
+          "name": "lnMarathi",
+          "type": 9
+        },
+        {
+          "id": "10:3888492938160347825",
+          "name": "fnMarathi",
+          "type": 9
+        },
+        {
+          "id": "11:8735143405934448995",
+          "name": "sex",
+          "type": 9
+        },
+        {
+          "id": "12:6137345959293516262",
+          "name": "age",
+          "type": 9
+        },
+        {
+          "id": "13:4591107189690788330",
+          "name": "houseNoEnglish",
+          "type": 9
+        },
+        {
+          "id": "14:5229266468593082086",
+          "name": "houseNoMarathi",
+          "type": 9
+        },
+        {
+          "id": "15:371378032518673098",
+          "name": "buildingNameEnglish",
+          "type": 9
+        },
+        {
+          "id": "16:7949129436597057609",
+          "name": "buildingNameMarathi",
+          "type": 9
+        },
+        {
+          "id": "17:2373184634195340912",
+          "name": "boothAddressEnglish",
+          "type": 9
+        },
+        {
+          "id": "18:9100316075312996990",
+          "name": "boothAddressMarathi",
+          "type": 9
+        },
+        {
+          "id": "19:2961089086583348719",
+          "name": "lang",
+          "type": 9
+        },
+        {
+          "id": "20:2904791910041164046",
+          "name": "color",
+          "type": 9
+        },
+        {
+          "id": "21:8976071726525648302",
+          "name": "shiftedDeath",
+          "type": 9
+        },
+        {
+          "id": "22:782532491152360915",
+          "name": "votedNonVoted",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:6636755008911549707",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

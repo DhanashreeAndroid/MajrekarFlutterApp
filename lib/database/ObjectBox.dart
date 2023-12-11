@@ -79,4 +79,31 @@ class ObjectBox {
 
   }
 
+  static Future<List<EDetails>> getFamilyVoters(String searchType, String surName, String houseNo, String buildingAddress) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    if(searchType.contains("Name")){
+      final query  = (box.query(EDetails_.fnEnglish.notEquals('')
+                                & EDetails_.lnEnglish.equals(surName)
+                                & EDetails_.houseNoEnglish.equals(houseNo)
+                                & EDetails_.buildingNameEnglish.equals(buildingAddress))..order(EDetails_.fnEnglish, flags:  Order.nullsLast )).build();
+      final output = query.find();
+      query.close();
+      store.close();
+      return output;
+    }else{
+      final query  = (box.query(EDetails_.lnEnglish.notEquals('')
+                                & EDetails_.lnEnglish.equals(surName)
+                                & EDetails_.houseNoEnglish.equals(houseNo)
+                                & EDetails_.buildingNameEnglish.equals(buildingAddress))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+      final output = query.find();
+      query.close();
+      store.close();
+      return output;
+    }
+
+
+  }
+
 }

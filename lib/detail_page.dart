@@ -2,23 +2,26 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/CommonWidget/customButton.dart';
+import 'package:majrekar_app/family_voter_list_page.dart';
 import 'package:majrekar_app/model/DataModel.dart';
+import 'package:majrekar_app/share_image.dart';
 import 'package:majrekar_app/voter_list_page.dart';
 
 import 'CommonWidget/showExitPopup.dart';
-import 'autosearch.dart';
 
 class DetailPage extends StatefulWidget {
   final EDetails data;
-  const DetailPage({Key? key, required this.data}) : super(key: key);
+  final String searchType;
+  const DetailPage({Key? key, required this.data, required this.searchType}) : super(key: key);
 
   @override
-  State<DetailPage> createState() => _DetailPageState(data);
+  State<DetailPage> createState() => _DetailPageState(data,searchType );
 }
 
 class _DetailPageState extends State<DetailPage> {
   EDetails data;
-  _DetailPageState(this.data);
+  String searchType;
+  _DetailPageState(this.data,this.searchType );
   TextEditingController mobileController = TextEditingController();
   int selectedOption = 1;
   bool selectedVoted = false;
@@ -325,7 +328,11 @@ class _DetailPageState extends State<DetailPage> {
                           color: Colors.transparent,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) =>  FamilyVoterListPage(searchType : searchType, surName:data.lnEnglish!, houseNo: data.houseNoEnglish!, buildingAddress: data.buildingNameEnglish! )));
+                      },
                       child: const Text(
                         "Family Search",
                         style: TextStyle(
@@ -401,7 +408,13 @@ class _DetailPageState extends State<DetailPage> {
                           color: Colors.transparent,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        List<EDetails> voterList = List<EDetails>.generate(1, (index) => data);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) =>  ShareImage(voterList: voterList, )));
+
+                      },
                       child: const Text(
                         "Share",
                         style: TextStyle(
@@ -661,7 +674,9 @@ class _DetailPageState extends State<DetailPage> {
           value: selectedShifted, onChanged: (bool? value) {
           setState(() {
             selectedShifted = value!;
-            selectedDeath = !value;
+            if(value == true) {
+              selectedDeath = !value;
+            }
           });
         },
         ),
@@ -690,7 +705,9 @@ class _DetailPageState extends State<DetailPage> {
       value: selectedDeath, onChanged: (bool? value) {
       setState(() {
         selectedDeath = value!;
-        selectedShifted = !value;
+        if(value == true) {
+          selectedShifted = !value;
+        }
       });
     },
     );

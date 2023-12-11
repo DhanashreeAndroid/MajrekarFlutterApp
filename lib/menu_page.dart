@@ -5,7 +5,6 @@ import 'package:majrekar_app/CommonWidget/customButton.dart';
 import 'package:majrekar_app/voter_list_page.dart';
 
 import 'CommonWidget/showExitPopup.dart';
-import 'autosearch.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);

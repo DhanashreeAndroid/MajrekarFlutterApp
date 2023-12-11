@@ -6,17 +6,26 @@ import 'package:majrekar_app/model/DataModel.dart';
 import 'database/ObjectBox.dart';
 import 'detail_page.dart';
 
-class VoterListPage extends StatefulWidget {
+class FamilyVoterListPage extends StatefulWidget {
   final String searchType;
-  const VoterListPage({Key? key ,required this.searchType}) : super(key: key);
+  final String surName;
+  final String houseNo;
+  final String buildingAddress;
+  const FamilyVoterListPage({Key? key ,required this.searchType,
+    required this.surName,
+    required this.houseNo,
+    required this.buildingAddress}) : super(key: key);
 
   @override
-  State<VoterListPage> createState() => _VoterListPageState(searchType);
+  State<FamilyVoterListPage> createState() => _FamilyVoterListPageState(searchType, surName, houseNo, buildingAddress);
 }
 
-class _VoterListPageState extends State<VoterListPage> {
+class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
   String searchType;
-  _VoterListPageState(this.searchType);
+   String surName;
+   String houseNo;
+   String buildingAddress;
+  _FamilyVoterListPageState(this.searchType,  this.surName, this.houseNo, this.buildingAddress);
   late List<EDetails> voterList  ;
   bool isLoading = false;
   // This list holds the data for the list view
@@ -30,7 +39,7 @@ class _VoterListPageState extends State<VoterListPage> {
 
   Future getData() async {
     setState(() => isLoading = true);
-    this.voterList = await ObjectBox.getAll(searchType);
+    this.voterList = await ObjectBox.getFamilyVoters(searchType, surName, houseNo, buildingAddress);
     // at the beginning, all users are shown
     _foundUsers = voterList;
     setState(() => isLoading = false);

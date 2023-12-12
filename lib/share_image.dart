@@ -15,7 +15,7 @@ import 'model/DataModel.dart';
 
 class ShareImage extends StatefulWidget {
   final List<EDetails> voterList;
-  const ShareImage({required this.voterList});
+  const ShareImage({super.key, required this.voterList});
 
   @override
   State<ShareImage> createState() => _ShareImageState();

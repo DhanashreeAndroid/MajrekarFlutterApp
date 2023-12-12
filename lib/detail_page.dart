@@ -4,6 +4,7 @@ import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/CommonWidget/customButton.dart';
 import 'package:majrekar_app/family_voter_list_page.dart';
 import 'package:majrekar_app/model/DataModel.dart';
+import 'package:majrekar_app/print_details.dart';
 import 'package:majrekar_app/share_image.dart';
 import 'package:majrekar_app/voter_list_page.dart';
 
@@ -370,7 +371,13 @@ class _DetailPageState extends State<DetailPage> {
                           color: Colors.transparent,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        List<EDetails> voterList = List<EDetails>.generate(1, (index) => data);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) =>  PrintDetails(voterList: voterList, )));
+
+                      },
                       child: const Text(
                         "Print",
                         style: TextStyle(

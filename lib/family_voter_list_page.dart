@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/model/DataModel.dart';
+import 'package:majrekar_app/print_details.dart';
+import 'package:majrekar_app/share_image.dart';
 import 'package:telephony/telephony.dart';
 
 import 'CommonWidget/show_snak_bar.dart';
@@ -43,7 +45,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
 
   Future getData() async {
     setState(() => isLoading = true);
-    this.voterList = await ObjectBox.getFamilyVoters(searchType, surName, houseNo, buildingAddress);
+    voterList = await ObjectBox.getFamilyVoters(searchType, surName, houseNo, buildingAddress);
     setState(() => isLoading = false);
   }
 
@@ -93,6 +95,13 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
                 style: TextStyle(fontSize: 24),
               ),
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            customPrintShareButton(),
+            const SizedBox(
+              height: 10,
+            ),
             customMobileNumber(),
             const SizedBox(
               height: 10,
@@ -134,6 +143,104 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
      );
    },
  );
+
+  Padding customPrintShareButton() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      child: Row(
+        children: <Widget>[
+
+          Flexible(
+            flex: 2,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      gradient: const LinearGradient(colors: [
+                        Color.fromRGBO(0, 0, 0, 1),
+                        Color.fromRGBO(0, 0, 0, .6),
+                      ])),
+                  child: SizedBox(
+                    width: 200,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        side: const BorderSide(
+                          width: 1.0,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) =>  PrintDetails(voterList: voterList, )));
+
+                      },
+                      child: const Text(
+                        "Print",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      gradient: const LinearGradient(colors: [
+                        Color.fromRGBO(0, 0, 0, 1),
+                        Color.fromRGBO(0, 0, 0, .6),
+                      ])),
+                  child: SizedBox(
+                    width: 200,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        side: const BorderSide(
+                          width: 1.0,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) =>  ShareImage(voterList: voterList, )));
+
+                      },
+                      child: const Text(
+                        "Share",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Padding customMobileNumber() {
     return Padding(

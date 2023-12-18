@@ -214,6 +214,15 @@ class _ShareImageState extends State<ShareImage> {
       ),
     );
   }
+  SizedBox lastDivider(double screenWidth) {
+    return SizedBox(
+      height: 2,
+      width: screenWidth,
+      child: const DecoratedBox(
+        decoration: BoxDecoration(color: Colors.grey),
+      ),
+    );
+  }
 
   Padding customAgeGender(String value, double screenWidth) {
     return Padding(
@@ -363,7 +372,7 @@ class _ShareImageState extends State<ShareImage> {
           const SizedBox(
             height: 5,
           ),
-          divider(screenWidth)
+          lastDivider(screenWidth)
         ],
       ),
     );

@@ -365,6 +365,15 @@ class _PrintDetailsState extends State<PrintDetails> {
     );
   }
 
+  SizedBox lastDivider(double screenWidth) {
+    return SizedBox(
+      height: 2,
+      width: screenWidth,
+      child: const DecoratedBox(
+        decoration: BoxDecoration(color: Colors.grey),
+      ),
+    );
+  }
   Padding customAgeGender(String value, double screenWidth) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -513,7 +522,7 @@ class _PrintDetailsState extends State<PrintDetails> {
           const SizedBox(
             height: 5,
           ),
-          divider(screenWidth)
+          lastDivider(screenWidth)
         ],
       ),
     );

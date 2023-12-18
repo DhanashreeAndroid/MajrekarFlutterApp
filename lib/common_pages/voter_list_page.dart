@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 
-import 'database/ObjectBox.dart';
+import '../database/ObjectBox.dart';
 import 'detail_page.dart';
 
 class VoterListPage extends StatefulWidget {

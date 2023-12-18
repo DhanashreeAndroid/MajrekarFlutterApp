@@ -15,8 +15,8 @@ import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import 'CommonWidget/widget_to_image.dart';
-import 'model/DataModel.dart';
+import '../CommonWidget/widget_to_image.dart';
+import '../model/DataModel.dart';
 
 class PrintDetails extends StatefulWidget {
   final List<EDetails> voterList;

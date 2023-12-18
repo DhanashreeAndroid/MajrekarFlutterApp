@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/controller/MainController.dart';
 import 'package:majrekar_app/database/ObjectBox.dart';
-import 'package:majrekar_app/menu_page.dart';
+import 'package:majrekar_app/menu_pages/menu_page.dart';
 
 import 'CommonWidget/commonHeader.dart';
 import 'CommonWidget/utility.dart';

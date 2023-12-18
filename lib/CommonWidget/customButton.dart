@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../voter_list_page.dart';
+import '../common_pages/voter_list_page.dart';
 
 Widget customButton(BuildContext context, String label){
   return Padding(

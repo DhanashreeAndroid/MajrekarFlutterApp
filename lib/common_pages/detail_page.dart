@@ -2,13 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
-import 'package:majrekar_app/family_voter_list_page.dart';
+import 'package:majrekar_app/common_pages/family_voter_list_page.dart';
 import 'package:majrekar_app/model/DataModel.dart';
-import 'package:majrekar_app/print_details.dart';
-import 'package:majrekar_app/share_image.dart';
+import 'package:majrekar_app/common_pages/print_details.dart';
+import 'package:majrekar_app/common_pages/share_image.dart';
 import 'package:telephony/telephony.dart';
 
-import 'CommonWidget/show_snak_bar.dart';
+import '../CommonWidget/show_snak_bar.dart';
 
 
 class DetailPage extends StatefulWidget {

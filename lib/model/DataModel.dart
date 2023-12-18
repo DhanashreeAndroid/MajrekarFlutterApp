@@ -81,53 +81,53 @@ class EDetails {
   EDetails.fromJson(Map<String, dynamic> json) {
 
     dbId                  = json['Id'].toString();
-    wardNo                = json['WardNo'];
-    partNo                = json['PartNo'];
-    serialNo              = json['SerialNo'];
-    cardNo                = json['CardNo'];
-    lnEnglish             = json['LN_English'];
-    fnEnglish             = json['FN_English'];
-    lnMarathi             = json['LN_Marathi'];
-    fnMarathi             = json['FN_Marathi'];
-    sex                   = json['Sex'];
-    age                   = json['Age'];
-    houseNoEnglish        = json['HouseNo_English'];
-    houseNoMarathi        = json['HouseNo_Marathi'];
-    buildingNameEnglish   = json['BuildingName_English'];
-    buildingNameMarathi   = json['BuildingName_marathi'];
-    boothAddressEnglish   = json['EnglishBoothAddress'];
-    boothAddressMarathi   = json['MarathiBoothAddress'];
-    lang                  = json['Lang'];
-    color                 = json['Color'];
-    shiftedDeath          = json['Shifted_Death'];
-    votedNonVoted         = json['Voted_NonVoted'];
+    wardNo                = json['wardno'];
+    partNo                = json['partno'];
+    serialNo              = json['serialno'];
+    cardNo                = json['cardno'];
+    lnEnglish             = json['ln_english'];
+    fnEnglish             = json['fn_english'];
+    lnMarathi             = json['ln_marathi'];
+    fnMarathi             = json['fn_marathi'];
+    sex                   = json['sex'];
+    age                   = json['age'];
+    houseNoEnglish        = json['houseno_english'];
+    houseNoMarathi        = json['houseno_marathi'];
+    buildingNameEnglish   = json['buildingname_english'];
+    buildingNameMarathi   = json['buildingname_marathi'];
+    boothAddressEnglish   = json['english_booth_address'];
+    boothAddressMarathi   = json['marathi_booth_address'];
+    lang                  = json['lang'];
+    color                 = json['color'];
+    shiftedDeath          = json['shifted_death'];
+    votedNonVoted         = json['voted_nonvoted'];
 
 
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['Id']= dbId;
-    data['WardNo']= wardNo;
-    data['PartNo']=partNo;
-    data['SerialNo']=serialNo;
-    data['CardNo']=cardNo;
-    data['LN_English']=lnEnglish;
-    data['FN_English']=fnEnglish;
-    data['LN_Marathi']=lnMarathi;
-    data['FN_Marathi']=fnMarathi;
-    data['Sex']=sex;
-    data['Age']=age;
-    data['HouseNo_English']=houseNoEnglish;
-    data['HouseNo_Marathi']=houseNoMarathi;
-    data['BuildingName_English']=buildingNameEnglish;
-    data['BuildingName_marathi']=buildingNameMarathi;
-    data['EnglishBoothAddress']=boothAddressEnglish;
-    data['MarathiBoothAddress']=boothAddressMarathi;
-    data['Lang']=lang;
-    data['Color']=color;
-    data['Shifted_Death']=shiftedDeath;
-    data['Voted_NonVoted']=votedNonVoted;
+    data['id']= dbId;
+    data['wardno']= wardNo;
+    data['partno']=partNo;
+    data['serialno']=serialNo;
+    data['cardno']=cardNo;
+    data['ln_english']=lnEnglish;
+    data['fn_english']=fnEnglish;
+    data['ln_marathi']=lnMarathi;
+    data['fn_marathi']=fnMarathi;
+    data['sex']=sex;
+    data['age']=age;
+    data['houseno_english']=houseNoEnglish;
+    data['houseno_marathi']=houseNoMarathi;
+    data['buildingname_english']=buildingNameEnglish;
+    data['buildingname_marathi']=buildingNameMarathi;
+    data['english_booth_address']=boothAddressEnglish;
+    data['marathi_booth_address']=boothAddressMarathi;
+    data['lang']=lang;
+    data['color']=color;
+    data['shifted_death']=shiftedDeath;
+    data['voted_nonvoted']=votedNonVoted;
     return data;
   }
 }

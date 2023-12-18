@@ -141,7 +141,11 @@ class _PrintDetailsState extends State<PrintDetails> {
                                 print('please select device');
                               }
                             },
-                            child: const Text('connect'),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(width: 2.0, color: Colors.black38),
+                            ),
+                            child: const Text('Connect', style: TextStyle( fontSize: 18, fontWeight: FontWeight.normal),),
+
                           ),
                           const SizedBox(width: 10.0),
                           OutlinedButton(
@@ -151,13 +155,51 @@ class _PrintDetailsState extends State<PrintDetails> {
                               });
                               await bluetoothPrint.disconnect();
                             }:null,
-                            child: const Text('disconnect'),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(width: 2.0, color: Colors.black38),
+                            ),
+                            child: const Text('Disconnect', style: TextStyle( fontSize: 18, fontWeight: FontWeight.normal),),
+                          ),
+                          const SizedBox(width: 10.0),
+                          StreamBuilder<bool>(
+                            stream: bluetoothPrint.isScanning,
+                            initialData: false,
+                            builder: (c, snapshot) {
+                              if (snapshot.data == true) {
+                                return  OutlinedButton(
+                                  onPressed:() =>  {
+                                    bluetoothPrint.stopScan()
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(width: 2.0, color: Colors.black38),
+                                  ),
+                                  child: const Text('Search', style: TextStyle( fontSize: 18, fontWeight: FontWeight.normal),),
+                                );
+
+                              } else {
+                                return OutlinedButton(
+                                  onPressed:() =>  {
+                                  bluetoothPrint.startScan(timeout: const Duration(seconds: 4))
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(width: 2.0, color: Colors.black38),
+                                  ),
+                                  child: const Text('Search', style: TextStyle( fontSize: 18, fontWeight: FontWeight.normal),),
+                                );
+                               }
+                            },
                           ),
                         ],
                       ),
                       const Divider(),
                       const SizedBox(
                         height: 10,
+                      ),
+                      const AutoSizeText(
+                        'Voter Details',
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +216,11 @@ class _PrintDetailsState extends State<PrintDetails> {
                               .map((e) => printData(e))
                               .toList();
                         }:null,
-                        child: const Text('Print'),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(width: 2.0, color: Colors.black38),
+                        ),
+                        child: const Text('Print', style: TextStyle( fontSize: 18, color: Colors.black,fontWeight: FontWeight.normal),),
+
                       ),
                      /* OutlinedButton(
                         child: Text('print label(tsc)'),
@@ -208,23 +254,7 @@ class _PrintDetailsState extends State<PrintDetails> {
             ),
           ),
         ),
-        floatingActionButton: StreamBuilder<bool>(
-          stream: bluetoothPrint.isScanning,
-          initialData: false,
-          builder: (c, snapshot) {
-            if (snapshot.data == true) {
-              return FloatingActionButton(
-                child: Icon(Icons.stop),
-                onPressed: () => bluetoothPrint.stopScan(),
-                backgroundColor: Colors.red,
-              );
-            } else {
-              return FloatingActionButton(
-                  child: Icon(Icons.search),
-                  onPressed: () => bluetoothPrint.startScan(timeout: Duration(seconds: 4)));
-            }
-          },
-        ),
+
       );
 
 
@@ -301,13 +331,8 @@ class _PrintDetailsState extends State<PrintDetails> {
                 fontWeight: FontWeight.normal),
           ),
           const SizedBox(
-            height: 5,
+            height: 10,
           ),
-          marathiValue.isNotEmpty
-              ? getMarathiTextBox(marathiValue)
-              : const SizedBox(
-                  height: 5,
-                ),
           divider(screenWidth)
         ],
       ),

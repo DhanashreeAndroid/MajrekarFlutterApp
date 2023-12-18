@@ -1,14 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
-import 'package:majrekar_app/CommonWidget/customButton.dart';
 import 'package:majrekar_app/family_voter_list_page.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 import 'package:majrekar_app/print_details.dart';
 import 'package:majrekar_app/share_image.dart';
-import 'package:majrekar_app/voter_list_page.dart';
+import 'package:telephony/telephony.dart';
 
-import 'CommonWidget/showExitPopup.dart';
+import 'CommonWidget/show_snak_bar.dart';
+
 
 class DetailPage extends StatefulWidget {
   final EDetails data;
@@ -28,6 +29,92 @@ class _DetailPageState extends State<DetailPage> {
   bool selectedVoted = false;
   bool selectedShifted = false;
   bool selectedDeath = false;
+  String _message = "";
+  final telephony = Telephony.instance;
+  final _recipientNumberformKey = GlobalKey<FormState>();
+
+
+  void showRequestStatus(SendStatus status) {
+    switch (status) {
+      case SendStatus.SENT:
+        ShowSnackBar.showSnackBar(context, ShowSnackBar.sent);
+        return;
+      case SendStatus.DELIVERED:
+        ShowSnackBar.showSnackBar(context, ShowSnackBar.delivered);
+        return;
+      default:
+        ShowSnackBar.showSnackBar(
+          context,
+          ShowSnackBar.failed,
+          backGroundColor: Colors.red,
+        );
+        return;
+    }
+  }
+
+  Future<void> openDialer() async {
+    try {
+      final isRecipientNumberValid =
+      _recipientNumberformKey.currentState!.validate();
+      FocusScope.of(context).unfocus();
+      if (isRecipientNumberValid ) {
+        _recipientNumberformKey.currentState!.save();
+        //to vibrate the phone
+        await HapticFeedback.lightImpact();
+        telephony.openDialer(mobileController.text.trim());
+        return;
+      } else {
+        await HapticFeedback.heavyImpact();
+        return;
+      }
+    } catch (e) {
+      ShowSnackBar.showSnackBar(context, 'Error occured while sending SMS.');
+    }
+
+  }
+
+  Future<void> sendDirectSmS(String message) async {
+    try {
+      final isRecipientNumberValid =
+      _recipientNumberformKey.currentState!.validate();
+      FocusScope.of(context).unfocus();
+      if (isRecipientNumberValid ) {
+        _recipientNumberformKey.currentState!.save();
+        //to vibrate the phone
+        await HapticFeedback.lightImpact();
+
+        final permissionsGranted =
+            await telephony.requestPhoneAndSmsPermissions ?? false;
+
+        if (permissionsGranted) {
+          ShowSnackBar.showSnackBar(context, 'Sending SMS...');
+          await telephony.sendSms(
+            to: mobileController.text.trim(),
+            message: message,
+            statusListener: (SendStatus status) {
+              showRequestStatus(status);
+            },
+          );
+          //clearTextField(ignorePhoneNumber: true);
+        } else {
+          ShowSnackBar.showSnackBar(context, 'SMS permission is not allowed');
+        }
+        return;
+      } else {
+        await HapticFeedback.heavyImpact();
+        return;
+      }
+    } catch (e) {
+      ShowSnackBar.showSnackBar(context, 'Error occured while sending SMS.');
+    }
+  }
+
+  @override
+  void dispose() {
+    mobileController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -445,13 +532,35 @@ class _DetailPageState extends State<DetailPage> {
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 2.0, 0.0),
       child: Row(
         children: <Widget>[
-          const Flexible(
+           Flexible(
             flex: 3,
             child:
-            TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Mobile No',
+            Form(
+              key: _recipientNumberformKey,
+              child: TextFormField(
+                controller: mobileController,
+                autofillHints: const [AutofillHints.telephoneNumber],
+                keyboardType: TextInputType.phone,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter mobile number";
+                  }
+                  return null;
+                },
+                onSaved: (String? phoneNumber) {},
+                decoration: InputDecoration(
+                  hintText: 'Enter mobile number',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
               ),
             ),
           ),
@@ -460,7 +569,7 @@ class _DetailPageState extends State<DetailPage> {
             flex: 2,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+                padding: const EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
@@ -470,7 +579,7 @@ class _DetailPageState extends State<DetailPage> {
                         Color.fromRGBO(255, 255, 255, .6),
                       ])),
                   child: SizedBox(
-                    width: 160,
+                    width: 140,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -480,7 +589,9 @@ class _DetailPageState extends State<DetailPage> {
                           color: Colors.transparent,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: ()  {
+
+                      },
                       child: const Text(
                         "Save",
                         style: TextStyle(
@@ -498,7 +609,7 @@ class _DetailPageState extends State<DetailPage> {
             flex: 1,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 0, 10.0, 0),
+                padding: const EdgeInsets.fromLTRB(0.0, 0, 5.0, 0),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
@@ -508,13 +619,25 @@ class _DetailPageState extends State<DetailPage> {
                         Color.fromRGBO(255, 255, 255, .6),
                       ])),
                   child:
-                  const SizedBox(
+                  SizedBox(
                     width: 50,
-                    child: Icon(
-                      Icons.call,
-                      color: Colors.black,
-                      size: 30.0,
-                      semanticLabel: 'Text to announce in accessibility modes',
+                    child: IconButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        side: const BorderSide(
+                          width: 0.0,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      onPressed: () async {
+                        await openDialer();
+                      },
+                      icon:  const Icon(
+                        Icons.call,
+                        color: Colors.black,
+                        size: 25.0,
+                      ),
                     ),
                   ),
                 ),
@@ -525,7 +648,7 @@ class _DetailPageState extends State<DetailPage> {
             flex: 1,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 0, 10.0, 0),
+                padding: const EdgeInsets.fromLTRB(0.0, 0, 0.0, 0),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
@@ -535,13 +658,20 @@ class _DetailPageState extends State<DetailPage> {
                         Color.fromRGBO(255, 255, 255, .6),
                       ])),
                   child:
-                  const SizedBox(
+                  SizedBox(
                     width: 50,
-                    child: Icon(
-                      Icons.message,
-                      color: Colors.black,
-                      size: 30.0,
-                      semanticLabel: 'Text to announce in accessibility modes',
+                    child: IconButton(
+                      onPressed: ()async {
+                        String strMessage1 = "Name:${data.lnEnglish!} ${data.fnEnglish!}\nAssembly No:${data.wardNo!}\nPart No:${data.partNo!}\nSerial No:${data.serialNo!}";
+                        String strMessage2 = "Voting Center Address:${data.boothAddressEnglish!}";
+                        await sendDirectSmS(strMessage1);
+                        await sendDirectSmS(strMessage2);
+                      },
+                      icon: const Icon(
+                        Icons.message,
+                        color: Colors.black,
+                        size: 25.0,
+                      ),
                     ),
                   ),
                 ),
@@ -552,7 +682,6 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
-
 
   Column getRedGreenOrangeRadioButton( double screenWidth) {
     return Column(children: [

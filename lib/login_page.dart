@@ -198,8 +198,8 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                     ),
                                     onPressed: () async {
-                                     // apiCall(userNameController.text, passwordController.text);
-                                      addOrUpdateNote(items);
+                                      apiCall(userNameController.text, passwordController.text);
+                                      // addOrUpdateNote(items);
                                     },
                                     child:const Text("Login",
                                       style: TextStyle(color: Colors.white,

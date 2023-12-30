@@ -2,9 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/CommonWidget/customButton.dart';
-import 'package:majrekar_app/common_pages/voter_list_page.dart';
 
-import '../CommonWidget/showExitPopup.dart';
 
 class VoterNameSearch extends StatefulWidget {
   const VoterNameSearch({Key? key}) : super(key: key);

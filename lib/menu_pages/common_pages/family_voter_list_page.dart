@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
+import 'package:majrekar_app/menu_pages/common_pages/print_details.dart';
+import 'package:majrekar_app/menu_pages/common_pages/share_image.dart';
 import 'package:majrekar_app/model/DataModel.dart';
-import 'package:majrekar_app/common_pages/print_details.dart';
-import 'package:majrekar_app/common_pages/share_image.dart';
 import 'package:telephony/telephony.dart';
 
-import '../CommonWidget/show_snak_bar.dart';
-import '../database/ObjectBox.dart';
+import '../../CommonWidget/show_snak_bar.dart';
+import '../../database/ObjectBox.dart';
 import 'detail_page.dart';
 
 class FamilyVoterListPage extends StatefulWidget {
@@ -177,7 +177,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  PrintDetails(voterList: voterList, )));
+                                (context) =>  PrintDetails(voterList: voterList,searchType: searchType, )));
 
                       },
                       child: const Text(
@@ -220,7 +220,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  ShareImage(voterList: voterList, )));
+                                (context) =>  ShareImage(voterList: voterList, searchType: searchType,)));
 
                       },
                       child: const Text(

@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:majrekar_app/menu_pages/buildingWiseSearch/building_wise_search.dart';
 
-import '../common_pages/voter_list_page.dart';
+import '../menu_pages/common_pages/voter_list_page.dart';
 
 Widget customButton(BuildContext context, String label){
   return Padding(
@@ -29,9 +30,16 @@ Widget customButton(BuildContext context, String label){
             ),
           ),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder:
-                    (context) =>  VoterListPage(searchType : label)));
+            if(label.contains("Building")){
+              Navigator.push(context,
+                  MaterialPageRoute(builder:
+                      (context) =>  const BuildingWiseSearch()));
+            }else{
+              Navigator.push(context,
+                  MaterialPageRoute(builder:
+                      (context) =>  VoterListPage(searchType : label,houseNumber: "",buildingName: "",)));
+            }
+
           },
           child: Text(label,
             style: const TextStyle(color: Colors.black,

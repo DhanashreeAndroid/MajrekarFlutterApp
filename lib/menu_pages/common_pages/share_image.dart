@@ -10,12 +10,13 @@ import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../CommonWidget/widget_to_image.dart';
-import '../model/DataModel.dart';
+import '../../CommonWidget/widget_to_image.dart';
+import '../../model/DataModel.dart';
 
 class ShareImage extends StatefulWidget {
   final List<EDetails> voterList;
-  const ShareImage({super.key, required this.voterList});
+  final String searchType;
+  const ShareImage({super.key, required this.voterList,required this.searchType});
 
   @override
   State<ShareImage> createState() => _ShareImageState();
@@ -132,8 +133,8 @@ class _ShareImageState extends State<ShareImage> {
 
   Column generateWidgets(EDetails data, double screenWidth) {
     return Column(children: <Widget>[
-      customData("Name", "${data.lnEnglish!} ${data.fnEnglish!}",
-          "${data.lnMarathi!} ${data.fnMarathi!}", screenWidth),
+      customData("Name", getEnglishName(data),
+          getMarathiName(data), screenWidth),
       customData(
           "Address",
           "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
@@ -145,6 +146,23 @@ class _ShareImageState extends State<ShareImage> {
       customWardPartSerial(
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
     ]);
+  }
+
+  String getEnglishName(EDetails data){
+    if(widget.searchType.contains("Surname")){
+      return "${data.lnEnglish!} ${data.fnEnglish!}";
+    }else{
+      return "${data.fnEnglish!} ${data.lnEnglish!}";
+    }
+
+  }
+  String getMarathiName(EDetails data){
+    if(widget.searchType.contains("Surname")){
+      return "${data.lnMarathi!} ${data.fnMarathi!}";
+    }else{
+      return "${data.fnMarathi!} ${data.lnMarathi!}";
+    }
+
   }
 
   Padding customData(String title, String englishValue, String marathiValue,

@@ -15,12 +15,12 @@ import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../CommonWidget/widget_to_image.dart';
-import '../model/DataModel.dart';
+import '../../model/DataModel.dart';
 
 class PrintDetails extends StatefulWidget {
   final List<EDetails> voterList;
-  const PrintDetails({super.key, required this.voterList});
+  final String searchType;
+  const PrintDetails({super.key, required this.voterList,required this.searchType});
 
   @override
   State<PrintDetails> createState() => _PrintDetailsState();
@@ -287,8 +287,8 @@ class _PrintDetailsState extends State<PrintDetails> {
 
   Column generateWidgets(EDetails data, double screenWidth) {
     return Column(children: <Widget>[
-      customData("Name", "${data.lnEnglish!} ${data.fnEnglish!}",
-          "${data.lnMarathi!} ${data.fnMarathi!}", screenWidth),
+      customData("Name", getEnglishName(data),
+          getMarathiName(data), screenWidth),
       customData(
           "Address",
           "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
@@ -301,7 +301,22 @@ class _PrintDetailsState extends State<PrintDetails> {
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
     ]);
   }
+  String getEnglishName(EDetails data){
+    if(widget.searchType.contains("Surname")){
+      return "${data.lnEnglish!} ${data.fnEnglish!}";
+    }else{
+      return "${data.fnEnglish!} ${data.lnEnglish!}";
+    }
 
+  }
+  String getMarathiName(EDetails data){
+    if(widget.searchType.contains("Surname")){
+      return "${data.lnMarathi!} ${data.fnMarathi!}";
+    }else{
+      return "${data.fnMarathi!} ${data.lnMarathi!}";
+    }
+
+  }
   Padding customData(String title, String englishValue, String marathiValue,
       double screenWidth) {
     return Padding(

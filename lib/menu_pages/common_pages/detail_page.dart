@@ -2,13 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
-import 'package:majrekar_app/common_pages/family_voter_list_page.dart';
+import 'package:majrekar_app/menu_pages/common_pages/print_details.dart';
+import 'package:majrekar_app/menu_pages/common_pages/share_image.dart';
 import 'package:majrekar_app/model/DataModel.dart';
-import 'package:majrekar_app/common_pages/print_details.dart';
-import 'package:majrekar_app/common_pages/share_image.dart';
 import 'package:telephony/telephony.dart';
 
-import '../CommonWidget/show_snak_bar.dart';
+import '../../CommonWidget/show_snak_bar.dart';
+import 'family_voter_list_page.dart';
 
 
 class DetailPage extends StatefulWidget {
@@ -130,8 +130,8 @@ class _DetailPageState extends State<DetailPage> {
               child: Column(
                 children: <Widget>[
                   getCommonHeader(context),
-                  customData("Name", "${data.lnEnglish!} ${data.fnEnglish!}",
-                      "${data.lnMarathi!} ${data.fnMarathi!}", screenWidth),
+                  customData("Name", getEnglishName(),
+                      getMarathiName() , screenWidth),
                   customData(
                       "Address",
                       "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
@@ -162,6 +162,22 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
+  String getEnglishName(){
+    if(searchType.contains("Surname")){
+      return "${data.lnEnglish!} ${data.fnEnglish!}";
+    }else{
+      return "${data.fnEnglish!} ${data.lnEnglish!}";
+    }
+
+  }
+  String getMarathiName(){
+    if(searchType.contains("Surname")){
+      return "${data.lnMarathi!} ${data.fnMarathi!}";
+    }else{
+      return "${data.fnMarathi!} ${data.lnMarathi!}";
+    }
+
+  }
   Padding customData(String title, String englishValue, String marathiValue,
       double screenWidth) {
     return Padding(
@@ -462,7 +478,7 @@ class _DetailPageState extends State<DetailPage> {
                         List<EDetails> voterList = List<EDetails>.generate(1, (index) => data);
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  PrintDetails(voterList: voterList, )));
+                                (context) =>  PrintDetails(voterList: voterList,searchType: searchType, )));
 
                       },
                       child: const Text(
@@ -506,7 +522,7 @@ class _DetailPageState extends State<DetailPage> {
                         List<EDetails> voterList = List<EDetails>.generate(1, (index) => data);
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  ShareImage(voterList: voterList, )));
+                                (context) =>  ShareImage(voterList: voterList,searchType: searchType, )));
 
                       },
                       child: const Text(

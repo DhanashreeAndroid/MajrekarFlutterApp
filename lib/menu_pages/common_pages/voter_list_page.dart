@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 
-import '../database/ObjectBox.dart';
+import '../../database/ObjectBox.dart';
 import 'detail_page.dart';
 
 class VoterListPage extends StatefulWidget {
   final String searchType;
-  const VoterListPage({Key? key ,required this.searchType}) : super(key: key);
+  final String houseNumber;
+  final String buildingName;
+  const VoterListPage({Key? key ,required this.searchType, required this.houseNumber, required this.buildingName}) : super(key: key);
 
   @override
-  State<VoterListPage> createState() => _VoterListPageState(searchType);
+  State<VoterListPage> createState() => _VoterListPageState();
 }
 
 class _VoterListPageState extends State<VoterListPage> {
-  String searchType;
-  _VoterListPageState(this.searchType);
   late List<EDetails> voterList  ;
   bool isLoading = false;
   // This list holds the data for the list view
@@ -30,7 +30,11 @@ class _VoterListPageState extends State<VoterListPage> {
 
   Future getData() async {
     setState(() => isLoading = true);
-    this.voterList = await ObjectBox.getAll(searchType);
+    if(widget.searchType == "BuildingWise"){
+      this.voterList = await ObjectBox.getAllBuildingWiseData(widget.houseNumber, widget.buildingName);
+    }else {
+      this.voterList = await ObjectBox.getAll(widget.searchType);
+    }
     // at the beginning, all users are shown
     _foundUsers = voterList;
     setState(() => isLoading = false);
@@ -98,12 +102,12 @@ class _VoterListPageState extends State<VoterListPage> {
                           (index+1).toString(),
                         style: const TextStyle(fontSize: 24),
                       ),
-                      title: getTextViewEnglish(index, searchType),
-                      subtitle: getTextViewMarathi(index, searchType),
+                      title: getTextViewEnglish(index, widget.searchType),
+                      subtitle: getTextViewMarathi(index, widget.searchType),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  DetailPage(data : _foundUsers[index], searchType: searchType,)));
+                                (context) =>  DetailPage(data : _foundUsers[index], searchType: widget.searchType,)));
                       },
                     ),
                   ),

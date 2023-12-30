@@ -18,6 +18,7 @@ class BuildingWiseSearch extends StatefulWidget {
 }
 
 class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
+  final ScrollController _controller = ScrollController();
   PartNo optionItemSelected = PartNo(id: "All");
   bool isLoading = false;
   PartNoDropListModel? partNoDropListModel;
@@ -43,6 +44,13 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
     setState(() {
       _foundUsers = results;
     });
+  }
+
+  void _scrollUp() {
+    _controller.animateTo(0,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   @override
@@ -84,6 +92,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                             optionItemSelected = optionItem;
                             setState(() {
                               _runFilter(optionItemSelected.id);
+                              _scrollUp();
                             });
                           },
                         ),
@@ -101,6 +110,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                 Expanded(
                   child: _foundUsers.isNotEmpty
                       ? ListView.builder(
+                    controller: _controller,
                     itemCount: _foundUsers.length,
                     itemBuilder: (context, index) => Card(
                       key: ValueKey(_foundUsers[index].id),

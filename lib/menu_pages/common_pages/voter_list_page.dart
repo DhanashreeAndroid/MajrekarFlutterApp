@@ -8,9 +8,8 @@ import 'detail_page.dart';
 
 class VoterListPage extends StatefulWidget {
   final String searchType;
-  final String houseNumber;
   final String buildingName;
-  const VoterListPage({Key? key ,required this.searchType, required this.houseNumber, required this.buildingName}) : super(key: key);
+  const VoterListPage({Key? key ,required this.searchType, required this.buildingName}) : super(key: key);
 
   @override
   State<VoterListPage> createState() => _VoterListPageState();
@@ -31,7 +30,7 @@ class _VoterListPageState extends State<VoterListPage> {
   Future getData() async {
     setState(() => isLoading = true);
     if(widget.searchType == "BuildingWise"){
-      this.voterList = await ObjectBox.getAllBuildingWiseData(widget.houseNumber, widget.buildingName);
+      this.voterList = await ObjectBox.getAllBuildingWiseData(widget.buildingName);
     }else {
       this.voterList = await ObjectBox.getAll(widget.searchType);
     }

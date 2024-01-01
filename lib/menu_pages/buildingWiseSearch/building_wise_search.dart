@@ -5,6 +5,7 @@ import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
 import 'package:majrekar_app/menu_pages/buildingWiseSearch/part_no_drop_list_item.dart';
 
+import '../../CommonWidget/utility.dart';
 import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../common_pages/voter_list_page.dart';
@@ -22,8 +23,8 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
   PartNo optionItemSelected = PartNo(id: "All");
   bool isLoading = false;
   PartNoDropListModel? partNoDropListModel;
-  List<EDetails> voterList = [];
-  List<EDetails> _foundUsers = [];
+  List<EDetails> buildingList = [];
+  List<EDetails> _foundBuildingList = [];
   @override
   void initState() {
     super.initState();
@@ -31,10 +32,11 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
   }
 
   Future getData() async {
+
     setState(() => isLoading = true);
     partNoDropListModel = await ObjectBox.getPartNo();
-    voterList = await ObjectBox.getPartWiseBuildings(optionItemSelected.id);
-    _foundUsers = voterList;
+    buildingList = await ObjectBox.getPartWiseBuildings(optionItemSelected.id);
+    _foundBuildingList = buildingList;
 
     setState(() => isLoading = false);
   }
@@ -42,7 +44,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
     List<EDetails> results = await ObjectBox.getPartWiseBuildings(partNo);
 
     setState(() {
-      _foundUsers = results;
+      _foundBuildingList = results;
     });
   }
 
@@ -55,6 +57,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
         onWillPop: () async {
       Navigator.pop(context);
@@ -98,9 +101,9 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                         ),
                       )
                       :
-                      const SizedBox(
-                        width: 10,
-                      )
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                   ],
                 ),
@@ -108,12 +111,12 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                   height: 10,
                 ),
                 Expanded(
-                  child: _foundUsers.isNotEmpty
+                  child: _foundBuildingList.isNotEmpty
                       ? ListView.builder(
                     controller: _controller,
-                    itemCount: _foundUsers.length,
+                    itemCount: _foundBuildingList.length,
                     itemBuilder: (context, index) => Card(
-                      key: ValueKey(_foundUsers[index].id),
+                      key: ValueKey(_foundBuildingList[index]),
                       color: const Color.fromRGBO(230, 238, 255, 1),
                       elevation: 4,
                       margin: const EdgeInsets.symmetric(vertical: 1),
@@ -122,20 +125,18 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                           (index+1).toString(),
                           style: const TextStyle(fontSize: 24),
                         ),
-                        title: Text("${_foundUsers[index].houseNoEnglish} ${_foundUsers[index].buildingNameEnglish}"),
-                        subtitle: Text("${_foundUsers[index].houseNoMarathi} ${_foundUsers[index].buildingNameMarathi}"),
+                        title: Text(_foundBuildingList[index].buildingNameEnglish!),
+                        subtitle: Text(_foundBuildingList[index].buildingNameMarathi!),
                         onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) =>  VoterListPage(searchType : 'BuildingWise',
-                                  houseNumber: _foundUsers[index].houseNoEnglish!,
-                                  buildingName: _foundUsers[index].buildingNameEnglish!,)));
+                                  buildingName: _foundBuildingList[index].buildingNameEnglish!,)));
                         },
                       ),
                     ),
                   )
-                      : const Text(
-                    'No results found',
-                    style: TextStyle(fontSize: 24),
+                      : const Center(
+                    child: CircularProgressIndicator(),
                   ),
                 ),
 

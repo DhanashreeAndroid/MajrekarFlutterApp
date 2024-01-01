@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/voter_name_search.dart';
 
+import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
 
 class MenuPage extends StatefulWidget {
@@ -23,241 +24,82 @@ class _MenuPageState extends State<MenuPage> {
       child: Scaffold(
           backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
           body: SafeArea(
-            child: Column(
-              children: [
-                getCommonHeader(context),
-                const SizedBox(height: 40,),
-                Image.asset("images/logom.png",
-                    height: 100,
-                    width: 100),
-                const SizedBox(height: 20,),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: GridView(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 30,
-                     crossAxisSpacing: 30
-                      ),
-                      scrollDirection: Axis.vertical,
-                      children: [
-                    GestureDetector(
-                      onTap:() {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder:
-                                (context) => const VoterNameSearch()));
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: const Center(
-                          child: Text(
-                            "Search Voters\nName",
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
-                                 ),
-                          ),
-                        ),
-
-                      ),
-                    ), //1
-                    GestureDetector(
-                    onTap:() {
-
-                    },
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          gradient: const LinearGradient(colors: [
-                            Color.fromRGBO(143, 148, 251, 1),
-                            Color.fromRGBO(143, 148, 251, .6),
-                          ])),
-                      child: const Center(
-                        child: Text(
-                          "Easy\nSearch",
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ),
-
-                    ),
-                      ),
-                    GestureDetector(
-                      onTap:() {
-
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: const Center(
-                          child: Text(
-                            "Alphabetical\nVoters List",
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap:() {
-
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: const Center(
-                          child: Text(
-                            "Voting Making\nReport",
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap:() {
-
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: const Center(
-                          child: Text(
-                            "Surname\nCounter",
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap:() {
-
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: const Center(
-                          child: Text(
-                            "Voters Slip\n(Print/Share)",
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap:() {
-
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: const Center(
-                          child: Text(
-                            "Contact Number\nSaved",
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap:() {
-
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: const Center(
-                          child: Text(
-                            "Language\nReport",
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-
-                      ),
-                    ),
-                      ],
-                    ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  getCommonHeader(context),
+                  const SizedBox(height: 40,),
+                  Image.asset("images/logom.png",
+                      height: 100,
+                      width: 100),
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Search Voters Name',
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Easy Search',
+                  ),
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Alphabetical Voters List',
+                  ),
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Voting Making Report',
+                  ),
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Surname Counter',
+                  ),
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Voters Slip (Print/Share)',
+                  ),
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Contact Number Saved',
+                  ),
+                  const SizedBox(height: 20,),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) => const VoterNameSearch()));
+                    }, label: 'Language Report',
+                  ),
+                  
+
+                ],
+              ),
             ),
           )),
     );

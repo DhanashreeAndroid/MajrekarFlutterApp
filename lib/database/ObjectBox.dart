@@ -82,12 +82,11 @@ class ObjectBox {
 
   }
 
-  static Future<List<EDetails>> getAllBuildingWiseData(String houseNo, String buildingName) async {
+  static Future<List<EDetails>> getAllBuildingWiseData(String buildingName) async {
     final store = await openStore();
     var box = store.box<EDetails>();
 
       final query  = (box.query(EDetails_.lnEnglish.notEquals('')
-                                & EDetails_.houseNoEnglish.equals(houseNo)
                                 & EDetails_.buildingNameEnglish.equals(buildingName))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
       final output = query.find();
       query.close();
@@ -145,20 +144,27 @@ class ObjectBox {
   static Future<List<EDetails>> getPartWiseBuildings(String partNo) async {
     final store = await openStore();
     var box = store.box<EDetails>();
+    List<EDetails> listBuilding = [];
 
     if(partNo == "All"){
       final query  = (box.query(EDetails_.buildingNameEnglish.notEquals(''))..order(EDetails_.buildingNameEnglish, flags:  Order.nullsLast )).build();
-      final output = query.find();
+      Stream<EDetails> stream = query.stream();
+      await stream.forEach((EDetails user) => listBuilding.add(EDetails(buildingNameEnglish: '${user.buildingNameEnglish}', buildingNameMarathi: '${user.buildingNameMarathi}')));
+      var seen = <String>{};
+      listBuilding = listBuilding.where((element) => seen.add(element.buildingNameEnglish!)).toList();
       query.close();
       store.close();
-      return output;
+      return listBuilding;
     }else{
       final query  = (box.query(EDetails_.buildingNameEnglish.notEquals('')
                                 & EDetails_.partNo.equals(partNo))..order(EDetails_.buildingNameEnglish, flags:  Order.nullsLast )).build();
-      final output = query.find();
+      Stream<EDetails> stream = query.stream();
+      await stream.forEach((EDetails user) => listBuilding.add(EDetails(buildingNameEnglish: '${user.buildingNameEnglish}', buildingNameMarathi: '${user.buildingNameMarathi}')));
+      var seen = <String>{};
+      listBuilding = listBuilding.where((element) => seen.add(element.buildingNameEnglish!)).toList();
       query.close();
       store.close();
-      return output;
+      return listBuilding;
     }
 
 

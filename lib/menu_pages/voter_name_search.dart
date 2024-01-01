@@ -1,7 +1,9 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
-import 'package:majrekar_app/CommonWidget/customButton.dart';
+
+import '../CommonWidget/commonButton.dart';
+import 'buildingWiseSearch/building_wise_search.dart';
+import 'common_pages/voter_list_page.dart';
 
 
 class VoterNameSearch extends StatefulWidget {
@@ -31,11 +33,30 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                   height: 100,
                       width: 100),
                   const SizedBox(height: 50,),
-                  customButton(context, "Surname wise Search"),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "",)));
+                    }, label: 'Surname wise Search',
+                  ),
+
                   const SizedBox(height: 20,),
-                  customButton(context, "Name wise Search"),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) =>  const VoterListPage(searchType : "Name wise Search" ,buildingName: "",)));
+                    }, label: 'Name wise Search',
+                  ),
                   const SizedBox(height: 20,),
-                  customButton(context, "Building wise Search")
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) =>  const BuildingWiseSearch()));
+                    }, label: 'Building wise Search',
+                  ),
 
                 ],
               ),

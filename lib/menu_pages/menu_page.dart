@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
+import 'package:majrekar_app/menu_pages/easy_search.dart';
 import 'package:majrekar_app/menu_pages/voter_name_search.dart';
 
 import '../CommonWidget/commonButton.dart';
@@ -45,7 +46,7 @@ class _MenuPageState extends State<MenuPage> {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
+                              (context) => const EasySearch()));
                     }, label: 'Easy Search',
                   ),
                   const SizedBox(height: 20,),

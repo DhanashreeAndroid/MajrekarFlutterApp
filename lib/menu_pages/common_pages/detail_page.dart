@@ -17,19 +17,16 @@ class DetailPage extends StatefulWidget {
   const DetailPage({Key? key, required this.data, required this.searchType}) : super(key: key);
 
   @override
-  State<DetailPage> createState() => _DetailPageState(data,searchType );
+  State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-  EDetails data;
-  String searchType;
-  _DetailPageState(this.data,this.searchType );
+
   TextEditingController mobileController = TextEditingController();
   int selectedOption = 1;
   bool selectedVoted = false;
   bool selectedShifted = false;
   bool selectedDeath = false;
-  String _message = "";
   final telephony = Telephony.instance;
   final _recipientNumberformKey = GlobalKey<FormState>();
 
@@ -134,14 +131,14 @@ class _DetailPageState extends State<DetailPage> {
                       getMarathiName() , screenWidth),
                   customData(
                       "Address",
-                      "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
-                      "${data.houseNoMarathi!} ${data.buildingNameMarathi!}",
+                      "${widget.data.houseNoEnglish!} ${widget.data.buildingNameEnglish!}",
+                      "${widget.data.houseNoMarathi!} ${widget.data.buildingNameMarathi!}",
                       screenWidth),
-                  customAgeGender("${data.age!} / ${data.sex!}", screenWidth),
-                  customData("Voting Center Address", data.boothAddressEnglish!,
-                      data.boothAddressMarathi!, screenWidth),
+                  customAgeGender("${widget.data.age!} / ${widget.data.sex!}", screenWidth),
+                  customData("Voting Center Address", widget.data.boothAddressEnglish!,
+                      widget.data.boothAddressMarathi!, screenWidth),
                   customWardPartSerial(
-                      data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
+                      widget.data.wardNo!, widget.data.partNo!, widget.data.serialNo!, screenWidth),
                   customPrintShareButton(),
                   const SizedBox(
                     height: 10,
@@ -163,18 +160,18 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   String getEnglishName(){
-    if(searchType.contains("Surname")){
-      return "${data.lnEnglish!} ${data.fnEnglish!}";
+    if(widget.searchType.contains("Surname")){
+      return "${widget.data.lnEnglish!} ${widget.data.fnEnglish!}";
     }else{
-      return "${data.fnEnglish!} ${data.lnEnglish!}";
+      return "${widget.data.fnEnglish!} ${widget.data.lnEnglish!}";
     }
 
   }
   String getMarathiName(){
-    if(searchType.contains("Surname")){
-      return "${data.lnMarathi!} ${data.fnMarathi!}";
+    if(widget.searchType.contains("Surname")){
+      return "${widget.data.lnMarathi!} ${widget.data.fnMarathi!}";
     }else{
-      return "${data.fnMarathi!} ${data.lnMarathi!}";
+      return "${widget.data.fnMarathi!} ${widget.data.lnMarathi!}";
     }
 
   }
@@ -338,7 +335,7 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       width: 150,
                       child: Center(
                         child: AutoSizeText(
@@ -355,9 +352,9 @@ class _DetailPageState extends State<DetailPage> {
               Flexible(
                   flex: 1,
                   child: Column(children: <Widget>[
-                    Container(
+                    const SizedBox(
                       width: 150,
-                      child: const Center(
+                      child: Center(
                         child: AutoSizeText(
                           "Serial No",
                           maxLines: 1,
@@ -368,7 +365,7 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       width: 150,
                       child: Center(
                         child: AutoSizeText(
@@ -435,7 +432,7 @@ class _DetailPageState extends State<DetailPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  FamilyVoterListPage(searchType : searchType, surName:data.lnEnglish!, houseNo: data.houseNoEnglish!, buildingAddress: data.buildingNameEnglish! )));
+                                (context) =>  FamilyVoterListPage(searchType : widget.searchType, surName:widget.data.lnEnglish!, houseNo: widget.data.houseNoEnglish!, buildingAddress: widget.data.buildingNameEnglish! )));
                       },
                       child: const Text(
                         "Family Search",
@@ -475,10 +472,10 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       onPressed: () {
-                        List<EDetails> voterList = List<EDetails>.generate(1, (index) => data);
+                        List<EDetails> voterList = List<EDetails>.generate(1, (index) => widget.data);
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  PrintDetails(voterList: voterList,searchType: searchType, )));
+                                (context) =>  PrintDetails(voterList: voterList,searchType: widget.searchType, )));
 
                       },
                       child: const Text(
@@ -519,10 +516,10 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       onPressed: () {
-                        List<EDetails> voterList = List<EDetails>.generate(1, (index) => data);
+                        List<EDetails> voterList = List<EDetails>.generate(1, (index) => widget.data);
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  ShareImage(voterList: voterList,searchType: searchType, )));
+                                (context) =>  ShareImage(voterList: voterList,searchType: widget.searchType, )));
 
                       },
                       child: const Text(
@@ -678,8 +675,8 @@ class _DetailPageState extends State<DetailPage> {
                     width: 50,
                     child: IconButton(
                       onPressed: ()async {
-                        String strMessage1 = "Name:${data.lnEnglish!} ${data.fnEnglish!}\nAssembly No:${data.wardNo!}\nPart No:${data.partNo!}\nSerial No:${data.serialNo!}";
-                        String strMessage2 = "Voting Center Address:${data.boothAddressEnglish!}";
+                        String strMessage1 = "Name:${widget.data.lnEnglish!} ${widget.data.fnEnglish!}\nAssembly No:${widget.data.wardNo!}\nPart No:${widget.data.partNo!}\nSerial No:${widget.data.serialNo!}";
+                        String strMessage2 = "Voting Center Address:${widget.data.boothAddressEnglish!}";
                         await sendDirectSmS(strMessage1);
                         await sendDirectSmS(strMessage2);
                       },

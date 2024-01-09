@@ -119,8 +119,6 @@ class ObjectBox {
       store.close();
       return output;
     }
-
-
   }
 
   static Future<PartNoDropListModel> getPartNo() async {
@@ -166,7 +164,20 @@ class ObjectBox {
       store.close();
       return listBuilding;
     }
+  }
 
+  static Future<List<EDetails>> getEasySearchData(String firstName, String lastName) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    final query  = (box.query(EDetails_.lnEnglish.contains(lastName)
+                              & EDetails_.fnEnglish.contains(firstName))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output;
 
   }
+
+
 }

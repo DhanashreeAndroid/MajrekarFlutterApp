@@ -23,85 +23,98 @@ class _MenuPageState extends State<MenuPage> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  getCommonHeader(context),
-                  const SizedBox(height: 40,),
-                  Image.asset("images/logom.png",
-                      height: 100,
-                      width: 100),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
-                    }, label: 'Search Voters Name',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const EasySearch()));
-                    }, label: 'Easy Search',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
-                    }, label: 'Alphabetical Voters List',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
-                    }, label: 'Voting Making Report',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
-                    }, label: 'Surname Counter',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
-                    }, label: 'Voters Slip (Print/Share)',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
-                    }, label: 'Contact Number Saved',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) => const VoterNameSearch()));
-                    }, label: 'Language Report',
-                  ),
-                  
-
-                ],
+          body: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/background.jpg'),
+                      fit: BoxFit.fitHeight),
+                ),
               ),
-            ),
+              Container(
+                color: const Color.fromRGBO(255, 255, 255, 0.50),
+              ),
+              SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      getCommonHeader(context),
+                      const SizedBox(height: 40,),
+                      Image.asset("images/logom.png",
+                          height: 100,
+                          width: 100),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Search Voters Name',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const EasySearch()));
+                        }, label: 'Easy Search',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Alphabetical Voters List',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Voting Making Report',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Surname Counter',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Voters Slip (Print/Share)',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Contact Number Saved',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Language Report',
+                      ),
+
+
+                    ],
+                  ),
+                ),
+              ),
+            ],
           )),
     );
   }

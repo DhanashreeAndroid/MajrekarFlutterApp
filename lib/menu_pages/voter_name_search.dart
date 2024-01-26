@@ -22,45 +22,58 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
       Navigator.pop(context);
       return false;
     }, child: Scaffold(
-          backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  getCommonHeader(context),
-                  const SizedBox(height: 40,),
-                  Image.asset("images/logom.png",
-                  height: 100,
-                      width: 100),
-                  const SizedBox(height: 50,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "",)));
-                    }, label: 'Surname wise Search',
-                  ),
-
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) =>  const VoterListPage(searchType : "Name wise Search" ,buildingName: "",)));
-                    }, label: 'Name wise Search',
-                  ),
-                  const SizedBox(height: 20,),
-                  CustomButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder:
-                              (context) =>  const BuildingWiseSearch()));
-                    }, label: 'Building wise Search',
-                  ),
-
-                ],
+          body: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/background.jpg'),
+                      fit: BoxFit.fitHeight),
+                ),
               ),
-            ),
+              Container(
+                color: const Color.fromRGBO(255, 255, 255, 0.50),
+              ),
+              SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      getCommonHeader(context),
+                      const SizedBox(height: 40,),
+                      Image.asset("images/logom.png",
+                      height: 100,
+                          width: 100),
+                      const SizedBox(height: 50,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "",)));
+                        }, label: 'Surname wise Search',
+                      ),
+
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) =>  const VoterListPage(searchType : "Name wise Search" ,buildingName: "",)));
+                        }, label: 'Name wise Search',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) =>  const BuildingWiseSearch()));
+                        }, label: 'Building wise Search',
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            ],
           )
       )
     );

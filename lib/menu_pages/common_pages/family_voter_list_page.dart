@@ -59,7 +59,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
     },
     child: SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
+        backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: Column(
           children: [
             getCommonHeader(context),
@@ -72,8 +72,8 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
                 itemCount: voterList.length,
                 itemBuilder: (context, index) => Card(
                   key: ValueKey(voterList[index].id),
-                  color: const Color.fromRGBO(230, 238, 255, 1),
-                  elevation: 4,
+                  color: const Color.fromRGBO(218,222,224, 1),
+                  elevation: 1,
                   margin: const EdgeInsets.symmetric(vertical: 1),
                   child: ListTile(
                     leading: Text(

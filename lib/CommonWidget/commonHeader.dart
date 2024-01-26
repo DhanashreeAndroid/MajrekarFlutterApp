@@ -5,40 +5,51 @@ import 'package:flutter/material.dart';
 Widget getCommonHeader(BuildContext context){
   double screenWidth = MediaQuery.of(context).size.width;
   return Container(
-    height: 100,
+    height: 140,
     width: screenWidth,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(1),
         gradient: const LinearGradient(
             colors: [
-              Color.fromRGBO(143, 148, 251, 1),
-              Color.fromRGBO(143, 148, 251, .6),
+              Color.fromRGBO(218,222,224, 1),
+              Color.fromRGBO(218,222,224, .6),
             ]
         )
     ),
     child: Column(
-      children:  const [
-        SizedBox(height: 10,),
-        AutoSizeText("Majrekar's Voters Management System",
-          maxLines: 1,
-          style: TextStyle(color: Colors.black,
-              fontSize: 22,
+      children:   [
+        const SizedBox(height: 10,),
+        const Text("MAJREKAR'S",
+          style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
+              fontSize: 50,
+              fontFamily: 'Calibri',
               fontWeight: FontWeight.bold)
           ,),
-        AutoSizeText("Search Mobile Software",
-          maxLines: 1,
-          style: TextStyle(color: Colors.black,
-              fontSize: 20,
+        const Text("Voters Management System",
+          style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
+              fontSize: 25,
+              fontFamily: 'Calibri',
               fontWeight: FontWeight.bold)
           ,),
-        AutoSizeText("Contact - 9892862864/9867262864",
-          maxLines: 1,
-          style: TextStyle(color: Colors.black,
-              fontSize: 20,
+        const Text("Contact - 9892862864/9867262864",
+          style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
+              fontSize: 25,
+              fontFamily: 'Calibri',
               fontWeight: FontWeight.bold)
-          ,)
-
+          ,),
+        const SizedBox(height: 5,),
+        divider(screenWidth)
       ],
+    ),
+  );
+}
+
+SizedBox divider(double screenWidth) {
+  return SizedBox(
+    height: 1,
+    width: screenWidth,
+    child: const DecoratedBox(
+      decoration: BoxDecoration(color: Colors.white),
     ),
   );
 }

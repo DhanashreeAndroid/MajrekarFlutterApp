@@ -15,8 +15,8 @@ class CustomButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               gradient: const LinearGradient(
                   colors: [
-                    Color.fromRGBO(143, 148, 251, 1),
-                    Color.fromRGBO(143, 148, 251, .6),
+                    Color.fromRGBO(218,222,224, 1),
+                    Color.fromRGBO(218,222,224, .6),
                   ]
               )
           ),
@@ -27,13 +27,13 @@ class CustomButton extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 side: const BorderSide(
-                  width: 1.0,
-                  color: Colors.transparent,
+                  width: 2.0,
+                  color: Colors.black38,
                 ),
               ),
               onPressed: onPressed,
               child: Text(label,
-                style: const TextStyle(color: Colors.black,
+                style: const TextStyle(color: Color.fromRGBO(7,53,250, 1),
                     fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),

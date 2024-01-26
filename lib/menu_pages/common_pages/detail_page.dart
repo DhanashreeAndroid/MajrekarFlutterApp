@@ -121,7 +121,7 @@ class _DetailPageState extends State<DetailPage> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
+          backgroundColor: const Color.fromRGBO(218,222,224, 1),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(

@@ -63,7 +63,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
       Navigator.pop(context);
       return false;
     }, child: Scaffold(
-          backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
+          backgroundColor: const Color.fromRGBO(218,222,224, 1),
           body: SafeArea(
             child: Column(
               children: <Widget>[
@@ -117,7 +117,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                     itemCount: _foundBuildingList.length,
                     itemBuilder: (context, index) => Card(
                       key: ValueKey(_foundBuildingList[index]),
-                      color: const Color.fromRGBO(230, 238, 255, 1),
+                      color: const Color.fromRGBO(218,222,224, 1),
                       elevation: 4,
                       margin: const EdgeInsets.symmetric(vertical: 1),
                       child: ListTile(

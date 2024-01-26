@@ -68,56 +68,54 @@ class _VoterListPageState extends State<VoterListPage> {
     },
     child: SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
-        body: Container(
-          child: Column(
-            children: [
-              getCommonHeader(context),
-              const SizedBox(
-                height: 5,
+        backgroundColor: const Color.fromRGBO(218,222,224, 1),
+        body: Column(
+          children: [
+            getCommonHeader(context),
+            const SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                onChanged: (value) => _runFilter(value),
+                decoration: const InputDecoration(
+                    labelText: 'Search', suffixIcon: Icon(Icons.search)),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: TextField(
-                  onChanged: (value) => _runFilter(value),
-                  decoration: const InputDecoration(
-                      labelText: 'Search', suffixIcon: Icon(Icons.search)),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                child: _foundUsers.isNotEmpty
-                    ? ListView.builder(
-                  itemCount: _foundUsers.length,
-                  itemBuilder: (context, index) => Card(
-                    key: ValueKey(_foundUsers[index].id),
-                    color: const Color.fromRGBO(230, 238, 255, 1),
-                    elevation: 4,
-                    margin: const EdgeInsets.symmetric(vertical: 1),
-                    child: ListTile(
-                      leading: Text(
-                          (index+1).toString(),
-                        style: const TextStyle(fontSize: 24),
-                      ),
-                      title: getTextViewEnglish(index, widget.searchType),
-                      subtitle: getTextViewMarathi(index, widget.searchType),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder:
-                                (context) =>  DetailPage(data : _foundUsers[index], searchType: widget.searchType,)));
-                      },
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Expanded(
+              child: _foundUsers.isNotEmpty
+                  ? ListView.builder(
+                itemCount: _foundUsers.length,
+                itemBuilder: (context, index) => Card(
+                  key: ValueKey(_foundUsers[index].id),
+                  color: const Color.fromRGBO(218,222,224, 1),
+                  elevation: 4,
+                  margin: const EdgeInsets.symmetric(vertical: 1),
+                  child: ListTile(
+                    leading: Text(
+                        (index+1).toString(),
+                      style: const TextStyle(fontSize: 24),
                     ),
+                    title: getTextViewEnglish(index, widget.searchType),
+                    subtitle: getTextViewMarathi(index, widget.searchType),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder:
+                              (context) =>  DetailPage(data : _foundUsers[index], searchType: widget.searchType,)));
+                    },
                   ),
-                )
-                    : const Text(
-                  'No results found',
-                  style: TextStyle(fontSize: 24),
                 ),
+              )
+                  : const Text(
+                'No results found',
+                style: TextStyle(fontSize: 24),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     ),

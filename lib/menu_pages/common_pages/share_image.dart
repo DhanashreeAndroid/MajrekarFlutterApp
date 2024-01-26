@@ -30,6 +30,7 @@ class _ShareImageState extends State<ShareImage> {
     const double radius = 0;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: SafeArea(
           child: SingleChildScrollView(
       child: Column(
@@ -52,8 +53,7 @@ class _ShareImageState extends State<ShareImage> {
                         borderRadius: const BorderRadius.horizontal(
                           left: Radius.circular(radius),
                         ),
-                        child: Image.network(
-                          'https://media.istockphoto.com/id/1309409153/vector/conceptual-illustration-of-political-parties-campaigning-for-vote-in-front-of-a-huge-hand.jpg?s=1024x1024&w=is&k=20&c=UPLGZ2jRgr8WPxVQxRj-fqG17dadN3RmYzKsS3Rya90=',
+                        child: Image.asset("images/sample.jpg",
                           width: screenWidth,
                           height: 200,
                           fit: BoxFit.cover,

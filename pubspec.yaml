@@ -94,6 +94,9 @@ flutter:
     - family: LatoRegular
       fonts:
         - asset: fonts/Lato-Regular.ttf
+    - family: Calibri
+      fonts:
+        - asset: fonts/CalibriBold.TTF
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #

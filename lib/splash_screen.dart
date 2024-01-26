@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           Container(
-            color: const Color.fromRGBO(255, 255, 255, 0.80),
+            color: const Color.fromRGBO(255, 255, 255, 0.50),
           ),
           SizedBox(
             width: screenWidth,

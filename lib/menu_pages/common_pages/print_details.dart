@@ -81,6 +81,7 @@ class _PrintDetailsState extends State<PrintDetails> {
     const double radius = 0;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(218,222,224, 1),
         appBar: AppBar(
           title: const Text('Print Data'),
         ),

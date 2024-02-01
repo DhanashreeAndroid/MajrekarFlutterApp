@@ -6,6 +6,7 @@ import 'package:majrekar_app/model/DataModel.dart';
 import 'package:majrekar_app/objectbox.g.dart';
 
 import '../menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
+import '../menu_pages/surname_counter_model.dart';
 
 class ObjectBox {
 
@@ -179,5 +180,39 @@ class ObjectBox {
 
   }
 
+  static Future<List<SurnameCounterModel>> getSurnameCountData() async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    List<SurnameCounterModel> listSurname = [];
+
+    final query  = (box.query(EDetails_.lnEnglish.notEquals(''))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    PropertyQuery<String> pq = query.property(EDetails_.lnEnglish);
+    pq.distinct = true;
+    pq.caseSensitive = false;
+    List<String> surNames = pq.find();
+    surNames.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    for (var element in surNames) {
+      final query1  = (box.query(EDetails_.lnEnglish.contains(element))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+      final count = query1.count();
+      listSurname.add(SurnameCounterModel(surName: element, count: count));
+      query1.close();
+    }
+    query.close();
+    store.close();
+    return listSurname;
+
+  }
+
+  static Future<List<EDetails>> getSurnameCounterVoterList(String surName) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    final query  = (box.query(EDetails_.lnEnglish.contains(surName))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output;
+
+  }
 
 }

@@ -2,10 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/easy_search.dart';
+import 'package:majrekar_app/menu_pages/surname_counter_page.dart';
 import 'package:majrekar_app/menu_pages/voter_name_search.dart';
 
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
+import 'buildingWiseSearch/building_wise_search.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -65,6 +67,14 @@ class _MenuPageState extends State<MenuPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
+                                  (context) =>  const BuildingWiseSearch()));
+                        }, label: 'Building wise Search',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
                                   (context) => const VoterNameSearch()));
                         }, label: 'Alphabetical Voters List',
                       ),
@@ -81,7 +91,7 @@ class _MenuPageState extends State<MenuPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) => const VoterNameSearch()));
+                                  (context) => const SurnameCounterPage()));
                         }, label: 'Surname Counter',
                       ),
                       const SizedBox(height: 20,),

@@ -60,14 +60,7 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                                   (context) =>  const VoterListPage(searchType : "Name wise Search" ,buildingName: "",)));
                         }, label: 'Name wise Search',
                       ),
-                      const SizedBox(height: 20,),
-                      CustomButton(
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder:
-                                  (context) =>  const BuildingWiseSearch()));
-                        }, label: 'Building wise Search',
-                      ),
+
 
                     ],
                   ),

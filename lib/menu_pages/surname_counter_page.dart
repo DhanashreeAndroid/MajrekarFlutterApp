@@ -1,25 +1,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
+import 'package:majrekar_app/menu_pages/surname_counter_model.dart';
 import 'package:majrekar_app/model/DataModel.dart';
-
 import '../../database/ObjectBox.dart';
-import 'detail_page.dart';
+import 'common_pages/detail_page.dart';
+import 'common_pages/voter_list_page.dart';
 
-class VoterListPage extends StatefulWidget {
-  final String searchType;
-  final String buildingName;
-  const VoterListPage({Key? key ,required this.searchType, required this.buildingName}) : super(key: key);
+class SurnameCounterPage extends StatefulWidget {
+  const SurnameCounterPage({Key? key }) : super(key: key);
 
   @override
-  State<VoterListPage> createState() => _VoterListPageState();
+  State<SurnameCounterPage> createState() => _SurnameCounterPageState();
 }
 
-class _VoterListPageState extends State<VoterListPage> {
-  late List<EDetails> voterList  ;
+class _SurnameCounterPageState extends State<SurnameCounterPage> {
+  late List<SurnameCounterModel> voterList  ;
   bool isLoading = false;
   // This list holds the data for the list view
-  List<EDetails> _foundUsers = [];
+  List<SurnameCounterModel> _foundUsers = [];
 
   @override
   void initState() {
@@ -29,13 +28,8 @@ class _VoterListPageState extends State<VoterListPage> {
 
   Future getData() async {
     setState(() => isLoading = true);
-    if(widget.searchType == "BuildingWise"){
-      this.voterList = await ObjectBox.getAllBuildingWiseData(widget.buildingName);
-    }else if(widget.searchType == "SurnameCount"){
-      this.voterList = await ObjectBox.getSurnameCounterVoterList(widget.buildingName);
-    }else {
-      this.voterList = await ObjectBox.getAll(widget.searchType);
-    }
+      this.voterList = await ObjectBox.getSurnameCountData();
+
     // at the beginning, all users are shown
     _foundUsers = voterList;
     setState(() => isLoading = false);
@@ -43,15 +37,14 @@ class _VoterListPageState extends State<VoterListPage> {
 
   // This function is called whenever the text field changes
   void _runFilter(String enteredKeyword) {
-    List<EDetails> results = [];
+    List<SurnameCounterModel> results = [];
     if (enteredKeyword.isEmpty) {
       // if the search field is empty or only contains white-space, we'll display all users
       results = voterList;
     } else {
       results = voterList
           .where((voter) =>
-      (voter.lnEnglish!.toLowerCase().contains(enteredKeyword.toLowerCase()))
-      || voter.fnEnglish!.toLowerCase().contains(enteredKeyword.toLowerCase()))
+      (voter.surName.toLowerCase().contains(enteredKeyword.toLowerCase())))
           .toList();
       // we use the toLowerCase() method to make it case-insensitive
     }
@@ -93,7 +86,7 @@ class _VoterListPageState extends State<VoterListPage> {
                   ? ListView.builder(
                 itemCount: _foundUsers.length,
                 itemBuilder: (context, index) => Card(
-                  key: ValueKey(_foundUsers[index].id),
+                  key: ValueKey(_foundUsers[index]),
                   color: const Color.fromRGBO(218,222,224, 1),
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(vertical: 1),
@@ -102,12 +95,12 @@ class _VoterListPageState extends State<VoterListPage> {
                         (index+1).toString(),
                       style: const TextStyle(fontSize: 24),
                     ),
-                    title: getTextViewEnglish(index, widget.searchType),
-                    subtitle: getTextViewMarathi(index, widget.searchType),
+                    title: Text(_foundUsers[index].surName),
+                    subtitle: Text("Total Count : ${_foundUsers[index].count}"),
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder:
-                              (context) =>  DetailPage(data : _foundUsers[index], searchType: widget.searchType,)));
+                              (context) =>  VoterListPage(searchType : "SurnameCount" ,buildingName: _foundUsers[index].surName)));
                     },
                   ),
                 ),
@@ -124,36 +117,8 @@ class _VoterListPageState extends State<VoterListPage> {
     );
   }
 
-  Widget getTextViewEnglish(int index, String searchType){
-    if(searchType.contains("Name")){
-      return Text("${_foundUsers[index].fnEnglish} ${_foundUsers[index].lnEnglish}");
-    }else{
-      return Text("${_foundUsers[index].lnEnglish} ${_foundUsers[index].fnEnglish}");
-    }
 
-  }
-  Widget getTextViewMarathi(int index, String searchType){
-    if(searchType.contains("Name")){
-      return Text("${_foundUsers[index].fnMarathi} ${_foundUsers[index].lnMarathi}");
-    }else{
-      return Text("${_foundUsers[index].lnMarathi} ${_foundUsers[index].fnMarathi}");
-    }
 
-  }
-
- Widget buildNotes() => ListView.builder(
-   itemCount: voterList.length,
-   itemBuilder: (context , index){
-     return   ListTile(
-       leading: const CircleAvatar(
-         backgroundColor: Colors.black,
-         backgroundImage: NetworkImage('https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?cs=srgb&dl=pexels-pixabay-415829.jpg&fm=jpg'),
-       ),
-       title: Text("${voterList[index].lnEnglish} ${voterList[index].fnEnglish}"),
-       subtitle: Text("${voterList[index].lnMarathi} ${voterList[index].fnMarathi}"),
-     );
-   },
- );
 
 }
 

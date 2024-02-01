@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
 import 'package:majrekar_app/menu_pages/buildingWiseSearch/part_no_drop_list_item.dart';
 
+import '../../CommonWidget/commonButton.dart';
+import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
 import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
@@ -24,29 +27,32 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
   bool isLoading = false;
   PartNoDropListModel? partNoDropListModel;
   List<EDetails> buildingList = [];
-  List<EDetails> _foundBuildingList = [];
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
+  final _recipientPartNoKey = GlobalKey<FormState>();
+  TextEditingController partNoController = TextEditingController();
+
 
   Future getData() async {
-
-    setState(() => isLoading = true);
-    partNoDropListModel = await ObjectBox.getPartNo();
-    buildingList = await ObjectBox.getPartWiseBuildings(optionItemSelected.id);
-    _foundBuildingList = buildingList;
-
-    setState(() => isLoading = false);
+    try {
+      final isRecipientSurnameValid =
+      _recipientPartNoKey.currentState!.validate();
+      FocusScope.of(context).unfocus();
+      if (isRecipientSurnameValid) {
+        _recipientPartNoKey.currentState!.save();
+        //to vibrate the phone
+        await HapticFeedback.lightImpact();
+        setState(() => isLoading = true);
+        buildingList = await ObjectBox.getPartWiseBuildings(partNoController.text);
+        setState(() => isLoading = false);
+        return;
+      } else {
+        await HapticFeedback.heavyImpact();
+        return;
+      }
+    } catch (e) {
+      ShowSnackBar.showSnackBar(context, 'Error occurred.');
+    }
   }
-  Future<void> _runFilter(String partNo) async {
-    List<EDetails> results = await ObjectBox.getPartWiseBuildings(partNo);
 
-    setState(() {
-      _foundBuildingList = results;
-    });
-  }
 
   void _scrollUp() {
     _controller.animateTo(0,
@@ -68,55 +74,24 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
             child: Column(
               children: <Widget>[
                 getCommonHeader(context),
-                const Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: AutoSizeText(
-                    "Select Part No",
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
                 const SizedBox(
                   width: 10,
                 ),
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                      child:  !partNoDropListModel.isNull
-                          ?
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: PartNoDropListItem(
-                          optionItemSelected,
-                          partNoDropListModel!,
-                              (optionItem){
-                            optionItemSelected = optionItem;
-                            setState(() {
-                              _runFilter(optionItemSelected.id);
-                              _scrollUp();
-                            });
-                          },
-                        ),
-                      )
-                      :
-                      const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ],
+                customInputs(),
+                const SizedBox(
+                  height: 10,
                 ),
+                const Divider(thickness: 2,),
                 const SizedBox(
                   height: 10,
                 ),
                 Expanded(
-                  child: _foundBuildingList.isNotEmpty
+                  child: buildingList.isNotEmpty
                       ? ListView.builder(
                     controller: _controller,
-                    itemCount: _foundBuildingList.length,
+                    itemCount: buildingList.length,
                     itemBuilder: (context, index) => Card(
-                      key: ValueKey(_foundBuildingList[index]),
+                      key: ValueKey(buildingList[index]),
                       color: const Color.fromRGBO(218,222,224, 1),
                       elevation: 4,
                       margin: const EdgeInsets.symmetric(vertical: 1),
@@ -125,18 +100,18 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                           (index+1).toString(),
                           style: const TextStyle(fontSize: 24),
                         ),
-                        title: Text(_foundBuildingList[index].buildingNameEnglish!),
-                        subtitle: Text(_foundBuildingList[index].buildingNameMarathi!),
+                        title: Text(buildingList[index].buildingNameEnglish!),
+                        subtitle: Text(buildingList[index].buildingNameMarathi!),
                         onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) =>  VoterListPage(searchType : 'BuildingWise',
-                                  buildingName: _foundBuildingList[index].buildingNameEnglish!,)));
+                                  buildingName: buildingList[index].buildingNameEnglish!,)));
                         },
                       ),
                     ),
                   )
-                      : const Center(
-                    child: CircularProgressIndicator(),
+                      :    const Center(
+                child: Text("Please enter Part No then click on search button"),
                   ),
                 ),
 
@@ -146,6 +121,60 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
       )
     );
 
+  }
+
+  Padding customInputs() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 2.0, 0.0),
+      child: Row(
+        children: <Widget>[
+          const SizedBox(width: 5,),
+          Flexible(
+            flex: 2,
+            child:
+            Form(
+              key: _recipientPartNoKey,
+              child: TextFormField(
+                controller: partNoController,
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    buildingList.clear();
+                    return "Please enter Part No";
+                  }
+                  return null;
+                },
+                onSaved: (String? phoneNumber) {},
+                decoration: InputDecoration(
+                  hintText: 'Enter Part No',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 5,),
+          Flexible(
+            flex: 2,
+            child:
+            CustomButton(
+              onPressed: () {
+                getData();
+                _scrollUp();
+              }, label: 'Search',
+            ),
+          )
+        ],
+      ),
+    );
   }
 
 

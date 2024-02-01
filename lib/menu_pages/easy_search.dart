@@ -50,7 +50,7 @@ class _EasySearchState extends State<EasySearch> {
         return;
       }
     } catch (e) {
-      ShowSnackBar.showSnackBar(context, 'Error occured while sending SMS.');
+      ShowSnackBar.showSnackBar(context, 'Error occurred.');
     }
   }
 
@@ -143,7 +143,7 @@ class _EasySearchState extends State<EasySearch> {
               child: TextFormField(
                 controller: surnameController,
                 autofillHints: const [AutofillHints.telephoneNumber],
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Please enter surname";
@@ -176,7 +176,7 @@ class _EasySearchState extends State<EasySearch> {
               child: TextFormField(
                 controller: nameController,
                 autofillHints: const [AutofillHints.telephoneNumber],
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Please enter first name";

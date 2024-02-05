@@ -171,9 +171,12 @@ class ObjectBox {
     final store = await openStore();
     var box = store.box<EDetails>();
 
-    final query  = (box.query(EDetails_.lnEnglish.contains(lastName)
-                              & EDetails_.fnEnglish.contains(firstName))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final query  = (box.query(EDetails_.lnEnglish.contains(lastName, caseSensitive: false) &
+    EDetails_.fnEnglish.contains(firstName, caseSensitive: false) )..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive )).build();
     final output = query.find();
+    print(firstName);
+    print(lastName);
+    print(output.toString());
     query.close();
     store.close();
     return output;
@@ -185,14 +188,14 @@ class ObjectBox {
     var box = store.box<EDetails>();
     List<SurnameCounterModel> listSurname = [];
 
-    final query  = (box.query(EDetails_.lnEnglish.notEquals(''))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final query  = (box.query(EDetails_.lnEnglish.notEquals(''))..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive)).build();
     PropertyQuery<String> pq = query.property(EDetails_.lnEnglish);
     pq.distinct = true;
     pq.caseSensitive = false;
     List<String> surNames = pq.find();
     surNames.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     for (var element in surNames) {
-      final query1  = (box.query(EDetails_.lnEnglish.contains(element))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+      final query1  = (box.query(EDetails_.lnEnglish.contains(element, caseSensitive: false))..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive)).build();
       final count = query1.count();
       listSurname.add(SurnameCounterModel(surName: element, count: count));
       query1.close();
@@ -207,7 +210,7 @@ class ObjectBox {
     final store = await openStore();
     var box = store.box<EDetails>();
 
-    final query  = (box.query(EDetails_.lnEnglish.contains(surName))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final query  = (box.query(EDetails_.lnEnglish.contains(surName, caseSensitive: false))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
     final output = query.find();
     query.close();
     store.close();

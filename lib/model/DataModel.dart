@@ -130,4 +130,9 @@ class EDetails {
     data['voted_nonvoted']=votedNonVoted;
     return data;
   }
+
+  @override
+  String toString() {
+    return '{dbId: ${dbId}, wardno: ${wardNo}, lnName: ${lnEnglish}, fnName: ${fnEnglish}}';
+  }
 }

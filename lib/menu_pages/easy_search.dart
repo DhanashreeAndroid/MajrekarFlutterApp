@@ -56,10 +56,12 @@ class _EasySearchState extends State<EasySearch> {
 
 
   void _scrollUp() {
-    _controller.animateTo(0,
-      duration: const Duration(seconds: 1),
-      curve: Curves.fastOutSlowIn,
-    );
+    if (_controller.hasClients) {
+      _controller.animateTo(0,
+        duration: const Duration(seconds: 1),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
   }
 
   @override
@@ -82,7 +84,6 @@ class _EasySearchState extends State<EasySearch> {
               CustomButton(
                 onPressed: () {
                   getData();
-                  _scrollUp();
                   }, label: 'Search',
               ),
               const SizedBox(
@@ -141,8 +142,8 @@ class _EasySearchState extends State<EasySearch> {
             Form(
               key: _recipientSurnameFormKey,
               child: TextFormField(
+                autofocus: true,
                 controller: surnameController,
-                autofillHints: const [AutofillHints.telephoneNumber],
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -174,8 +175,8 @@ class _EasySearchState extends State<EasySearch> {
             Form(
               key: _recipientNameFormKey,
               child: TextFormField(
+                autofocus: true,
                 controller: nameController,
-                autofillHints: const [AutofillHints.telephoneNumber],
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value!.isEmpty) {

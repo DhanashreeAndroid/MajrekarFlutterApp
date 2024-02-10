@@ -7,6 +7,7 @@ import 'package:majrekar_app/objectbox.g.dart';
 
 import '../menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
 import '../menu_pages/surname_counter_model.dart';
+import '../model/UserModel.dart';
 
 class ObjectBox {
 
@@ -215,7 +216,41 @@ class ObjectBox {
     query.close();
     store.close();
     return output;
+  }
 
+  //User Details
+  //=====================================================================================
+  static Future<int> insertUserDetails(UserDetails user) async {
+    final store = await openStore();
+    var box = store.box<UserDetails>();
+    var output = box.put(user);
+    store.close();
+    return output;
+  }
+
+  static Future<int> deleteUserDetails() async {
+    final store = await openStore();
+    var box = store.box<UserDetails>();
+    var output =box.removeAll();
+    store.close();
+    return output;
+  }
+
+  static Future<List<UserDetails>> getUserDetails() async {
+    final store = await openStore();
+    var box = store.box<UserDetails>();
+    var output = box.getAll();
+    store.close();
+    return output;
+  }
+
+  static Future<void> updateMacAddress(String macAddress) async {
+    final store = await openStore();
+    var box = store.box<UserDetails>();
+    var output = box.get(1);
+    output!.macAddress = macAddress;
+    box.put(output);
+    store.close();
   }
 
 }

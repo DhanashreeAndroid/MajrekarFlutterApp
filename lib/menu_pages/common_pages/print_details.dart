@@ -13,6 +13,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../model/DataModel.dart';
@@ -39,6 +40,33 @@ class _PrintDetailsState extends State<PrintDetails> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => initBluetooth());
   }
+
+  Future<bool> requestAccess() async {
+    //request here your permissions
+    await Permission.bluetoothScan.request();
+    await Permission.bluetoothAdvertise.request();
+    await Permission.bluetoothConnect.request();
+
+    bool permOne = await Permission.bluetoothScan.request().isGranted;
+    bool permTwo = await Permission.bluetoothAdvertise.request().isGranted;
+    bool permThree = await Permission.bluetoothConnect.request().isGranted;
+
+    //This will only bring up one permission pop-up, but will only grant the permissions you have been requested here
+    //in this method.
+
+    //Return your boolean here
+    return permOne && permTwo && permThree ? true : false;
+  }
+
+  Future<void> checkPermission() async {
+    bool request = await requestAccess() ;
+    if(request){
+      initBluetooth();
+    }else{
+      checkPermission();
+    }
+  }
+
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initBluetooth() async {
     bluetoothPrint.startScan(timeout: const Duration(seconds: 4));

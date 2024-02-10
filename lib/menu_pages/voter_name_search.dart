@@ -28,7 +28,7 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('images/background.jpg'),
-                      fit: BoxFit.fitHeight),
+                      fit: BoxFit.fill),
                 ),
               ),
               Container(

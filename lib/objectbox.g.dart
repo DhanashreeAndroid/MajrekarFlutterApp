@@ -15,6 +15,7 @@ import 'package:objectbox/objectbox.dart';
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'model/DataModel.dart';
+import 'model/UserModel.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -137,6 +138,80 @@ final _entities = <ModelEntity>[
             flags: 0)
       ],
       relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(2, 3625653354348383543),
+      name: 'UserDetails',
+      lastPropertyId: const IdUid(14, 2879495251186326496),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 3654598264177600187),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 8319204328188971642),
+            name: 'userName',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 6134236700863483652),
+            name: 'password',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 5757377182504372888),
+            name: 'isUpdatable',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 5261924795472911042),
+            name: 'isMarkable',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(7, 7685014761481313936),
+            name: 'isVotingMakingReport',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(8, 1642270580272926542),
+            name: 'isContactReport',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(9, 2775832838439605818),
+            name: 'electionDate',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(10, 4788701231861803595),
+            name: 'time',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(11, 8937664526719358331),
+            name: 'lineForOnlyPrintingPurpose',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(12, 1757053480130578827),
+            name: 'smsTimeLimit',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(13, 5732567863590215243),
+            name: 'vidhansabhaName',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(14, 2879495251186326496),
+            name: 'macAddress',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
 ];
 
@@ -167,13 +242,13 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(1, 6636755008911549707),
+      lastEntityId: const IdUid(2, 3625653354348383543),
       lastIndexId: const IdUid(0, 0),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [2808037037703655817],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -350,6 +425,121 @@ ModelDefinition getObjectBoxModel() {
               votedNonVoted: votedNonVotedParam);
 
           return object;
+        }),
+    UserDetails: EntityDefinition<UserDetails>(
+        model: _entities[1],
+        toOneRelations: (UserDetails object) => [],
+        toManyRelations: (UserDetails object) => {},
+        getId: (UserDetails object) => object.id,
+        setId: (UserDetails object, int id) {
+          object.id = id;
+        },
+        objectToFB: (UserDetails object, fb.Builder fbb) {
+          final userNameOffset = object.userName == null
+              ? null
+              : fbb.writeString(object.userName!);
+          final passwordOffset = object.password == null
+              ? null
+              : fbb.writeString(object.password!);
+          final isUpdatableOffset = object.isUpdatable == null
+              ? null
+              : fbb.writeString(object.isUpdatable!);
+          final isMarkableOffset = object.isMarkable == null
+              ? null
+              : fbb.writeString(object.isMarkable!);
+          final isVotingMakingReportOffset = object.isVotingMakingReport == null
+              ? null
+              : fbb.writeString(object.isVotingMakingReport!);
+          final isContactReportOffset = object.isContactReport == null
+              ? null
+              : fbb.writeString(object.isContactReport!);
+          final electionDateOffset = object.electionDate == null
+              ? null
+              : fbb.writeString(object.electionDate!);
+          final timeOffset =
+              object.time == null ? null : fbb.writeString(object.time!);
+          final lineForOnlyPrintingPurposeOffset =
+              object.lineForOnlyPrintingPurpose == null
+                  ? null
+                  : fbb.writeString(object.lineForOnlyPrintingPurpose!);
+          final smsTimeLimitOffset = object.smsTimeLimit == null
+              ? null
+              : fbb.writeString(object.smsTimeLimit!);
+          final vidhansabhaNameOffset = object.vidhansabhaName == null
+              ? null
+              : fbb.writeString(object.vidhansabhaName!);
+          final macAddressOffset = object.macAddress == null
+              ? null
+              : fbb.writeString(object.macAddress!);
+          fbb.startTable(15);
+          fbb.addInt64(0, object.id ?? 0);
+          fbb.addOffset(1, userNameOffset);
+          fbb.addOffset(2, passwordOffset);
+          fbb.addOffset(4, isUpdatableOffset);
+          fbb.addOffset(5, isMarkableOffset);
+          fbb.addOffset(6, isVotingMakingReportOffset);
+          fbb.addOffset(7, isContactReportOffset);
+          fbb.addOffset(8, electionDateOffset);
+          fbb.addOffset(9, timeOffset);
+          fbb.addOffset(10, lineForOnlyPrintingPurposeOffset);
+          fbb.addOffset(11, smsTimeLimitOffset);
+          fbb.addOffset(12, vidhansabhaNameOffset);
+          fbb.addOffset(13, macAddressOffset);
+          fbb.finish(fbb.endTable());
+          return object.id ?? 0;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+          final userNameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 6);
+          final passwordParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 8);
+          final vidhansabhaNameParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 28);
+          final isUpdatableParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 12);
+          final isMarkableParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 14);
+          final isVotingMakingReportParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 16);
+          final isContactReportParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 18);
+          final electionDateParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 20);
+          final timeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 22);
+          final lineForOnlyPrintingPurposeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 24);
+          final smsTimeLimitParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 26);
+          final macAddressParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 30);
+          final object = UserDetails(
+              id: idParam,
+              userName: userNameParam,
+              password: passwordParam,
+              vidhansabhaName: vidhansabhaNameParam,
+              isUpdatable: isUpdatableParam,
+              isMarkable: isMarkableParam,
+              isVotingMakingReport: isVotingMakingReportParam,
+              isContactReport: isContactReportParam,
+              electionDate: electionDateParam,
+              time: timeParam,
+              lineForOnlyPrintingPurpose: lineForOnlyPrintingPurposeParam,
+              smsTimeLimit: smsTimeLimitParam,
+              macAddress: macAddressParam);
+
+          return object;
         })
   };
 
@@ -441,4 +631,59 @@ class EDetails_ {
   /// see [EDetails.votedNonVoted]
   static final votedNonVoted =
       QueryStringProperty<EDetails>(_entities[0].properties[21]);
+}
+
+/// [UserDetails] entity fields to define ObjectBox queries.
+class UserDetails_ {
+  /// see [UserDetails.id]
+  static final id =
+      QueryIntegerProperty<UserDetails>(_entities[1].properties[0]);
+
+  /// see [UserDetails.userName]
+  static final userName =
+      QueryStringProperty<UserDetails>(_entities[1].properties[1]);
+
+  /// see [UserDetails.password]
+  static final password =
+      QueryStringProperty<UserDetails>(_entities[1].properties[2]);
+
+  /// see [UserDetails.isUpdatable]
+  static final isUpdatable =
+      QueryStringProperty<UserDetails>(_entities[1].properties[3]);
+
+  /// see [UserDetails.isMarkable]
+  static final isMarkable =
+      QueryStringProperty<UserDetails>(_entities[1].properties[4]);
+
+  /// see [UserDetails.isVotingMakingReport]
+  static final isVotingMakingReport =
+      QueryStringProperty<UserDetails>(_entities[1].properties[5]);
+
+  /// see [UserDetails.isContactReport]
+  static final isContactReport =
+      QueryStringProperty<UserDetails>(_entities[1].properties[6]);
+
+  /// see [UserDetails.electionDate]
+  static final electionDate =
+      QueryStringProperty<UserDetails>(_entities[1].properties[7]);
+
+  /// see [UserDetails.time]
+  static final time =
+      QueryStringProperty<UserDetails>(_entities[1].properties[8]);
+
+  /// see [UserDetails.lineForOnlyPrintingPurpose]
+  static final lineForOnlyPrintingPurpose =
+      QueryStringProperty<UserDetails>(_entities[1].properties[9]);
+
+  /// see [UserDetails.smsTimeLimit]
+  static final smsTimeLimit =
+      QueryStringProperty<UserDetails>(_entities[1].properties[10]);
+
+  /// see [UserDetails.vidhansabhaName]
+  static final vidhansabhaName =
+      QueryStringProperty<UserDetails>(_entities[1].properties[11]);
+
+  /// see [UserDetails.macAddress]
+  static final macAddress =
+      QueryStringProperty<UserDetails>(_entities[1].properties[12]);
 }

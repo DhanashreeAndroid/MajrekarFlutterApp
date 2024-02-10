@@ -36,7 +36,7 @@ class AuthService {
       return res;
     } catch (e) {
       print(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -61,6 +61,63 @@ class AuthService {
     } catch (e) {
       print(e);
       return "null";
+    }
+  }
+
+  Future<dynamic> getUserData(String? token, String userid) async {
+    try {
+
+      var url = Uri.parse("${Constant.baseUrl}${Constant.getUserData}/$userid");
+
+      print("url $url");
+
+      var res = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "bearer $token",
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=5, max=1000"
+        },
+      );
+      print("Status : ${res.statusCode}");
+      return res;
+    } catch (e) {
+      print(e);
+      return "null";
+    }
+  }
+
+  Future<dynamic> saveMacAddress(String? token, String macAddress, String userName) async {
+    print(macAddress);
+
+    try {
+      var data = {
+        "username": userName,
+        "macAddress": macAddress,
+        "grant_type" : "password"};
+
+      print("data:  $data");
+
+      var url = Uri.parse("${Constant.baseUrl}${Constant.saveMacAddress}");
+
+      print("url $url");
+
+      var res = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "bearer $token",
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=5, max=1000"
+        },
+        body: data,
+      );
+      print("Status : ${res.statusCode}");
+      return res;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 

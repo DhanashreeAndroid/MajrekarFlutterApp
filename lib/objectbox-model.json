@@ -121,9 +121,83 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:3625653354348383543",
+      "lastPropertyId": "14:2879495251186326496",
+      "name": "UserDetails",
+      "properties": [
+        {
+          "id": "1:3654598264177600187",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8319204328188971642",
+          "name": "userName",
+          "type": 9
+        },
+        {
+          "id": "3:6134236700863483652",
+          "name": "password",
+          "type": 9
+        },
+        {
+          "id": "5:5757377182504372888",
+          "name": "isUpdatable",
+          "type": 9
+        },
+        {
+          "id": "6:5261924795472911042",
+          "name": "isMarkable",
+          "type": 9
+        },
+        {
+          "id": "7:7685014761481313936",
+          "name": "isVotingMakingReport",
+          "type": 9
+        },
+        {
+          "id": "8:1642270580272926542",
+          "name": "isContactReport",
+          "type": 9
+        },
+        {
+          "id": "9:2775832838439605818",
+          "name": "electionDate",
+          "type": 9
+        },
+        {
+          "id": "10:4788701231861803595",
+          "name": "time",
+          "type": 9
+        },
+        {
+          "id": "11:8937664526719358331",
+          "name": "lineForOnlyPrintingPurpose",
+          "type": 9
+        },
+        {
+          "id": "12:1757053480130578827",
+          "name": "smsTimeLimit",
+          "type": 9
+        },
+        {
+          "id": "13:5732567863590215243",
+          "name": "vidhansabhaName",
+          "type": 9
+        },
+        {
+          "id": "14:2879495251186326496",
+          "name": "macAddress",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:6636755008911549707",
+  "lastEntityId": "2:3625653354348383543",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
@@ -131,7 +205,9 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    2808037037703655817
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

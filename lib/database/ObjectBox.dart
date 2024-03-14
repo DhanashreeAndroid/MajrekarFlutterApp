@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:majrekar_app/menu_pages/languageSearch/language_list_model.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -251,6 +252,101 @@ class ObjectBox {
     output!.macAddress = macAddress;
     box.put(output);
     store.close();
+  }
+
+  static Future<void> updateUserDetails(UserDetails user) async {
+    final store = await openStore();
+    var box = store.box<UserDetails>();
+    var output = box.get(1);
+    output!.userName = user.userName;
+    output.vidhansabhaName = user.vidhansabhaName;
+    output.isUpdatable = user.isUpdatable;
+    output.isMarkable = user.isMarkable;
+    output.isVotingMakingReport = user.isVotingMakingReport;
+    output.isContactReport = user.isContactReport;
+    output.electionDate = user.electionDate;
+    output.time = user.time;
+    output.lineForOnlyPrintingPurpose = user.lineForOnlyPrintingPurpose;
+    output.smsTimeLimit = user.smsTimeLimit;
+    output.macAddress = user.macAddress;
+    box.put(output);
+    store.close();
+  }
+
+  static Future<void> updateColor(String partNo, String serialNo, String wardNo,String color) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    final query  = (box.query(EDetails_.partNo.equals(partNo)
+    & EDetails_.serialNo.equals(serialNo)
+    & EDetails_.wardNo.equals(wardNo))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    output.first.color = color;
+    box.put(output.first);
+    store.close();
+  }
+
+  static Future<void> updateShiftedDeath(String partNo, String serialNo, String wardNo,String type) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    final query  = (box.query(EDetails_.partNo.equals(partNo)
+    & EDetails_.serialNo.equals(serialNo)
+    & EDetails_.wardNo.equals(wardNo))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    output.first.shiftedDeath = type;
+    box.put(output.first);
+    store.close();
+  }
+
+  static Future<void> updateVotedNonVoted(String partNo, String serialNo, String wardNo,String type) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    final query  = (box.query(EDetails_.partNo.equals(partNo)
+    & EDetails_.serialNo.equals(serialNo)
+    & EDetails_.wardNo.equals(wardNo))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    output.first.votedNonVoted = type;
+    box.put(output.first);
+    store.close();
+  }
+
+  static Future<List<LanguageItem>> getLanguageList(String buildingName) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    List<LanguageItem> languageList = [];
+
+    final query  = (box.query(EDetails_.lnEnglish.notEquals('')
+    & EDetails_.buildingNameEnglish.equals(buildingName))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+
+    PropertyQuery<String> pq = query.property(EDetails_.lang);
+    pq.distinct = true;
+    pq.caseSensitive = false;
+    List<String> languages = pq.find();
+    languages.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    for (var element in languages) {
+      final query1  = (box.query(EDetails_.lang.equals(element, caseSensitive: false)
+      & EDetails_.lnEnglish.notEquals('')
+      & EDetails_.buildingNameEnglish.equals(buildingName))..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive)).build();
+      final count = query1.count();
+      languageList.add(LanguageItem(name: element, count: count));
+      query1.close();
+    }
+    query.close();
+    store.close();
+    return languageList;
+  }
+
+  static Future<List<EDetails>> getLanguageWiseVoterList(String buildingName, String language) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    final query  = (box.query(EDetails_.lnEnglish.notEquals('')
+    & EDetails_.buildingNameEnglish.equals(buildingName, caseSensitive: false)
+    & EDetails_.lang.equals(language, caseSensitive: false))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output;
+
   }
 
 }

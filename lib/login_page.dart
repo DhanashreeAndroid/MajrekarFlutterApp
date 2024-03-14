@@ -88,8 +88,10 @@ class _LoginPageState extends State<LoginPage> {
         UserDetails? user = mainController.userModel.value.uDetails?.first;
         user!.password = passwordController.text.toString();
         addUserDetails(user);
-        callLoginApi(token);
+        callMacAddress(user, token!);
+       // updateMacAddress(user, token!);
       } else {
+        Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Getting some technical problem, Please try again."),
         ));
@@ -99,10 +101,13 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> callMacAddress(UserDetails user, String token) async {
     final macAddress = await getDeviceIdentifier();
-    if (user != null && user.macAddress != null) {
-      if (macAddress == user.macAddress) {
+    if (user.macAddress != null) {
+      print('db mac address : ${user.macAddress!}' );
+      print('device mac address : $macAddress' );
+       if (macAddress == user.macAddress && macAddress != "unknown") {
         callLoginApi(token);
       } else {
+        Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("This User already login in another device"),
         ));
@@ -112,9 +117,22 @@ class _LoginPageState extends State<LoginPage> {
           token, macAddress!, user!.userName!);
       if (mainController.isMacSaved) {
         await ObjectBox.updateMacAddress(macAddress);
-
+        callLoginApi(token);
       }
     }
+  }
+  Future<void> updateMacAddress(UserDetails user, String token) async {
+    final macAddress = await getDeviceIdentifier();
+    print('db mac address : ${user.macAddress!}' );
+    print('device mac address : $macAddress' );
+
+      await mainController.saveMacAddress(
+          token, macAddress!, user!.userName!);
+      if (mainController.isMacSaved) {
+        await ObjectBox.updateMacAddress(macAddress);
+        callLoginApi(token);
+      }
+
   }
 
   void callLoginApi(String? token) async {

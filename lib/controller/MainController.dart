@@ -18,6 +18,9 @@ class MainController extends GetxController{
   Rx<DataModel> dataModel = DataModel().obs;
   Rx<UserModel> userModel = UserModel().obs;
   bool isMacSaved = false;
+  bool isColorSaved = false;
+  bool isShiftedDeathSaved = false;
+  bool isVotedNonVotedSaved = false;
 
   Future<void> getToken(
       String? userid, String? password) async {
@@ -52,7 +55,7 @@ class MainController extends GetxController{
 
   }
 
-  Future<void> getUserData(String? token, String userId) async {
+  Future<void> getUserData(String? token, String? userId) async {
     await authService
         .getUserData(token,userId)
         .then((value) {
@@ -88,6 +91,58 @@ class MainController extends GetxController{
     });
 
   }
+  Future<void> markColorPrediction(String? token, String partNo, String serialNo, String wardNo, String color) async {
+    await authService
+        .markColorPrediction(token,partNo, serialNo,wardNo,color)
+        .then((value) {
+      if(value!=null) {
+        String body = value.body;
+        print("markColor: $body");
 
+        isColorSaved = body.contains("Success")? true : false;
+
+      }
+
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
+
+  }
+
+  Future<void> markShiftedDeath(String? token, String partNo, String serialNo, String wardNo, String type) async {
+    await authService
+        .markShiftedDeath(token,partNo, serialNo,wardNo,type)
+        .then((value) {
+      if(value!=null) {
+        String body = value.body;
+        print("markShiftedDeath: $body");
+
+        isShiftedDeathSaved = body.contains("Success")? true : false;
+
+      }
+
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
+
+  }
+
+  Future<void> markVotedNonVoted(String? token, String partNo, String serialNo, String wardNo, String type) async {
+    await authService
+        .markVotedNonVoted(token,partNo, serialNo,wardNo,type)
+        .then((value) {
+      if(value!=null) {
+        String body = value.body;
+        print("markVotedNonVoted: $body");
+
+        isVotedNonVotedSaved = body.contains("Success")? true : false;
+
+      }
+
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
+
+  }
 
 }

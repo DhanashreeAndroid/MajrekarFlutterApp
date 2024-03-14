@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
 import 'package:majrekar_app/menu_pages/buildingWiseSearch/part_no_drop_list_item.dart';
+import 'package:majrekar_app/menu_pages/languageSearch/language_list_page.dart';
 
 import '../../CommonWidget/commonButton.dart';
 import '../../CommonWidget/show_snak_bar.dart';
@@ -14,14 +15,14 @@ import '../../model/DataModel.dart';
 import '../common_pages/voter_list_page.dart';
 
 
-class BuildingWiseSearch extends StatefulWidget {
-  const BuildingWiseSearch({Key? key}) : super(key: key);
+class LanguageWiseSearch extends StatefulWidget {
+  const LanguageWiseSearch({Key? key}) : super(key: key);
 
   @override
-  State<BuildingWiseSearch> createState() => _BuildingWiseSearchSearchState();
+  State<LanguageWiseSearch> createState() => _LanguageWiseSearchSearchState();
 }
 
-class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
+class _LanguageWiseSearchSearchState extends State<LanguageWiseSearch> {
   final ScrollController _controller = ScrollController();
   PartNo optionItemSelected = PartNo(id: "All");
   bool isLoading = false;
@@ -102,8 +103,8 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                         subtitle: Text(buildingList[index].buildingNameMarathi!),
                         onTap: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (context) =>  VoterListPage(searchType : 'BuildingWise',
-                                  buildingName: buildingList[index].buildingNameEnglish!,language: "",)));
+                                MaterialPageRoute(builder: (context) =>  LanguageListPage(
+                                  buildingName: buildingList[index].buildingNameEnglish!,)));
                         },
                       ),
                     ),

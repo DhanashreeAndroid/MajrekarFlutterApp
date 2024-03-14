@@ -100,7 +100,7 @@ class _SurnameCounterPageState extends State<SurnameCounterPage> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder:
-                              (context) =>  VoterListPage(searchType : "SurnameCount" ,buildingName: _foundUsers[index].surName)));
+                              (context) =>  VoterListPage(searchType : "SurnameCount" ,buildingName: _foundUsers[index].surName, language: "",)));
                     },
                   ),
                 ),

@@ -112,11 +112,11 @@ import 'package:encrypt/encrypt.dart' as enc;
  import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/snackBars.dart';
  import 'package:pointycastle/export.dart';
 import 'package:pointycastle/export.dart' as point;
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 
 RSAPublicKey getPublicKeyFromBase64EncodedKey(String b64) {
   final pem =
@@ -183,21 +183,10 @@ Future alertDailog(BuildContext context) {
 
 Future<String?> getDeviceIdentifier() async {
   String? deviceIdentifier = "unknown";
-  DeviceInfoPlugin  deviceInfo = DeviceInfoPlugin();
-
-  if (Platform.isAndroid) {
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    deviceIdentifier = androidInfo.id;
-  } else if (Platform.isIOS) {
-    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    deviceIdentifier = iosInfo.identifierForVendor;
-  } else if (kIsWeb) {
-    // The web doesnt have a device UID, so use a combination fingerprint as an example
-    WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
-    deviceIdentifier = webInfo.vendor! + webInfo.userAgent! + webInfo.hardwareConcurrency.toString();
-  } else if (Platform.isLinux) {
-    LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
-    deviceIdentifier = linuxInfo.machineId;
+  try {
+    deviceIdentifier = await UniqueIdentifier.serial;
+  } on PlatformException {
+    deviceIdentifier = 'unknown';
   }
   return deviceIdentifier;
 }

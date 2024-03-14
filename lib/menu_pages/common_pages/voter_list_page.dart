@@ -9,7 +9,8 @@ import 'detail_page.dart';
 class VoterListPage extends StatefulWidget {
   final String searchType;
   final String buildingName;
-  const VoterListPage({Key? key ,required this.searchType, required this.buildingName}) : super(key: key);
+  final String language;
+  const VoterListPage({Key? key ,required this.searchType, required this.buildingName, required this.language}) : super(key: key);
 
   @override
   State<VoterListPage> createState() => _VoterListPageState();
@@ -33,6 +34,8 @@ class _VoterListPageState extends State<VoterListPage> {
       this.voterList = await ObjectBox.getAllBuildingWiseData(widget.buildingName);
     }else if(widget.searchType == "SurnameCount"){
       this.voterList = await ObjectBox.getSurnameCounterVoterList(widget.buildingName);
+    }else if(widget.searchType == "LanguageWise"){
+      this.voterList = await ObjectBox.getLanguageWiseVoterList(widget.buildingName, widget.language);
     }else {
       this.voterList = await ObjectBox.getAll(widget.searchType);
     }
@@ -98,10 +101,8 @@ class _VoterListPageState extends State<VoterListPage> {
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(vertical: 1),
                   child: ListTile(
-                    leading: Text(
-                        (index+1).toString(),
-                      style: const TextStyle(fontSize: 24),
-                    ),
+                    leading: const Text( "", style: TextStyle(fontSize: 0),),
+                    minLeadingWidth : 1,
                     title: getTextViewEnglish(index, widget.searchType),
                     subtitle: getTextViewMarathi(index, widget.searchType),
                     onTap: () {

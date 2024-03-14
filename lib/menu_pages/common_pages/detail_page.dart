@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/common_pages/print_details.dart';
 import 'package:majrekar_app/menu_pages/common_pages/share_image.dart';
@@ -8,6 +10,10 @@ import 'package:majrekar_app/model/DataModel.dart';
 import 'package:telephony/telephony.dart';
 
 import '../../CommonWidget/show_snak_bar.dart';
+import '../../CommonWidget/utility.dart';
+import '../../controller/MainController.dart';
+import '../../database/ObjectBox.dart';
+import '../../model/UserModel.dart';
 import 'family_voter_list_page.dart';
 
 
@@ -21,15 +27,74 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-
+  final mainController = Get.put(MainController());
   TextEditingController mobileController = TextEditingController();
-  int selectedOption = 1;
+  int selectedOption = 0;
   bool selectedVoted = false;
   bool selectedShifted = false;
   bool selectedDeath = false;
   final telephony = Telephony.instance;
   final _recipientNumberformKey = GlobalKey<FormState>();
+  UserDetails? userDetails;
+  bool isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
+
+  Future getUserDetails() async {
+    setState(() => isLoading = true);
+    List<UserDetails> users = await ObjectBox.getUserDetails();
+    userDetails =  users.first;
+    selectedShifted = getShiftedDeath();
+    selectedDeath = getShiftedDeath();
+    selectedVoted = getVotedNonVoted();
+    selectedOption = getMarkColor();
+    setState(() => isLoading = false);
+  }
+
+  int getMarkColor(){
+    var color = widget.data.color;
+    print("DB saved Mark Color : $color");
+    switch (widget.data.color) {
+      case "Green":
+        return 1;
+      case "Red":
+        return 2;
+      case "Yellow":
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
+  bool getShiftedDeath(){
+    var str = widget.data.shiftedDeath;
+    print("DB saved shiftedDeath : $str");
+    switch (widget.data.shiftedDeath) {
+      case "Shifted":
+        return true;
+      case "Death":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  bool getVotedNonVoted(){
+    var str = widget.data.votedNonVoted;
+    print("DB saved votedNonVoted : $str");
+    switch (widget.data.votedNonVoted) {
+      case "Voted":
+        return true;
+      case "NonVoted":
+        return false;
+      default:
+        return false;
+    }
+  }
 
   void showRequestStatus(SendStatus status) {
     switch (status) {
@@ -115,6 +180,7 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
@@ -147,11 +213,16 @@ class _DetailPageState extends State<DetailPage> {
                   const SizedBox(
                     height: 10,
                   ),
+                  userDetails?.isMarkable == "false" ?
+                  Column(
+                    children: <Widget>[
                   getRedGreenOrangeRadioButton(screenWidth),
                   getShiftedCheckBox(),
                   getDeathCheckBox(),
-                  getVotedCheckBox(),
-
+                  getVotedCheckBox()]) :
+                  const SizedBox(
+                    height: 10,
+                  ),
                 ],
               ),
             ),
@@ -729,7 +800,9 @@ class _DetailPageState extends State<DetailPage> {
             splashRadius: 20, // Change the splash radius when clicked
             onChanged: (int? value) {
               setState(() {
+                callApi("Green","","","");
                 selectedOption = value!;
+                widget.data.color = "Green";
               });
             },
           ),
@@ -753,7 +826,9 @@ class _DetailPageState extends State<DetailPage> {
             splashRadius: 20, // Change the splash radius when clicked
             onChanged: (int? value) {
               setState(() {
+                callApi("Red""","","","");
                 selectedOption = value!;
+                widget.data.color = "Red";
               });
             },
           ),
@@ -777,7 +852,9 @@ class _DetailPageState extends State<DetailPage> {
             splashRadius: 20, // Change the splash radius when clicked
             onChanged: (int? value) {
               setState(() {
-                selectedOption = value!;
+               callApi("Yellow", "","","");
+               selectedOption = value!;
+               widget.data.color = "Yellow";
               });
             },
           ),
@@ -800,6 +877,123 @@ class _DetailPageState extends State<DetailPage> {
     ]);
   }
 
+  Future<void> callApi(String color, String shifted, String death, String voted) async {
+    alertDailog(context);
+
+    await mainController.getToken(userDetails?.userName, userDetails?.password).then((value) {
+      setState(() {
+        if (mainController.tokenModel.value.accessToken == null) {
+          Navigator.of(context, rootNavigator: true).pop();
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Invalid user name or password"),
+          ));
+        } else {
+          if(color.isNotEmpty) {
+            markColor(color);
+          }
+          if(shifted.isNotEmpty){
+            markShiftedDeath(shifted);
+          }
+          if(death.isNotEmpty){
+            markShiftedDeath(death);
+          }
+          if(voted.isNotEmpty){
+            markVotedNonVoted(voted);
+          }
+        }
+      });
+
+    });
+
+
+  }
+
+  Future<void> markColor( String color) async {
+
+    await mainController.markColorPrediction(
+        mainController.tokenModel.value.accessToken,
+        widget.data.partNo!, widget.data.serialNo!, widget.data.wardNo!, color).then((value) =>
+        setState(() {
+          if (mainController.isColorSaved) {
+            updateColorToDB(color);
+            Navigator.of(context, rootNavigator: true).pop();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Color Prediction saved successfully"),
+            ));
+          }else{
+            Navigator.of(context, rootNavigator: true).pop();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Please try again, getting some problem"),
+            ));
+          }
+        }));
+
+  }
+
+  Future<void> markShiftedDeath(String type) async {
+
+    await mainController.markShiftedDeath(
+        mainController.tokenModel.value.accessToken,
+        widget.data.partNo!, widget.data.serialNo!, widget.data.wardNo!, type).then((value) =>
+        setState(() {
+          if (mainController.isShiftedDeathSaved) {
+            updateShiftedDeathToDB(type);
+            Navigator.of(context, rootNavigator: true).pop();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              content: Text("$type saved successfully"),
+            ));
+          }else{
+            Navigator.of(context, rootNavigator: true).pop();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Please try again, getting some problem"),
+            ));
+          }
+        }));
+
+  }
+
+  Future<void> markVotedNonVoted(String type) async {
+
+    await mainController.markVotedNonVoted(
+        mainController.tokenModel.value.accessToken,
+        widget.data.partNo!, widget.data.serialNo!, widget.data.wardNo!, type).then((value) =>
+        setState(() {
+          if (mainController.isVotedNonVotedSaved) {
+            updateVotedNonVotedToDB(type);
+            Navigator.of(context, rootNavigator: true).pop();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              content: Text("$type saved successfully"),
+            ));
+          }else{
+            Navigator.of(context, rootNavigator: true).pop();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Please try again, getting some problem"),
+            ));
+          }
+        }));
+
+  }
+
+
+  Future<void> updateColorToDB( String color) async {
+    await ObjectBox.updateColor(widget.data.partNo!,
+        widget.data.serialNo!, widget.data.wardNo!, color);
+
+  }
+
+  Future<void> updateShiftedDeathToDB( String type) async {
+    await ObjectBox.updateShiftedDeath(widget.data.partNo!,
+        widget.data.serialNo!, widget.data.wardNo!, type);
+
+  }
+
+  Future<void> updateVotedNonVotedToDB( String type) async {
+    await ObjectBox.updateVotedNonVoted(widget.data.partNo!,
+        widget.data.serialNo!, widget.data.wardNo!, type);
+
+  }
+
   CheckboxListTile getVotedCheckBox(){
     return CheckboxListTile(
       controlAffinity: ListTileControlAffinity.leading,
@@ -808,6 +1002,13 @@ class _DetailPageState extends State<DetailPage> {
             value: selectedVoted, onChanged: (bool? value) {
                 setState(() {
                   selectedVoted = value!;
+                  if(selectedVoted == true){
+                    widget.data.votedNonVoted = "Voted";
+                    callApi("", "","","Voted");
+                  }else{
+                    widget.data.votedNonVoted = "NonVoted";
+                    callApi("", "","","NonVoted");
+                  }
                 });
           },
         );
@@ -823,13 +1024,15 @@ class _DetailPageState extends State<DetailPage> {
           value: selectedShifted, onChanged: (bool? value) {
           setState(() {
             selectedShifted = value!;
+            widget.data.shiftedDeath = "Shifted";
+            callApi("", "Shifted","","");
             if(value == true) {
               selectedDeath = !value;
             }
           });
         },
         ),
-        selectedShifted == true ?
+       /* selectedShifted == true ?
         const Padding(
           padding: EdgeInsets.all(10.0),
           child: TextField(
@@ -841,7 +1044,7 @@ class _DetailPageState extends State<DetailPage> {
         ):
         const SizedBox(
         height: 0,
-    ),
+    ),*/
       ],
     );
   }
@@ -854,6 +1057,8 @@ class _DetailPageState extends State<DetailPage> {
       value: selectedDeath, onChanged: (bool? value) {
       setState(() {
         selectedDeath = value!;
+        widget.data.shiftedDeath = "Death";
+        callApi("", "","Death","");
         if(value == true) {
           selectedShifted = !value;
         }

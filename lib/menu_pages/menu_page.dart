@@ -8,6 +8,7 @@ import 'package:majrekar_app/menu_pages/voter_name_search.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
 import 'buildingWiseSearch/building_wise_search.dart';
+import 'languageSearch/language_wise_search.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -115,7 +116,7 @@ class _MenuPageState extends State<MenuPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) => const VoterNameSearch()));
+                                  (context) => const LanguageWiseSearch()));
                         }, label: 'Language Report',
                       ),
 

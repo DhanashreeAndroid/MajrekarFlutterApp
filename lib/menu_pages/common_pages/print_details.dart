@@ -38,34 +38,26 @@ class _PrintDetailsState extends State<PrintDetails> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => initBluetooth());
+    WidgetsBinding.instance.addPostFrameCallback((_) => requestAccess());
   }
 
-  Future<bool> requestAccess() async {
-    //request here your permissions
-    await Permission.bluetoothScan.request();
-    await Permission.bluetoothAdvertise.request();
-    await Permission.bluetoothConnect.request();
+  Future<void> requestAccess() async {
 
-    bool permOne = await Permission.bluetoothScan.request().isGranted;
-    bool permTwo = await Permission.bluetoothAdvertise.request().isGranted;
-    bool permThree = await Permission.bluetoothConnect.request().isGranted;
+      Map<Permission, PermissionStatus> statuses = await [Permission.bluetoothScan, Permission.bluetoothAdvertise, Permission.bluetoothConnect, Permission.bluetooth].request();
 
-    //This will only bring up one permission pop-up, but will only grant the permissions you have been requested here
-    //in this method.
+      if (statuses[Permission.bluetoothScan] == PermissionStatus.granted
+          && statuses[Permission.bluetoothAdvertise] == PermissionStatus.granted
+          && statuses[Permission.bluetoothConnect] == PermissionStatus.granted
+          && statuses[Permission.bluetooth] == PermissionStatus.granted) {
 
-    //Return your boolean here
-    return permOne && permTwo && permThree ? true : false;
+        print('Permission granted');
+        initBluetooth();
+      }else{
+        print('Permission not granted');
+      }
+
   }
 
-  Future<void> checkPermission() async {
-    bool request = await requestAccess() ;
-    if(request){
-      initBluetooth();
-    }else{
-      checkPermission();
-    }
-  }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initBluetooth() async {

@@ -64,7 +64,7 @@ class AuthService {
     }
   }
 
-  Future<dynamic> getUserData(String? token, String userid) async {
+  Future<dynamic> getUserData(String? token, String? userid) async {
     try {
 
       var url = Uri.parse("${Constant.baseUrl}${Constant.getUserData}/$userid");
@@ -93,11 +93,11 @@ class AuthService {
 
     try {
       var data = {
-        "username": userName,
-        "macAddress": macAddress,
-        "grant_type" : "password"};
+        "userid": userName,
+        "macaddress": macAddress};
 
-      print("data:  $data");
+      var body = json.encode(data);
+      print("data:  $body");
 
       var url = Uri.parse("${Constant.baseUrl}${Constant.saveMacAddress}");
 
@@ -111,7 +111,108 @@ class AuthService {
           "Connection": "Keep-Alive",
           "Keep-Alive": "timeout=5, max=1000"
         },
-        body: data,
+        body:  body,
+      );
+      print("Status : ${res.statusCode}");
+      return res;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> markColorPrediction(String? token, String partNo, String serialNo, String wardNo, String color) async {
+
+    try {
+      var data = {
+        "partno": partNo,
+        "serialno": serialNo,
+        "wardno": wardNo,
+        "color": color};
+
+      var body = json.encode(data);
+      print("data:  $body");
+
+      var url = Uri.parse("${Constant.baseUrl}${Constant.markColor}");
+
+      print("url $url");
+
+      var res = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "bearer $token",
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=5, max=1000"
+        },
+        body:  body,
+      );
+      print("Status : ${res.statusCode}");
+      return res;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+  Future<dynamic> markShiftedDeath(String? token, String partNo, String serialNo, String wardNo, String type) async {
+
+    try {
+      var data = {
+        "partno": partNo,
+        "serialno": serialNo,
+        "wardno": wardNo,
+        "shiftedDeath": type};
+
+      var body = json.encode(data);
+      print("data:  $body");
+
+      var url = Uri.parse("${Constant.baseUrl}${Constant.markShiftedDeath}");
+
+      print("url $url");
+
+      var res = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "bearer $token",
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=5, max=1000"
+        },
+        body:  body,
+      );
+      print("Status : ${res.statusCode}");
+      return res;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> markVotedNonVoted(String? token, String partNo, String serialNo, String wardNo, String type) async {
+
+    try {
+      var data = {
+        "partno": partNo,
+        "serialno": serialNo,
+        "wardno": wardNo,
+        "votednonvoted": type};
+
+      var body = json.encode(data);
+      print("data:  $body");
+
+      var url = Uri.parse("${Constant.baseUrl}${Constant.markVotedNonVoted}");
+
+      print("url $url");
+
+      var res = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "bearer $token",
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=5, max=1000"
+        },
+        body:  body,
       );
       print("Status : ${res.statusCode}");
       return res;

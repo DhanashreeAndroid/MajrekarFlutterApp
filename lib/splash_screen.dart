@@ -24,7 +24,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   final mainController = Get.put(MainController());
 
-  apiCall(String userId, String password) async {
+  apiCall(String? userId, String? password) async {
     alertDailog(context);
 
     await mainController.getToken(userId, password).then((value) {
@@ -44,14 +44,16 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  void callUserDetailsApi(String? token, String userid) async {
+  void callUserDetailsApi(String? token, String? userid) async {
     await mainController.getUserData(token, userid);
     int? count = mainController.userModel.value.uDetails?.length;
     if (mainController.userModel.value.uDetails != null && count! > 0) {
       UserDetails? user = mainController.userModel.value.uDetails?.first;
       addUserDetails(user);
-      callLoginApi(token);
+      callMacAddress(user!, token!);
+      //updateMacAddressTemparary(user!, token!);
     } else {
+      Navigator.of(context, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Getting some technical problem, Please try again."),
       ));
@@ -60,18 +62,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void addUserDetails(UserDetails? user) async {
-
-      await ObjectBox.deleteUserDetails();
-      await ObjectBox.insertUserDetails(user!);
-
+      await ObjectBox.updateUserDetails(user!);
   }
 
   Future<void> callMacAddress(UserDetails user, String token) async {
     final macAddress = await getDeviceIdentifier();
-    if (user != null && user.macAddress != null) {
+    print('db mac address : ${user.macAddress!}' );
+    print('device mac address : $macAddress' );
+    if (user.macAddress != null && macAddress != "unknown") {
       if (macAddress == user.macAddress) {
-        callLoginApi(token);
+        callGetData(token);
       } else {
+        Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("This User already login in another device"),
         ));
@@ -81,12 +83,27 @@ class _SplashScreenState extends State<SplashScreen> {
           token, macAddress!, user!.userName!);
       if (mainController.isMacSaved) {
         await ObjectBox.updateMacAddress(macAddress);
-
+        callGetDataFromApi(token);
       }
     }
   }
 
-  void callLoginApi(String? token) async {
+  Future<void> updateMacAddressTemparary(UserDetails user, String token) async {
+    final macAddress = await getDeviceIdentifier();
+    print('db mac address : ${user.macAddress!}' );
+    print('device mac address : $macAddress' );
+
+    await mainController.saveMacAddress(
+        token, macAddress!, user!.userName!);
+    if (mainController.isMacSaved) {
+      await ObjectBox.updateMacAddress(macAddress);
+      callGetDataFromApi(token);
+    }
+
+  }
+
+
+  void callGetDataFromApi(String? token) async {
     await mainController.getAllData(token);
     int? count = mainController.dataModel.value.eDetails?.length;
     if (mainController.dataModel.value.eDetails != null && count! > 0) {
@@ -99,11 +116,20 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  void callGetData(String? token) async{
+   List<EDetails> list =  await ObjectBox.getAll("Name");
+   if(list.isNotEmpty){
+     Navigator.pushReplacement(
+         context, MaterialPageRoute(builder: (context) => const MenuPage()));
+   }else{
+     callGetDataFromApi(token);
+   }
+  }
+
   void addOrUpdateEDetails(List<EDetails>? eDetails) async {
 
       await ObjectBox.deleteAll();
       await ObjectBox.insertAll(eDetails!);
-      Navigator.of(context, rootNavigator: true).pop();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const MenuPage()));
 
@@ -118,7 +144,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> loadScreen() async {
     List<UserDetails> users = await ObjectBox.getUserDetails();
-    if(users.isEmpty) {
+    if(users.isEmpty || users.first.userName.isNull ||  users.first.password.isNull ) {
       Timer(const Duration(seconds: 5),
               () =>
               Navigator.pushReplacement(context,
@@ -126,8 +152,9 @@ class _SplashScreenState extends State<SplashScreen> {
                       (context) => const LoginPage()))
       );
     }else{
-      apiCall(users.first.userName!, users.first.password!);
-    }
+        apiCall(users.first.userName, users.first.password);
+      }
+
   }
 
   @override

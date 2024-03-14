@@ -48,7 +48,7 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "",)));
+                                  (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "", language: "",)));
                         }, label: 'Surname wise Search',
                       ),
 
@@ -57,7 +57,7 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) =>  const VoterListPage(searchType : "Name wise Search" ,buildingName: "",)));
+                                  (context) =>  const VoterListPage(searchType : "Name wise Search" ,buildingName: "", language: "",)));
                         }, label: 'Name wise Search',
                       ),
 

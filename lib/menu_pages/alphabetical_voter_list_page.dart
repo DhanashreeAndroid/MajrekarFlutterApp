@@ -1,0 +1,319 @@
+import 'dart:io';
+
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:majrekar_app/CommonWidget/commonHeader.dart';
+import 'package:majrekar_app/menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
+import 'package:majrekar_app/menu_pages/buildingWiseSearch/part_no_drop_list_item.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+
+import '../../CommonWidget/commonButton.dart';
+import '../../CommonWidget/show_snak_bar.dart';
+import '../../CommonWidget/utility.dart';
+import '../../database/ObjectBox.dart';
+import '../../model/DataModel.dart';
+
+
+class AlphabeticalVoterListPage extends StatefulWidget {
+  const AlphabeticalVoterListPage({Key? key}) : super(key: key);
+
+  @override
+  State<AlphabeticalVoterListPage> createState() => _AlphabeticalVoterListPageState();
+}
+
+class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
+  final ScrollController _controller = ScrollController();
+  bool isLoading = false;
+  List<EDetails> voterList = [];
+  final _recipientPartNoKey = GlobalKey<FormState>();
+  TextEditingController partNoController = TextEditingController();
+
+
+  Future getData(String type) async {
+    try {
+      final isRecipientSurnameValid =
+      _recipientPartNoKey.currentState!.validate();
+      FocusScope.of(context).unfocus();
+      if (isRecipientSurnameValid) {
+        _recipientPartNoKey.currentState!.save();
+        //to vibrate the phone
+        await HapticFeedback.lightImpact();
+        setState(() => isLoading = true);
+        voterList = await ObjectBox.getPartWiseData(partNoController.text);
+        if(voterList.isNotEmpty){
+          generatePDF(type);
+        }else{
+          ShowSnackBar.showSnackBar(context, 'No record found.');
+        }
+        setState(() => isLoading = false);
+        return;
+      } else {
+        await HapticFeedback.heavyImpact();
+        return;
+      }
+    } catch (e) {
+      ShowSnackBar.showSnackBar(context, 'Error occurred.');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return WillPopScope(
+        onWillPop: () async {
+      Navigator.pop(context);
+      return false;
+    }, child: Scaffold(
+          backgroundColor: const Color.fromRGBO(218,222,224, 1),
+          body: SafeArea(
+            child: Column(
+              children: <Widget>[
+                getCommonHeader(context),
+                const SizedBox(
+                  width: 10,
+                ),
+                customInputs(),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Divider(thickness: 2,),
+                const SizedBox(
+                  height: 10,
+                ),
+                customButtons(),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          )
+      )
+    );
+
+  }
+
+  Padding customInputs() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 2.0, 2.0),
+      child:
+            Form(
+              key: _recipientPartNoKey,
+              child: TextFormField(
+                controller: partNoController,
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter Part No";
+                  }
+                  return null;
+                },
+                onSaved: (String? phoneNumber) {},
+                decoration: InputDecoration(
+                  hintText: 'Enter Part No',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ),
+    );
+  }
+
+  Padding customButtons() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
+      child: Column(
+        children: <Widget>[
+          const SizedBox(height: 10,),
+          CustomButton(
+            onPressed: () {
+              getData("Marathi");
+            }, label: 'Create Marathi PDF',
+          ),
+
+          const SizedBox(height: 20,),
+
+          CustomButton(
+            onPressed: () {
+              getData("English");
+            }, label: 'Create English PDF',
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> generatePDF(String type) async {
+    PdfDocument document;
+    //Create a new PDF document with conformance A2B.
+    document = PdfDocument(conformanceLevel: PdfConformanceLevel.a2b);
+
+    //Add page to the PDF
+    final PdfPage page = document.pages.add();
+    //Get page client size
+    final Size pageSize = page.getClientSize();
+    //Draw rectangle
+    page.graphics.drawRectangle(
+        bounds: Rect.fromLTWH(0, 0, pageSize.width, pageSize.height),
+        pen: PdfPen(PdfColor(142, 170, 219, 255)));
+    //Read font file.
+    List<int> fontData = await _readData('Roboto-Regular.ttf');
+    if(type == "Marathi"){
+      fontData = await _readData('Noto-Sans-Devanagari-Light.ttf');
+    }
+    //Create a PDF true type font.
+    PdfFont contentFont = PdfTrueTypeFont(fontData, 6);
+    PdfFont headerFont = PdfTrueTypeFont(fontData, 15);
+    PdfFont footerFont = PdfTrueTypeFont(fontData, 18);
+    //Generate PDF grid.
+    final PdfGrid grid = _getGrid(contentFont, type);
+    //Draw the header section by creating text element
+    final PdfLayoutResult result =
+    _drawHeader(page, pageSize, grid, contentFont, headerFont, footerFont, type);
+    //Draw grid
+    _drawGrid(page, grid, result, contentFont);
+    //Add invoice footer
+    //_drawFooter(page, pageSize, contentFont);
+    //Save and dispose the document.
+    final List<int> bytes = document.saveSync();
+    document.dispose();
+
+    //Get external storage directory
+    Directory? directory = await getExternalStorageDirectory();
+    //Get directory path
+    String? path = directory?.path;
+    //Create an empty file to write PDF data
+    File file = File('$path/Output.pdf');
+    //Write PDF data
+    await file.writeAsBytes(bytes, flush: true);
+    //Open the PDF document in mobile
+    OpenFile.open('$path/Output.pdf');
+  }
+
+  Future<List<int>> _readData(String name) async {
+    final ByteData data = await rootBundle.load('assets/$name');
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
+  PdfGrid _getGrid(PdfFont contentFont, String type) {
+    //Create a PDF grid
+    final PdfGrid grid = PdfGrid();
+    //Secify the columns count to the grid.
+    grid.columns.add(count: 6);
+    //Create the header row of the grid.
+    final PdfGridRow headerRow = grid.headers.add(1)[0];
+    //Set style
+    headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor(68, 114, 196));
+    headerRow.style.textBrush = PdfBrushes.white;
+    headerRow.cells[0].value = 'Part';
+    //headerRow.cells[0].stringFormat.alignment = PdfTextAlignment.center;
+    headerRow.cells[1].value = 'Sr No';
+    headerRow.cells[2].value = 'Voter Name';
+    headerRow.cells[3].value = 'Voter Address';
+    headerRow.cells[4].value = 'Sex';
+    headerRow.cells[5].value = 'Age';
+
+    for(var voter in voterList){
+      if(type == "English") {
+        _addProducts(
+            voter.partNo!,
+            voter.serialNo!,
+            "${voter.lnEnglish!} ${voter.fnEnglish!}",
+            "${voter.houseNoEnglish!} ${voter.buildingNameEnglish!}",
+            voter.sex!,
+            voter.age!,
+            grid);
+      }else{
+        _addProducts(
+            voter.partNo!,
+            voter.serialNo!,
+            "${voter.lnMarathi!} ${voter.fnMarathi!}",
+            "${voter.houseNoMarathi!} ${voter.buildingNameMarathi!}",
+            voter.sex!,
+            voter.age!,
+            grid);
+
+      }
+    }
+    final PdfPen whitePen = PdfPen(PdfColor.empty, width: 0.5);
+    PdfBorders borders = PdfBorders();
+    borders.all = PdfPen(PdfColor(142, 179, 219), width: 0.5);
+    grid.rows.applyStyle(PdfGridCellStyle(borders: borders));
+    grid.columns[0].width = 22;
+    grid.columns[1].width = 30;
+    grid.columns[4].width = 30;
+    grid.columns[5].width = 30;
+    for (int i = 0; i < headerRow.cells.count; i++) {
+      headerRow.cells[i].style.cellPadding =
+          PdfPaddings(bottom: 5, left: 5, right: 5, top: 5);
+      headerRow.cells[i].style.borders.all = whitePen;
+    }
+    for (int i = 0; i < grid.rows.count; i++) {
+      final PdfGridRow row = grid.rows[i];
+      if (i % 2 == 0) {
+        row.style.backgroundBrush = PdfSolidBrush(PdfColor(217, 226, 243));
+      }
+      for (int j = 0; j < row.cells.count; j++) {
+        final PdfGridCell cell = row.cells[j];
+        if (j == 0) {
+          cell.stringFormat.alignment = PdfTextAlignment.center;
+        }
+        cell.style.cellPadding =
+            PdfPaddings(bottom: 5, left: 5, right: 5, top: 5);
+      }
+    }
+    //Set font
+    grid.style.font = contentFont;
+    return grid;
+  }
+
+  void _addProducts(String partNo, String srNo, String voterName,
+      String voterAdd, String sex,String age, PdfGrid grid) {
+    final PdfGridRow row = grid.rows.add();
+    row.cells[0].value = partNo;
+    row.cells[1].value = srNo;
+    row.cells[2].value = voterName;
+    row.cells[3].value = voterAdd;
+    row.cells[4].value = sex;
+    row.cells[5].value = age;
+  }
+
+  PdfLayoutResult _drawHeader(PdfPage page, Size pageSize, PdfGrid grid,
+      PdfFont contentFont, PdfFont headerFont, PdfFont footerFont, String type) {
+    //Draw rectangle
+    page.graphics.drawRectangle(
+        brush: PdfSolidBrush(PdfColor(91, 126, 215, 255)),
+        bounds: Rect.fromLTWH(0, 0, pageSize.width , 50));
+    var str = "MAJREKAR'S Voters Management System";
+    if(type == "Marathi"){
+      str = "माजरेकर्स वोटर मॅनॅजमेन्ट सिस्टम";
+    }
+
+    return PdfTextElement(text: str, font: headerFont).draw(
+        page: page,
+        bounds:  Rect.fromLTWH(10, 10,
+            pageSize.width , 0))!;
+
+  }
+
+  void _drawGrid(
+      PdfPage page, PdfGrid grid, PdfLayoutResult result, PdfFont contentFont) {
+
+    //Draw the PDF grid and get the result.
+    result = grid.draw(
+        page: page, bounds: Rect.fromLTWH(0, result.bounds.bottom + 40, 0, 0))!;
+
+  }
+
+}

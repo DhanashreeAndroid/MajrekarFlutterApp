@@ -103,6 +103,7 @@ class _PrintDetailsState extends State<PrintDetails> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(218,222,224, 1),
         appBar: AppBar(
+          backgroundColor:const Color.fromRGBO(218,222,224, 1) ,
           title: const Text('Print Data'),
         ),
         body: RefreshIndicator(
@@ -142,7 +143,7 @@ class _PrintDetailsState extends State<PrintDetails> {
                 ),
                 const Divider(),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: Column(
                     children: <Widget>[
                       Row(
@@ -322,6 +323,7 @@ class _PrintDetailsState extends State<PrintDetails> {
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
     ]);
   }
+
   String getEnglishName(EDetails data){
     if(widget.searchType.contains("Surname")){
       return "${data.lnEnglish!} ${data.fnEnglish!}";
@@ -330,6 +332,7 @@ class _PrintDetailsState extends State<PrintDetails> {
     }
 
   }
+
   String getMarathiName(EDetails data){
     if(widget.searchType.contains("Surname")){
       return "${data.lnMarathi!} ${data.fnMarathi!}";
@@ -338,6 +341,7 @@ class _PrintDetailsState extends State<PrintDetails> {
     }
 
   }
+
   Padding customData(String title, String englishValue, String marathiValue,
       double screenWidth) {
     return Padding(
@@ -410,6 +414,7 @@ class _PrintDetailsState extends State<PrintDetails> {
       ),
     );
   }
+
   Padding customAgeGender(String value, double screenWidth) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),

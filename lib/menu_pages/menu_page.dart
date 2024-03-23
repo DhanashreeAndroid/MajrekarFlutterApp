@@ -1,13 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/easy_search.dart';
+import 'package:majrekar_app/menu_pages/pdfSample.dart';
 import 'package:majrekar_app/menu_pages/surname_counter_page.dart';
 import 'package:majrekar_app/menu_pages/voter_name_search.dart';
 
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
+import 'alphabetical_voter_list_page.dart';
 import 'buildingWiseSearch/building_wise_search.dart';
+import 'easy_print_share.dart';
 import 'languageSearch/language_wise_search.dart';
 
 class MenuPage extends StatefulWidget {
@@ -76,16 +81,18 @@ class _MenuPageState extends State<MenuPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) => const VoterNameSearch()));
+                                  (context) => const AlphabeticalVoterListPage()));
                         }, label: 'Alphabetical Voters List',
                       ),
-                      const SizedBox(height: 20,),
-                      CustomButton(
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder:
-                                  (context) => const VoterNameSearch()));
-                        }, label: 'Voting Making Report',
+                      Visibility(
+                        visible: false,
+                        child: CustomButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder:
+                                    (context) => const VoterNameSearch()));
+                          }, label: 'Voting Making Report',
+                        ),
                       ),
                       const SizedBox(height: 20,),
                       CustomButton(
@@ -100,16 +107,18 @@ class _MenuPageState extends State<MenuPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) => const VoterNameSearch()));
+                                  (context) => const EasyPrintShare()));
                         }, label: 'Voters Slip (Print/Share)',
                       ),
-                      const SizedBox(height: 20,),
-                      CustomButton(
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder:
-                                  (context) => const VoterNameSearch()));
-                        }, label: 'Contact Number Saved',
+                     Visibility(
+                        visible: false,
+                        child: CustomButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder:
+                                    (context) =>  PdfSample()));
+                          }, label: 'Contact Number Saved',
+                        ),
                       ),
                       const SizedBox(height: 20,),
                       CustomButton(
@@ -119,7 +128,7 @@ class _MenuPageState extends State<MenuPage> {
                                   (context) => const LanguageWiseSearch()));
                         }, label: 'Language Report',
                       ),
-
+                      const SizedBox(height: 20,),
 
                     ],
                   ),

@@ -23,7 +23,7 @@ Future<bool?> showExitPopup(context) async{
                           exit(0);
                         },
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.white),
+                            backgroundColor: Colors.white),
                         child: const Text("Yes", style: TextStyle(color:
                         Colors.black)),
                       ),
@@ -36,7 +36,7 @@ Future<bool?> showExitPopup(context) async{
                             Navigator.of(context).pop();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red.shade800,
+                            backgroundColor: Colors.red.shade800,
                           ),
                           child: const Text("No", style: TextStyle(color:
                           Colors.white)),

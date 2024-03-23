@@ -1,8 +1,7 @@
-
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/login_page.dart';
@@ -37,7 +36,6 @@ class _SplashScreenState extends State<SplashScreen> {
           ));
         } else {
           callUserDetailsApi(mainController.tokenModel.value.accessToken, userId);
-          //callLoginApi(mainController.tokenModel.value.accessToken);
         }
       });
 
@@ -49,9 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
     int? count = mainController.userModel.value.uDetails?.length;
     if (mainController.userModel.value.uDetails != null && count! > 0) {
       UserDetails? user = mainController.userModel.value.uDetails?.first;
-      addUserDetails(user);
-      callMacAddress(user!, token!);
-      //updateMacAddressTemparary(user!, token!);
+      checkForAnotherDevice(user!, token!);
     } else {
       Navigator.of(context, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -65,43 +61,27 @@ class _SplashScreenState extends State<SplashScreen> {
       await ObjectBox.updateUserDetails(user!);
   }
 
-  Future<void> callMacAddress(UserDetails user, String token) async {
+  Future<void> checkForAnotherDevice(UserDetails user, String token) async {
     final macAddress = await getDeviceIdentifier();
-    print('db mac address : ${user.macAddress!}' );
-    print('device mac address : $macAddress' );
-    if (user.macAddress != null && macAddress != "unknown") {
-      if (macAddress == user.macAddress) {
+    if (user.macAddress !=  "0") {
+      print('db mac address : ${user.macAddress!}' );
+      print('device mac address : $macAddress' );
+      if (macAddress == user.macAddress && macAddress != "unknown") {
+        addUserDetails(user);
         callGetData(token);
-      } else {
+      } else if (macAddress == "unknown") {
+        Navigator.of(context, rootNavigator: true).pop();
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to find mac address."),
+        ));
+      }else {
         Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("This User already login in another device"),
         ));
       }
-    } else {
-      await mainController.saveMacAddress(
-          token, macAddress!, user!.userName!);
-      if (mainController.isMacSaved) {
-        await ObjectBox.updateMacAddress(macAddress);
-        callGetDataFromApi(token);
-      }
     }
   }
-
-  Future<void> updateMacAddressTemparary(UserDetails user, String token) async {
-    final macAddress = await getDeviceIdentifier();
-    print('db mac address : ${user.macAddress!}' );
-    print('device mac address : $macAddress' );
-
-    await mainController.saveMacAddress(
-        token, macAddress!, user!.userName!);
-    if (mainController.isMacSaved) {
-      await ObjectBox.updateMacAddress(macAddress);
-      callGetDataFromApi(token);
-    }
-
-  }
-
 
   void callGetDataFromApi(String? token) async {
     await mainController.getAllData(token);
@@ -139,8 +119,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState()  {
     super.initState();
-        loadScreen();
+    loadScreen();
   }
+
+
 
   Future<void> loadScreen() async {
     List<UserDetails> users = await ObjectBox.getUserDetails();
@@ -210,3 +192,6 @@ class _SplashScreenState extends State<SplashScreen> {
 //flutter pub get
 
 //flutter packages pub run build_runner build --delete-conflicting-outputs
+
+//to generate apk run this command
+//flutter build apk --release --no-sound-null-safety

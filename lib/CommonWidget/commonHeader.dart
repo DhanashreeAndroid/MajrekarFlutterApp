@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 Widget getCommonHeader(BuildContext context){
   double screenWidth = MediaQuery.of(context).size.width;
   return Container(
-    height: 140,
+    height: 135,
     width: screenWidth,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(1),
@@ -21,19 +21,19 @@ Widget getCommonHeader(BuildContext context){
         const SizedBox(height: 10,),
         const Text("MAJREKAR'S",
           style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
-              fontSize: 50,
+              fontSize: 40,
               fontFamily: 'Calibri',
               fontWeight: FontWeight.bold)
           ,),
         const Text("Voters Management System",
           style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
-              fontSize: 25,
+              fontSize: 20,
               fontFamily: 'Calibri',
               fontWeight: FontWeight.bold)
           ,),
         const Text("Contact - 9892862864/9867262864",
           style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
-              fontSize: 25,
+              fontSize: 20,
               fontFamily: 'Calibri',
               fontWeight: FontWeight.bold)
           ,),

@@ -87,10 +87,10 @@ class _SurnameCounterPageState extends State<SurnameCounterPage> {
                 itemCount: _foundUsers.length,
                 itemBuilder: (context, index) => Card(
                   key: ValueKey(_foundUsers[index]),
-                  color: const Color.fromRGBO(218,222,224, 1),
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(vertical: 1),
                   child: ListTile(
+                    tileColor: const Color.fromRGBO(218,222,224, 1),
                     leading: Text(
                         (index+1).toString(),
                       style: const TextStyle(fontSize: 24),

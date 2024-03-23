@@ -7,12 +7,13 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return
+      Padding(
         padding: const EdgeInsets.fromLTRB(30.0,0,30.0,0),
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               gradient: const LinearGradient(
                   colors: [
                     Color.fromRGBO(218,222,224, 1),

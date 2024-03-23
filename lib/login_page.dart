@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/controller/MainController.dart';
@@ -20,6 +21,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final mainController = Get.put(MainController());
+  bool isOffline = false;
   TextEditingController userNameController =
       TextEditingController(text: "admin");
   TextEditingController passwordController =
@@ -86,10 +88,7 @@ class _LoginPageState extends State<LoginPage> {
       int? count = mainController.userModel.value.uDetails?.length;
       if (mainController.userModel.value.uDetails != null && count! > 0) {
         UserDetails? user = mainController.userModel.value.uDetails?.first;
-        user!.password = passwordController.text.toString();
-        addUserDetails(user);
-        callMacAddress(user, token!);
-       // updateMacAddress(user, token!);
+        checkForAnotherDevice(user!, token!);
       } else {
         Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -99,28 +98,42 @@ class _LoginPageState extends State<LoginPage> {
 
   }
 
-  Future<void> callMacAddress(UserDetails user, String token) async {
+  Future<void> checkForAnotherDevice(UserDetails user, String token) async {
     final macAddress = await getDeviceIdentifier();
-    if (user.macAddress != null) {
+    if (user.macAddress != "0") {
       print('db mac address : ${user.macAddress!}' );
       print('device mac address : $macAddress' );
-       if (macAddress == user.macAddress && macAddress != "unknown") {
+      if (macAddress == user.macAddress && macAddress != "unknown") {
         callLoginApi(token);
-      } else {
+      } else if (macAddress == "unknown") {
+        Navigator.of(context, rootNavigator: true).pop();
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to find mac address."),
+        ));
+      }else {
         Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("This User already login in another device"),
         ));
       }
-    } else {
+    }else{
+      user.password = passwordController.text.toString();
+      addUserDetails(user);
+      callMacAddress(user, token, macAddress!);
+    }
+  }
+
+  Future<void> callMacAddress(UserDetails user, String token, String macAddress) async {
+
       await mainController.saveMacAddress(
-          token, macAddress!, user!.userName!);
+          token, macAddress, user.userName!);
       if (mainController.isMacSaved) {
         await ObjectBox.updateMacAddress(macAddress);
         callLoginApi(token);
       }
-    }
+
   }
+
   Future<void> updateMacAddress(UserDetails user, String token) async {
     final macAddress = await getDeviceIdentifier();
     print('db mac address : ${user.macAddress!}' );
@@ -248,10 +261,6 @@ class _LoginPageState extends State<LoginPage> {
                                   children: <Widget>[
                                     Container(
                                       padding: const EdgeInsets.all(8.0),
-                                      decoration: const BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(
-                                                  color: Colors.grey))),
                                       child: TextField(
                                         controller: userNameController,
                                         autofocus: false,
@@ -303,8 +312,12 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     onPressed: () async {
-                                      apiCall(userNameController.text,
-                                          passwordController.text);
+                                      if(isOffline){
+
+                                      }else {
+                                        apiCall(userNameController.text,
+                                            passwordController.text);
+                                      }
                                       // addOrUpdateNote(items);
                                     },
                                     child: const Text(
@@ -329,4 +342,5 @@ class _LoginPageState extends State<LoginPage> {
           )),
     );
   }
+
 }

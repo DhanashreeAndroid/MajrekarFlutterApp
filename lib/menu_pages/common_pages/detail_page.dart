@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -213,7 +214,7 @@ class _DetailPageState extends State<DetailPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  userDetails?.isMarkable == "false" ?
+                  userDetails?.isMarkable == "true" ?
                   Column(
                     children: <Widget>[
                   getRedGreenOrangeRadioButton(screenWidth),
@@ -522,7 +523,7 @@ class _DetailPageState extends State<DetailPage> {
             flex: 1,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                padding: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 0),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
@@ -566,8 +567,9 @@ class _DetailPageState extends State<DetailPage> {
             flex: 1,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                child: Container(
+                padding: const EdgeInsets.fromLTRB(1.0, 0, 1.0, 0),
+                child:
+                Container(
                   height: 40,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -649,39 +651,42 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
 
-          Flexible(
-            flex: 2,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      gradient: const LinearGradient(colors: [
-                        Color.fromRGBO(255, 255, 255, 1),
-                        Color.fromRGBO(255, 255, 255, .6),
-                      ])),
-                  child: SizedBox(
-                    width: 140,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        side: const BorderSide(
-                          width: 1.0,
-                          color: Colors.transparent,
+          Visibility(
+            visible: false,
+            child: Flexible(
+              flex: 2,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        gradient: const LinearGradient(colors: [
+                          Color.fromRGBO(255, 255, 255, 1),
+                          Color.fromRGBO(255, 255, 255, .6),
+                        ])),
+                    child: SizedBox(
+                      width: 140,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          side: const BorderSide(
+                            width: 1.0,
+                            color: Colors.transparent,
+                          ),
                         ),
-                      ),
-                      onPressed: ()  {
+                        onPressed: ()  {
 
-                      },
-                      child: const Text(
-                        "Save",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
                       ),
                     ),
                   ),

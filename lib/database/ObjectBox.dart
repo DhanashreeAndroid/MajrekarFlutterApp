@@ -85,6 +85,32 @@ class ObjectBox {
 
   }
 
+  static Future<List<EDetails>> getSearchResult(String searchType, String search) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    if(searchType.contains("Name")){
+      final query  = (box.query(EDetails_.fnEnglish.notEquals('') &
+      EDetails_.lnEnglish.contains(search, caseSensitive: false) |
+          EDetails_.fnEnglish.contains(search, caseSensitive: false) )..order(EDetails_.fnEnglish, flags:  Order.nullsLast )).build();
+      final output = query.find();
+      query.close();
+      store.close();
+      return output;
+    }else{
+      final query  = (box.query(EDetails_.lnEnglish.notEquals('') &
+      EDetails_.lnEnglish.contains(search, caseSensitive: false) |
+      EDetails_.fnEnglish.contains(search, caseSensitive: false))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+      final output = query.find();
+      query.close();
+      store.close();
+      return output;
+    }
+
+
+  }
+
+
   static Future<List<EDetails>> getAllBuildingWiseData(String buildingName) async {
     final store = await openStore();
     var box = store.box<EDetails>();
@@ -98,6 +124,18 @@ class ObjectBox {
 
   }
 
+  static Future<List<EDetails>> getPartWiseData(String partNo) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    final query  = (box.query(EDetails_.lnEnglish.notEquals('')
+    & EDetails_.partNo.equals(partNo))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output;
+
+  }
 
   static Future<List<EDetails>> getFamilyVoters(String searchType, String surName, String houseNo, String buildingAddress) async {
     final store = await openStore();
@@ -184,6 +222,20 @@ class ObjectBox {
     return output;
 
   }
+
+  static Future<EDetails> getPartSerialWiseData(String part, String serial) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    final query  = (box.query(EDetails_.partNo.contains(part, caseSensitive: false) &
+    EDetails_.serialNo.contains(serial, caseSensitive: false) )..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output.first;
+
+  }
+
 
   static Future<List<SurnameCounterModel>> getSurnameCountData() async {
     final store = await openStore();

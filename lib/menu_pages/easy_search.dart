@@ -72,7 +72,7 @@ class _EasySearchState extends State<EasySearch> {
           Navigator.pop(context);
           return false;
         }, child: Scaffold(
-        backgroundColor: const Color.fromRGBO(230, 238, 255, 1),
+        backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: SafeArea(
           child: Column(
             children: <Widget>[

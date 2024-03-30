@@ -10,5 +10,11 @@ class Constant{
   static const String markColor = "api/vidhansabha/markcolor";
   static const String markShiftedDeath = "api/vidhansabha/markshifteddeath";
   static const String markVotedNonVoted = "api/vidhansabha/markvotednonvoted";
+
+
+  //constant for app flow
+
+static const bool isOffline = false;
+
 }
 

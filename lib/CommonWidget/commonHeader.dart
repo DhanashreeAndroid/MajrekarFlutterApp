@@ -1,6 +1,8 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 Widget getCommonHeader(BuildContext context){
   double screenWidth = MediaQuery.of(context).size.width;
@@ -19,12 +21,45 @@ Widget getCommonHeader(BuildContext context){
     child: Column(
       children:   [
         const SizedBox(height: 10,),
-        const Text("MAJREKAR'S",
-          style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
-              fontSize: 40,
-              fontFamily: 'Calibri',
-              fontWeight: FontWeight.bold)
-          ,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: Image.asset("images/leftarrow.png",
+                    height: 30,
+                    width: 30),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+            ),
+            Expanded(
+              child: Container(
+                child:
+                const Column(
+                  children:   [
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0.0,0.0,40.0,0.0),
+                    child: Text("MAJREKAR'S",
+                      style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
+                          fontSize: 40,
+                          fontFamily: 'Calibri',
+                          fontWeight: FontWeight.bold)
+                      ,),
+                  ),
+                ),
+                ]),
+              ),
+            ),
+          ],
+        ),
+
         const Text("Voters Management System",
           style: TextStyle(color: Color.fromRGBO(7,53,250, 1),
               fontSize: 20,

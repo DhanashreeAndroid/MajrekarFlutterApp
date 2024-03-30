@@ -181,6 +181,48 @@ Future alertDailog(BuildContext context) {
   );
 }
 
+Future alertDialogWithMessage(BuildContext context, String text) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+
+          // title: Text('Welcome'),
+          content: SizedBox(
+            height: 100,
+            width: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: CircularProgressIndicator(
+                      color: white,
+                      backgroundColor: puprle,
+                    ),
+                  ),
+                ),
+                Center(
+                  child:  Text(text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 40,
+                        color: Colors.black,
+                        fontFamily: 'FUTURALC',
+                        decoration: TextDecoration.none),),
+                )
+              ],
+            ),
+          ));
+    },
+  );
+}
+
 Future<String?> getDeviceIdentifier() async {
   String? deviceIdentifier = "unknown";
   try {

@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'package:csv/csv.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/login_page.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'CommonWidget/utility.dart';
 import 'controller/MainController.dart';
@@ -22,6 +27,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final mainController = Get.put(MainController());
+  var strMessage = "Please wait";
 
   apiCall(String? userId, String? password) async {
     alertDailog(context);
@@ -123,7 +129,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
 
-
   Future<void> loadScreen() async {
     List<UserDetails> users = await ObjectBox.getUserDetails();
     if(users.isEmpty || users.first.userName.isNull ||  users.first.password.isNull ) {
@@ -185,7 +190,13 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+
+
 }
+
+
+
+
 
 //flutter clean
 

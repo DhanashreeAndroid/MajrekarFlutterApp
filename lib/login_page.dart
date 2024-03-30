@@ -1,11 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:majrekar_app/CommonWidget/Constant.dart';
 import 'package:majrekar_app/controller/MainController.dart';
 import 'package:majrekar_app/database/ObjectBox.dart';
 import 'package:majrekar_app/menu_pages/menu_page.dart';
 import 'package:majrekar_app/model/UserModel.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'CommonWidget/commonHeader.dart';
 import 'CommonWidget/utility.dart';
@@ -21,7 +27,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final mainController = Get.put(MainController());
-  bool isOffline = false;
   TextEditingController userNameController =
       TextEditingController(text: "admin");
   TextEditingController passwordController =
@@ -104,7 +109,11 @@ class _LoginPageState extends State<LoginPage> {
       print('db mac address : ${user.macAddress!}' );
       print('device mac address : $macAddress' );
       if (macAddress == user.macAddress && macAddress != "unknown") {
-        callLoginApi(token);
+        if(Constant.isOffline){
+          getOfflineData(context);
+        }else {
+          callLoginApi(token);
+        }
       } else if (macAddress == "unknown") {
         Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -129,7 +138,11 @@ class _LoginPageState extends State<LoginPage> {
           token, macAddress, user.userName!);
       if (mainController.isMacSaved) {
         await ObjectBox.updateMacAddress(macAddress);
-        callLoginApi(token);
+        if(Constant.isOffline){
+          getOfflineData(context);
+        }else {
+          callLoginApi(token);
+        }
       }
 
   }
@@ -312,13 +325,10 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     onPressed: () async {
-                                      if(isOffline){
 
-                                      }else {
                                         apiCall(userNameController.text,
                                             passwordController.text);
-                                      }
-                                      // addOrUpdateNote(items);
+
                                     },
                                     child: const Text(
                                       "Login",
@@ -341,6 +351,59 @@ class _LoginPageState extends State<LoginPage> {
             ),
           )),
     );
+
+
+
   }
+
+  Future getOfflineData(BuildContext context) async{
+/*
+    List<EDetails> voterList = [];
+    await ObjectBox.deleteAll();
+
+    Directory directory = await getApplicationDocumentsDirectory();
+    var dbPath = "${directory.path}fullvidhansabha3.csv";
+    if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
+      ByteData data = await rootBundle.load("assets/datautfeight.csv");
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await File(dbPath).writeAsBytes(bytes);
+    }
+    final csvFile = File(dbPath).openRead();
+
+    List<List<dynamic>> list = await csvFile.transform(utf8.decoder).transform(const CsvToListConverter()).toList();
+
+    for(int i=1;i<list.length;i++){
+      //ward no.,Partno,Serial_No,Cardno,LN_English,FN_English,LN_Marathi,FN_Marathi,Sex,Age,HouseNo_English,HouseNo_Marathi,BuildingName_English,BuildingName_marathi,EnglishBoothAddress,MarathiBoothAddress,Lang,Color,Shifted_death,Voted_Nonvoted
+     var eDetails = EDetails(dbId: i.toString(), wardNo:list.elementAt(i).elementAt(0).toString(),
+          partNo: list.elementAt(i).elementAt(1).toString(),
+          serialNo: list.elementAt(i).elementAt(2).toString(),
+          cardNo: list.elementAt(i).elementAt(3).toString(),
+          lnEnglish: list.elementAt(i).elementAt(4).toString(),
+          fnEnglish: list.elementAt(i).elementAt(5).toString(),
+          lnMarathi: list.elementAt(i).elementAt(6).toString(),
+          fnMarathi: list.elementAt(i).elementAt(7).toString(),
+          sex: list.elementAt(i).elementAt(8).toString(),
+          age: list.elementAt(i).elementAt(9).toString(),
+          houseNoEnglish: list.elementAt(i).elementAt(10).toString(),
+          houseNoMarathi: list.elementAt(i).elementAt(11).toString(),
+          buildingNameEnglish: list.elementAt(i).elementAt(12).toString(),
+          buildingNameMarathi: list.elementAt(i).elementAt(13).toString(),
+          boothAddressEnglish: list.elementAt(i).elementAt(14).toString(),
+          boothAddressMarathi: list.elementAt(i).elementAt(15).toString(),
+          lang: list.elementAt(i).elementAt(16).toString(),
+          color: list.elementAt(i).elementAt(17).toString(),
+          shiftedDeath: list.elementAt(i).elementAt(18).toString(),
+          votedNonVoted: list.elementAt(i).elementAt(19).toString()
+      );
+      voterList.add(eDetails);
+    }
+    await ObjectBox.insertAll(voterList);
+    List<EDetails> dblist =  await ObjectBox.getAll("Name");
+    print("db data count : ${dblist.length}");
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MenuPage()));
+ */
+  }
+
 
 }

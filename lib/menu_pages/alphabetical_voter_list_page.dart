@@ -17,12 +17,12 @@ import '../../CommonWidget/utility.dart';
 import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 
-
 class AlphabeticalVoterListPage extends StatefulWidget {
   const AlphabeticalVoterListPage({Key? key}) : super(key: key);
 
   @override
-  State<AlphabeticalVoterListPage> createState() => _AlphabeticalVoterListPageState();
+  State<AlphabeticalVoterListPage> createState() =>
+      _AlphabeticalVoterListPageState();
 }
 
 class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
@@ -32,11 +32,10 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
   final _recipientPartNoKey = GlobalKey<FormState>();
   TextEditingController partNoController = TextEditingController();
 
-
   Future getData(String type) async {
     try {
       final isRecipientSurnameValid =
-      _recipientPartNoKey.currentState!.validate();
+          _recipientPartNoKey.currentState!.validate();
       FocusScope.of(context).unfocus();
       if (isRecipientSurnameValid) {
         _recipientPartNoKey.currentState!.save();
@@ -44,9 +43,9 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
         voterList = await ObjectBox.getPartWiseData(partNoController.text);
-        if(voterList.isNotEmpty){
+        if (voterList.isNotEmpty) {
           generatePDF(type);
-        }else{
+        } else {
           ShowSnackBar.showSnackBar(context, 'No record found.');
         }
         setState(() => isLoading = false);
@@ -62,71 +61,69 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
         onWillPop: () async {
-      Navigator.pop(context);
-      return false;
-    }, child: Scaffold(
-          backgroundColor: const Color.fromRGBO(218,222,224, 1),
-          body: SafeArea(
-            child: Column(
-              children: <Widget>[
-                getCommonHeader(context),
-                const SizedBox(
-                  width: 10,
-                ),
-                customInputs(),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Divider(thickness: 2,),
-                const SizedBox(
-                  height: 10,
-                ),
-                customButtons(),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          )
-      )
-    );
-
+          Navigator.pop(context);
+          return false;
+        },
+        child: Scaffold(
+            backgroundColor: const Color.fromRGBO(218, 222, 224, 1),
+            body: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  getCommonHeader(context),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  customInputs(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(
+                    thickness: 2,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  customButtons(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+            )));
   }
 
   Padding customInputs() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 2.0, 2.0),
-      child:
-            Form(
-              key: _recipientPartNoKey,
-              child: TextFormField(
-                controller: partNoController,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please enter Part No";
-                  }
-                  return null;
-                },
-                onSaved: (String? phoneNumber) {},
-                decoration: InputDecoration(
-                  hintText: 'Enter Part No',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
+      child: Form(
+        key: _recipientPartNoKey,
+        child: TextFormField(
+          controller: partNoController,
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Please enter Part No";
+            }
+            return null;
+          },
+          onSaved: (String? phoneNumber) {},
+          decoration: InputDecoration(
+            hintText: 'Enter Part No',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
             ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -135,19 +132,23 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
       child: Column(
         children: <Widget>[
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           CustomButton(
             onPressed: () {
               getData("Marathi");
-            }, label: 'Create Marathi PDF',
+            },
+            label: 'Create Marathi PDF',
           ),
-
-          const SizedBox(height: 20,),
-
+          const SizedBox(
+            height: 20,
+          ),
           CustomButton(
             onPressed: () {
               getData("English");
-            }, label: 'Create English PDF',
+            },
+            label: 'Create English PDF',
           )
         ],
       ),
@@ -169,7 +170,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
         pen: PdfPen(PdfColor(142, 170, 219, 255)));
     //Read font file.
     List<int> fontData = await _readData('Roboto-Regular.ttf');
-    if(type == "Marathi"){
+    if (type == "Marathi") {
       fontData = await _readData('Noto-Sans-Devanagari-Light.ttf');
     }
     //Create a PDF true type font.
@@ -179,8 +180,8 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     //Generate PDF grid.
     final PdfGrid grid = _getGrid(contentFont, type);
     //Draw the header section by creating text element
-    final PdfLayoutResult result =
-    _drawHeader(page, pageSize, grid, contentFont, headerFont, footerFont, type);
+    final PdfLayoutResult result = _drawHeader(
+        page, pageSize, grid, contentFont, headerFont, footerFont, type);
     //Draw grid
     _drawGrid(page, grid, result, contentFont);
     //Add invoice footer
@@ -190,9 +191,11 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     document.dispose();
 
     //Get external storage directory
-    Directory? directory = await getExternalStorageDirectory();
+    Directory? directory = Platform.isAndroid
+        ? await getTemporaryDirectory()
+        : await getApplicationSupportDirectory();
     //Get directory path
-    String? path = directory?.path;
+    String? path = directory.path;
     //Create an empty file to write PDF data
     File file = File('$path/Output.pdf');
     //Write PDF data
@@ -224,8 +227,8 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     headerRow.cells[4].value = 'Sex';
     headerRow.cells[5].value = 'Age';
 
-    for(var voter in voterList){
-      if(type == "English") {
+    for (var voter in voterList) {
+      if (type == "English") {
         _addProducts(
             voter.partNo!,
             voter.serialNo!,
@@ -234,7 +237,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
             voter.sex!,
             voter.age!,
             grid);
-      }else{
+      } else {
         _addProducts(
             voter.partNo!,
             voter.serialNo!,
@@ -243,7 +246,6 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
             voter.sex!,
             voter.age!,
             grid);
-
       }
     }
     final PdfPen whitePen = PdfPen(PdfColor.empty, width: 0.5);
@@ -279,7 +281,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
   }
 
   void _addProducts(String partNo, String srNo, String voterName,
-      String voterAdd, String sex,String age, PdfGrid grid) {
+      String voterAdd, String sex, String age, PdfGrid grid) {
     final PdfGridRow row = grid.rows.add();
     row.cells[0].value = partNo;
     row.cells[1].value = srNo;
@@ -289,31 +291,31 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     row.cells[5].value = age;
   }
 
-  PdfLayoutResult _drawHeader(PdfPage page, Size pageSize, PdfGrid grid,
-      PdfFont contentFont, PdfFont headerFont, PdfFont footerFont, String type) {
+  PdfLayoutResult _drawHeader(
+      PdfPage page,
+      Size pageSize,
+      PdfGrid grid,
+      PdfFont contentFont,
+      PdfFont headerFont,
+      PdfFont footerFont,
+      String type) {
     //Draw rectangle
     page.graphics.drawRectangle(
         brush: PdfSolidBrush(PdfColor(91, 126, 215, 255)),
-        bounds: Rect.fromLTWH(0, 0, pageSize.width , 50));
+        bounds: Rect.fromLTWH(0, 0, pageSize.width, 50));
     var str = "MAJREKAR'S Voters Management System";
-    if(type == "Marathi"){
+    if (type == "Marathi") {
       str = "माजरेकर्स वोटर मॅनॅजमेन्ट सिस्टम";
     }
 
-    return PdfTextElement(text: str, font: headerFont).draw(
-        page: page,
-        bounds:  Rect.fromLTWH(10, 10,
-            pageSize.width , 0))!;
-
+    return PdfTextElement(text: str, font: headerFont)
+        .draw(page: page, bounds: Rect.fromLTWH(10, 10, pageSize.width, 0))!;
   }
 
   void _drawGrid(
       PdfPage page, PdfGrid grid, PdfLayoutResult result, PdfFont contentFont) {
-
     //Draw the PDF grid and get the result.
     result = grid.draw(
         page: page, bounds: Rect.fromLTWH(0, result.bounds.bottom + 40, 0, 0))!;
-
   }
-
 }

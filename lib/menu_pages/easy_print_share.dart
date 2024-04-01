@@ -13,7 +13,6 @@ import 'common_pages/detail_page.dart';
 import 'common_pages/print_details.dart';
 import 'common_pages/share_image.dart';
 
-
 class EasyPrintShare extends StatefulWidget {
   const EasyPrintShare({Key? key}) : super(key: key);
 
@@ -29,14 +28,12 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
   TextEditingController partNoController = TextEditingController();
   TextEditingController srNoController = TextEditingController();
 
-
   Future getData() async {
-
     try {
       final isRecipientSurnameValid =
-      _recipientPartNoFormKey.currentState!.validate();
+          _recipientPartNoFormKey.currentState!.validate();
       final isRecipientNameValid =
-      _recipientSrNoFormKey.currentState!.validate();
+          _recipientSrNoFormKey.currentState!.validate();
       FocusScope.of(context).unfocus();
       if (isRecipientSurnameValid && isRecipientNameValid) {
         _recipientPartNoFormKey.currentState!.save();
@@ -44,7 +41,8 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         //to vibrate the phone
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
-        voterDetails = await ObjectBox.getPartSerialWiseData(partNoController.text, srNoController.text);
+        voterDetails = await ObjectBox.getPartSerialWiseData(
+            partNoController.text, srNoController.text);
         setState(() => isLoading = false);
         return;
       } else {
@@ -56,8 +54,6 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -65,61 +61,62 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         onWillPop: () async {
           Navigator.pop(context);
           return false;
-        }, child: Scaffold(
-        backgroundColor: const Color.fromRGBO(218,222,224, 1),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                getCommonHeader(context),
-                customInputs(),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomButton(
-                  onPressed: () {
-                    getData();
-                    }, label: 'Search',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Divider(thickness: 2,),
-                const SizedBox(
-                  height: 10,
-                ),
-                const AutoSizeText(
-                  'Voter Details',
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                voterDetails != null ?
-                generateWidgets(voterDetails!, screenWidth) :
-                const Column(
-                  children: [
-                    Center(
-                      child: Text("Please enter part no and serial no then click on search button"),
+        },
+        child: Scaffold(
+            backgroundColor: const Color.fromRGBO(218, 222, 224, 1),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    getCommonHeader(context),
+                    customInputs(),
+                    const SizedBox(
+                      height: 10,
                     ),
-                    SizedBox(
-                      height: 20,
+                    CustomButton(
+                      onPressed: () {
+                        getData();
+                      },
+                      label: 'Search',
                     ),
-            
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const AutoSizeText(
+                      'Voter Details',
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    voterDetails != null
+                        ? generateWidgets(voterDetails!, screenWidth)
+                        : Column(
+                            children: [
+                              Center(
+                                child: Text(
+                                    "Please enter part no and serial no then click on search button"),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                    voterDetails != null ? customButtons() : const SizedBox(),
+                    const SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
-                voterDetails != null ?
-                customButtons() :
-                    const SizedBox(),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-        )
-    )
-    );
-
+              ),
+            )));
   }
 
   Padding customInputs() {
@@ -129,8 +126,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         children: <Widget>[
           Flexible(
             flex: 1,
-            child:
-            Form(
+            child: Form(
               key: _recipientPartNoFormKey,
               child: TextFormField(
                 autofocus: true,
@@ -159,11 +155,12 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
               ),
             ),
           ),
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
-            child:
-            Form(
+            child: Form(
               key: _recipientSrNoFormKey,
               child: TextFormField(
                 autofocus: true,
@@ -202,31 +199,44 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
       child: Row(
         children: <Widget>[
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
             child: CustomButton(
               onPressed: () {
-                List<EDetails> voterList = List<EDetails>.generate(1, (index) => voterDetails!);
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) =>  PrintDetails(voterList: voterList,searchType: "Surname", )));
-              }, label: 'Print',
+                List<EDetails> voterList =
+                    List<EDetails>.generate(1, (index) => voterDetails!);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PrintDetails(
+                              voterList: voterList,
+                              searchType: "Surname",
+                            )));
+              },
+              label: 'Print',
             ),
           ),
-
-          const SizedBox(width: 10,),
-
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
             child: CustomButton(
               onPressed: () {
-                List<EDetails> voterList = List<EDetails>.generate(1, (index) => voterDetails!);
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) =>  ShareImage(voterList: voterList,searchType: "Surname", )));
-
-              }, label: 'Share',
+                List<EDetails> voterList =
+                    List<EDetails>.generate(1, (index) => voterDetails!);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShareImage(
+                              voterList: voterList,
+                              searchType: "Surname",
+                            )));
+              },
+              label: 'Share',
             ),
           )
         ],
@@ -234,11 +244,10 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
     );
   }
 
-
   Column generateWidgets(EDetails data, double screenWidth) {
     return Column(children: <Widget>[
-      customData("Name", getEnglishName(data),
-          getMarathiName(data), screenWidth),
+      customData(
+          "Name", getEnglishName(data), getMarathiName(data), screenWidth),
       customData(
           "Address",
           "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
@@ -252,12 +261,12 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
     ]);
   }
 
-  String getEnglishName(EDetails data){
-      return "${data.lnEnglish!} ${data.fnEnglish!}";
+  String getEnglishName(EDetails data) {
+    return "${data.lnEnglish!} ${data.fnEnglish!}";
   }
 
-  String getMarathiName(EDetails data){
-      return "${data.lnMarathi!} ${data.fnMarathi!}";
+  String getMarathiName(EDetails data) {
+    return "${data.lnMarathi!} ${data.fnMarathi!}";
   }
 
   Padding customData(String title, String englishValue, String marathiValue,
@@ -486,5 +495,4 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
       ),
     );
   }
-
 }

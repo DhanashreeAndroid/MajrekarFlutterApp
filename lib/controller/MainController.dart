@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:majrekar_app/model/UserModel.dart';
+import 'package:majrekar_app/model/VidhansabhaModel.dart';
 import 'package:majrekar_app/services/authservice/AuthService.dart';
 
 import '../CommonWidget/snackBars.dart';
@@ -17,6 +18,7 @@ class MainController extends GetxController{
   Rx<TokenModel> tokenModel = TokenModel().obs;
   Rx<DataModel> dataModel = DataModel().obs;
   Rx<UserModel> userModel = UserModel().obs;
+  Rx<VidhansabhaModel> boothModel = VidhansabhaModel().obs;
   bool isMacSaved = false;
   bool isColorSaved = false;
   bool isShiftedDeathSaved = false;
@@ -144,5 +146,25 @@ class MainController extends GetxController{
     });
 
   }
+
+  Future<void> getBoothData(String? token) async {
+    await authService
+        .getVidhansabhaData(token)
+        .then((value) {
+      if(value!=null) {
+        String body = value.body;
+        print("BoothModel: $body");
+
+        boothModel.value = VidhansabhaModel.fromJson(jsonDecode(value.body));
+        int? count = boothModel.value.vidhansabhaList?.length;
+        print("getBoothData: $count");
+      }
+
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
+
+  }
+
 
 }

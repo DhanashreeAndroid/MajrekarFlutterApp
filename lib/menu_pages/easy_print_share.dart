@@ -9,6 +9,7 @@ import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/show_snak_bar.dart';
+import '../model/VidhansabhaModel.dart';
 import 'common_pages/detail_page.dart';
 import 'common_pages/print_details.dart';
 import 'common_pages/share_image.dart';
@@ -45,6 +46,12 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
         voterDetails = await ObjectBox.getPartSerialWiseData(partNoController.text, srNoController.text);
+        Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
+            voterDetails!.wardNo!, voterDetails!.partNo!,
+            voterDetails!.serialNo!);
+        voterDetails!.boothAddressEnglish = boothDetails!.boothAddressEnglish!;
+        voterDetails!.boothAddressMarathi = boothDetails.boothAddressMarathi!;
+
         setState(() => isLoading = false);
         return;
       } else {
@@ -289,8 +296,9 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
                 fontWeight: FontWeight.normal),
           ),
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
+          getMarathiTextBox(marathiValue),
           divider(screenWidth)
         ],
       ),

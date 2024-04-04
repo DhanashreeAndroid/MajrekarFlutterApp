@@ -54,6 +54,9 @@ class _VoterListPageState extends State<VoterListPage> {
     }else if(widget.searchType == "LanguageWise"){
       this.voterList = await ObjectBox.getLanguageWiseVoterList(widget.buildingName, widget.language);
       isVisible = true;
+    }else if(widget.searchType == "AgeWise"){
+      this.voterList = await ObjectBox.getAgeWiseVoterList(widget.buildingName, widget.language);
+      isVisible = true;
     }else {
       this.voterList = await ObjectBox.getAll(widget.searchType);
       isVisible = false;

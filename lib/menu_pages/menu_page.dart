@@ -10,6 +10,7 @@ import 'package:majrekar_app/menu_pages/voter_name_search.dart';
 
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
+import 'ageWiseReport/age_wise_search.dart';
 import 'alphabetical_voter_list_page.dart';
 import 'buildingWiseSearch/building_wise_search.dart';
 import 'easy_print_share.dart';
@@ -44,7 +45,8 @@ class _MenuPageState extends State<MenuPage> {
                 color: const Color.fromRGBO(255, 255, 255, 0.50),
               ),
               SafeArea(
-                child: SingleChildScrollView(
+                child:
+                SingleChildScrollView(
                   child: Column(
                     children: [
                       getCommonHeader(context),
@@ -129,7 +131,14 @@ class _MenuPageState extends State<MenuPage> {
                         }, label: 'Language Report',
                       ),
                       const SizedBox(height: 20,),
-
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const AgeWiseSearch()));
+                        }, label: 'Age Wise Report',
+                      ),
+                      const SizedBox(height: 20,),
                     ],
                   ),
                 ),

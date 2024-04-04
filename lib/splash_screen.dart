@@ -103,8 +103,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void callGetData(String? token) async{
-   List<EDetails> list =  await ObjectBox.getAll("Name");
-   if(list.isNotEmpty){
+   bool isDataAvailable =  await ObjectBox.isDataAvailable();
+   if(isDataAvailable){
      Navigator.pushReplacement(
          context, MaterialPageRoute(builder: (context) => const MenuPage()));
    }else{
@@ -202,7 +202,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
 //flutter pub get
 
+//Run 'flutter pub run build_runner build' to generate the binding code required to use ObjectBox.
+
+//Run below command while adding new object box model
 //flutter packages pub run build_runner build --delete-conflicting-outputs
 
 //to generate apk run this command
 //flutter build apk --release --no-sound-null-safety
+
+//to delete commit and recommit from git user below command
+// git reset --soft HEAD~5

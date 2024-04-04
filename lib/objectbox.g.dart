@@ -16,6 +16,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'model/DataModel.dart';
 import 'model/UserModel.dart';
+import 'model/VidhansabhaModel.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -60,12 +61,14 @@ final _entities = <ModelEntity>[
             id: const IdUid(7, 1887852847113926454),
             name: 'lnEnglish',
             type: 9,
-            flags: 0),
+            flags: 8,
+            indexId: const IdUid(1, 3140573368655584199)),
         ModelProperty(
             id: const IdUid(8, 1058148144439741616),
             name: 'fnEnglish',
             type: 9,
-            flags: 0),
+            flags: 8,
+            indexId: const IdUid(2, 3867627287615291860)),
         ModelProperty(
             id: const IdUid(9, 1754694413920988681),
             name: 'lnMarathi',
@@ -212,6 +215,57 @@ final _entities = <ModelEntity>[
             flags: 0)
       ],
       relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(3, 1150958799004521241),
+      name: 'Vidhansabha',
+      lastPropertyId: const IdUid(8, 4539419067265328488),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 3389405251360437120),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 5774829335366522850),
+            name: 'dbId',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 2924295297498911914),
+            name: 'wardNo',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(4, 1639591732004670440),
+            name: 'partNo',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 5261312038072363433),
+            name: 'from',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 7114988050899651310),
+            name: 'to',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(7, 4652810905865183553),
+            name: 'boothAddressEnglish',
+            type: 9,
+            flags: 8,
+            indexId: const IdUid(3, 8580387892300726525)),
+        ModelProperty(
+            id: const IdUid(8, 4539419067265328488),
+            name: 'boothAddressMarathi',
+            type: 9,
+            flags: 8,
+            indexId: const IdUid(4, 9173619587212408139))
+      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
 ];
 
@@ -242,8 +296,8 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(2, 3625653354348383543),
-      lastIndexId: const IdUid(0, 0),
+      lastEntityId: const IdUid(3, 1150958799004521241),
+      lastIndexId: const IdUid(4, 9173619587212408139),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
@@ -540,6 +594,76 @@ ModelDefinition getObjectBoxModel() {
               macAddress: macAddressParam);
 
           return object;
+        }),
+    Vidhansabha: EntityDefinition<Vidhansabha>(
+        model: _entities[2],
+        toOneRelations: (Vidhansabha object) => [],
+        toManyRelations: (Vidhansabha object) => {},
+        getId: (Vidhansabha object) => object.id,
+        setId: (Vidhansabha object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Vidhansabha object, fb.Builder fbb) {
+          final dbIdOffset =
+              object.dbId == null ? null : fbb.writeString(object.dbId!);
+          final wardNoOffset =
+              object.wardNo == null ? null : fbb.writeString(object.wardNo!);
+          final partNoOffset =
+              object.partNo == null ? null : fbb.writeString(object.partNo!);
+          final fromOffset =
+              object.from == null ? null : fbb.writeString(object.from!);
+          final toOffset =
+              object.to == null ? null : fbb.writeString(object.to!);
+          final boothAddressEnglishOffset = object.boothAddressEnglish == null
+              ? null
+              : fbb.writeString(object.boothAddressEnglish!);
+          final boothAddressMarathiOffset = object.boothAddressMarathi == null
+              ? null
+              : fbb.writeString(object.boothAddressMarathi!);
+          fbb.startTable(9);
+          fbb.addInt64(0, object.id ?? 0);
+          fbb.addOffset(1, dbIdOffset);
+          fbb.addOffset(2, wardNoOffset);
+          fbb.addOffset(3, partNoOffset);
+          fbb.addOffset(4, fromOffset);
+          fbb.addOffset(5, toOffset);
+          fbb.addOffset(6, boothAddressEnglishOffset);
+          fbb.addOffset(7, boothAddressMarathiOffset);
+          fbb.finish(fbb.endTable());
+          return object.id ?? 0;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+          final dbIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 6);
+          final wardNoParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 8);
+          final partNoParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 10);
+          final fromParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 12);
+          final toParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 14);
+          final boothAddressEnglishParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 16);
+          final boothAddressMarathiParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 18);
+          final object = Vidhansabha(
+              id: idParam,
+              dbId: dbIdParam,
+              wardNo: wardNoParam,
+              partNo: partNoParam,
+              from: fromParam,
+              to: toParam,
+              boothAddressEnglish: boothAddressEnglishParam,
+              boothAddressMarathi: boothAddressMarathiParam);
+
+          return object;
         })
   };
 
@@ -686,4 +810,39 @@ class UserDetails_ {
   /// see [UserDetails.macAddress]
   static final macAddress =
       QueryStringProperty<UserDetails>(_entities[1].properties[12]);
+}
+
+/// [Vidhansabha] entity fields to define ObjectBox queries.
+class Vidhansabha_ {
+  /// see [Vidhansabha.id]
+  static final id =
+      QueryIntegerProperty<Vidhansabha>(_entities[2].properties[0]);
+
+  /// see [Vidhansabha.dbId]
+  static final dbId =
+      QueryStringProperty<Vidhansabha>(_entities[2].properties[1]);
+
+  /// see [Vidhansabha.wardNo]
+  static final wardNo =
+      QueryStringProperty<Vidhansabha>(_entities[2].properties[2]);
+
+  /// see [Vidhansabha.partNo]
+  static final partNo =
+      QueryStringProperty<Vidhansabha>(_entities[2].properties[3]);
+
+  /// see [Vidhansabha.from]
+  static final from =
+      QueryStringProperty<Vidhansabha>(_entities[2].properties[4]);
+
+  /// see [Vidhansabha.to]
+  static final to =
+      QueryStringProperty<Vidhansabha>(_entities[2].properties[5]);
+
+  /// see [Vidhansabha.boothAddressEnglish]
+  static final boothAddressEnglish =
+      QueryStringProperty<Vidhansabha>(_entities[2].properties[6]);
+
+  /// see [Vidhansabha.boothAddressMarathi]
+  static final boothAddressMarathi =
+      QueryStringProperty<Vidhansabha>(_entities[2].properties[7]);
 }

@@ -42,12 +42,16 @@
         {
           "id": "7:1887852847113926454",
           "name": "lnEnglish",
-          "type": 9
+          "type": 9,
+          "flags": 8,
+          "indexId": "1:3140573368655584199"
         },
         {
           "id": "8:1058148144439741616",
           "name": "fnEnglish",
-          "type": 9
+          "type": 9,
+          "flags": 8,
+          "indexId": "2:3867627287615291860"
         },
         {
           "id": "9:1754694413920988681",
@@ -195,10 +199,63 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:1150958799004521241",
+      "lastPropertyId": "8:4539419067265328488",
+      "name": "Vidhansabha",
+      "properties": [
+        {
+          "id": "1:3389405251360437120",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5774829335366522850",
+          "name": "dbId",
+          "type": 9
+        },
+        {
+          "id": "3:2924295297498911914",
+          "name": "wardNo",
+          "type": 9
+        },
+        {
+          "id": "4:1639591732004670440",
+          "name": "partNo",
+          "type": 9
+        },
+        {
+          "id": "5:5261312038072363433",
+          "name": "from",
+          "type": 9
+        },
+        {
+          "id": "6:7114988050899651310",
+          "name": "to",
+          "type": 9
+        },
+        {
+          "id": "7:4652810905865183553",
+          "name": "boothAddressEnglish",
+          "type": 9,
+          "flags": 8,
+          "indexId": "3:8580387892300726525"
+        },
+        {
+          "id": "8:4539419067265328488",
+          "name": "boothAddressMarathi",
+          "type": 9,
+          "flags": 8,
+          "indexId": "4:9173619587212408139"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:3625653354348383543",
-  "lastIndexId": "0:0",
+  "lastEntityId": "3:1150958799004521241",
+  "lastIndexId": "4:9173619587212408139",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

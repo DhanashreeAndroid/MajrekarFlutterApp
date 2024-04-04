@@ -10,6 +10,7 @@ class Constant{
   static const String markColor = "api/vidhansabha/markcolor";
   static const String markShiftedDeath = "api/vidhansabha/markshifteddeath";
   static const String markVotedNonVoted = "api/vidhansabha/markvotednonvoted";
+  static const String getVidhansabhaData = "api/vidhansabha/getboothdata";
 
 
   //constant for app flow

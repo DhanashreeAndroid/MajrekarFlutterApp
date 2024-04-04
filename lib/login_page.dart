@@ -11,6 +11,7 @@ import 'package:majrekar_app/controller/MainController.dart';
 import 'package:majrekar_app/database/ObjectBox.dart';
 import 'package:majrekar_app/menu_pages/menu_page.dart';
 import 'package:majrekar_app/model/UserModel.dart';
+import 'package:majrekar_app/model/VidhansabhaModel.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'CommonWidget/commonHeader.dart';
@@ -81,7 +82,6 @@ class _LoginPageState extends State<LoginPage> {
           ));
         } else {
           callUserDetailsApi(mainController.tokenModel.value.accessToken);
-          //callLoginApi(mainController.tokenModel.value.accessToken);
         }
       });
 
@@ -112,7 +112,9 @@ class _LoginPageState extends State<LoginPage> {
         if(Constant.isOffline){
           getOfflineData(context);
         }else {
-          callLoginApi(token);
+          user.password = passwordController.text.toString();
+          addUserDetails(user);
+          callBoothDataApi(token);
         }
       } else if (macAddress == "unknown") {
         Navigator.of(context, rootNavigator: true).pop();
@@ -141,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
         if(Constant.isOffline){
           getOfflineData(context);
         }else {
-          callLoginApi(token);
+          callBoothDataApi(token);
         }
       }
 
@@ -156,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
           token, macAddress!, user!.userName!);
       if (mainController.isMacSaved) {
         await ObjectBox.updateMacAddress(macAddress);
-        callLoginApi(token);
+        callBoothDataApi(token);
       }
 
   }
@@ -173,6 +175,30 @@ class _LoginPageState extends State<LoginPage> {
         ));
       }
   }
+
+  void callBoothDataApi(String? token) async {
+    await mainController.getBoothData(token);
+    int? count = mainController.boothModel.value.vidhansabhaList?.length;
+    if (count!= null && count > 0) {
+      addOrUpdateBoothDetail(mainController.boothModel.value.vidhansabhaList);
+      callLoginApi(token);
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Getting some technical problem, Please try again."),
+      ));
+    }
+  }
+
+  void addOrUpdateBoothDetail(List<Vidhansabha>? boothList) async {
+    final isValid = _formKey.currentState!.validate();
+
+    if (isValid) {
+      await ObjectBox.deleteAllBooths();
+      await ObjectBox.insertAllBooths(boothList!);
+    }
+  }
+
 
   void addOrUpdateEDetails(List<EDetails>? eDetails) async {
     final isValid = _formKey.currentState!.validate();

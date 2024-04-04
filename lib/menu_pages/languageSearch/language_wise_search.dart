@@ -24,9 +24,7 @@ class LanguageWiseSearch extends StatefulWidget {
 
 class _LanguageWiseSearchSearchState extends State<LanguageWiseSearch> {
   final ScrollController _controller = ScrollController();
-  PartNo optionItemSelected = PartNo(id: "All");
   bool isLoading = false;
-  PartNoDropListModel? partNoDropListModel;
   List<EDetails> buildingList = [];
   final _recipientPartNoKey = GlobalKey<FormState>();
   TextEditingController partNoController = TextEditingController();

@@ -36,7 +36,9 @@ class EDetails {
   String? partNo;
   String? serialNo;
   String? cardNo;
+  @Index(type: IndexType.value)
   String? lnEnglish;
+  @Index(type: IndexType.value)
   String? fnEnglish;
   String? lnMarathi;
   String? fnMarathi;

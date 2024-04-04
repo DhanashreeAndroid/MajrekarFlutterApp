@@ -12,10 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/login_page.dart';
+import 'package:majrekar_app/model/VidhansabhaModel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 
 class PrintDetails extends StatefulWidget {
@@ -39,6 +41,16 @@ class _PrintDetailsState extends State<PrintDetails> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => requestAccess());
+    setBoothAddresses();
+  }
+  Future<void> setBoothAddresses() async {
+    for (int i = 0; i < widget.voterList.length; i++) {
+      Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
+          widget.voterList[i].wardNo!, widget.voterList[i].partNo!,
+          widget.voterList[i].serialNo!);
+      widget.voterList[i].boothAddressEnglish = boothDetails!.boothAddressEnglish!;
+      widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;
+    }
   }
 
   Future<void> requestAccess() async {
@@ -307,8 +319,8 @@ class _PrintDetailsState extends State<PrintDetails> {
     await bluetoothPrint.printLabel(config, list);
   }
 
-  Column generateWidgets(EDetails data, double screenWidth) {
-    return Column(children: <Widget>[
+  Column generateWidgets(EDetails data, double screenWidth)  {
+       return Column(children: <Widget>[
       customData("Name", getEnglishName(data),
           getMarathiName(data), screenWidth),
       customData(
@@ -317,13 +329,12 @@ class _PrintDetailsState extends State<PrintDetails> {
           "${data.houseNoMarathi!} ${data.buildingNameMarathi!}",
           screenWidth),
       customAgeGender("${data.age!} / ${data.sex!}", screenWidth),
-      customData("Voting Center Address", data.boothAddressEnglish!,
-          data.boothAddressMarathi!, screenWidth),
+      customData("Voting Center Address", data.boothAddressEnglish,
+          data.boothAddressMarathi, screenWidth),
       customWardPartSerial(
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
     ]);
   }
-
   String getEnglishName(EDetails data){
     if(widget.searchType.contains("Surname")){
       return "${data.lnEnglish!} ${data.fnEnglish!}";
@@ -342,7 +353,7 @@ class _PrintDetailsState extends State<PrintDetails> {
 
   }
 
-  Padding customData(String title, String englishValue, String marathiValue,
+  Padding customData(String title, String? englishValue, String? marathiValue,
       double screenWidth) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -363,7 +374,7 @@ class _PrintDetailsState extends State<PrintDetails> {
             height: 5,
           ),
           AutoSizeText(
-            englishValue,
+            englishValue ?? "",
             maxLines: 2,
             style: const TextStyle(
                 color: Colors.black,
@@ -373,17 +384,18 @@ class _PrintDetailsState extends State<PrintDetails> {
           const SizedBox(
             height: 10,
           ),
+          getMarathiTextBox(marathiValue),
           divider(screenWidth)
         ],
       ),
     );
   }
 
-  Column getMarathiTextBox(String marathiValue) {
+  Column getMarathiTextBox(String? marathiValue) {
     return Column(
       children: <Widget>[
         AutoSizeText(
-          marathiValue,
+          marathiValue ?? "",
           maxLines: 2,
           style: const TextStyle(
               color: Colors.green, fontSize: 20, fontWeight: FontWeight.normal),

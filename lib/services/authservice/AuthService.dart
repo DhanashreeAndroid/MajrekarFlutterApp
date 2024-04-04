@@ -222,4 +222,28 @@ class AuthService {
     }
   }
 
+  Future<dynamic> getVidhansabhaData(String? token) async {
+    try {
+
+      var url = Uri.parse("${Constant.baseUrl}${Constant.getVidhansabhaData}");
+
+      print("url $url");
+
+      var res = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "bearer $token",
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=5, max=1000"
+        },
+      );
+      print("Status : ${res.statusCode}");
+      return res;
+    } catch (e) {
+      print(e);
+      return "null";
+    }
+  }
+
 }

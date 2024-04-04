@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:majrekar_app/menu_pages/ageWiseReport/age_count_model.dart';
 import 'package:majrekar_app/menu_pages/languageSearch/language_list_model.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:path/path.dart' as p;
@@ -9,6 +10,7 @@ import 'package:majrekar_app/objectbox.g.dart';
 import '../menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
 import '../menu_pages/surname_counter_model.dart';
 import '../model/UserModel.dart';
+import '../model/VidhansabhaModel.dart';
 
 class ObjectBox {
 
@@ -62,6 +64,17 @@ class ObjectBox {
     var output = box.get(id);
     store.close();
     return output;
+  }
+
+  static Future<bool> isDataAvailable() async {
+    final store = await openStore();
+    var box = store.box<Vidhansabha>();
+    store.close();
+    if(box.isEmpty()){
+      return false;
+    }else{
+      return true;
+    }
   }
 
   static Future<List<EDetails>> getAll(String searchType) async {
@@ -207,6 +220,44 @@ class ObjectBox {
     }
   }
 
+  static Future<List<AgeCountModel>> getAgeCountTable(String partNo, String ageRange) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    int idx = ageRange.indexOf("-");
+    var start = ageRange.substring(0,idx).trim();
+    var end = ageRange.substring(idx+1,ageRange.length).trim();
+    print("age 1" +start );
+    print("age 2" +end );
+
+    final query = box.query(
+        EDetails_.partNo.equals(partNo)
+            .and(EDetails_.age.greaterOrEqual(start)
+            .and(EDetails_.age.lessOrEqual(end)
+            )))
+        .order(EDetails_.age)
+        .build();
+
+      List<AgeCountModel> listBuilding = [];
+
+      List<EDetails> list = query.find();
+
+      final int startCount = int.parse(start) ;
+      final int endCount = int.parse(end);
+
+      for(var i = startCount; i<= endCount ; i++){
+        List<EDetails> maleList = list.where((eDetails) => eDetails.age!.contains(i.toString()) && eDetails.sex!.contains("M")).toList();
+        List<EDetails> femaleList = list.where((eDetails) => eDetails.age!.contains(i.toString()) && eDetails.sex!.contains("F")).toList();
+        listBuilding.add(AgeCountModel(partNo: partNo ,maleCount: maleList.length, femaleCount: femaleList.length, age: i));
+      }
+
+    query.close();
+
+
+      store.close();
+      return listBuilding;
+
+  }
+
   static Future<List<EDetails>> getEasySearchData(String firstName, String lastName) async {
     final store = await openStore();
     var box = store.box<EDetails>();
@@ -228,7 +279,7 @@ class ObjectBox {
     var box = store.box<EDetails>();
 
     final query  = (box.query(EDetails_.partNo.contains(part, caseSensitive: false) &
-    EDetails_.serialNo.contains(serial, caseSensitive: false) )..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive )).build();
+    EDetails_.serialNo.equals(serial, caseSensitive: false) )..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive )).build();
     final output = query.find();
     query.close();
     store.close();
@@ -398,7 +449,61 @@ class ObjectBox {
     query.close();
     store.close();
     return output;
-
   }
 
+  static Future<List<EDetails>> getAgeWiseVoterList(String partNo, String filter) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    int idx = filter.indexOf("-");
+    var gender = filter.substring(0,idx).trim();
+    var age = filter.substring(idx+1,filter.length).trim();
+    
+    final query  = (box.query(EDetails_.lnEnglish.notEquals('')
+    & EDetails_.partNo.equals(partNo)
+    & EDetails_.age.equals(age)
+    & EDetails_.sex.equals(gender, caseSensitive: false))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output;
+  }
+
+  //============
+
+  static Future<int> deleteAllBooths() async {
+    final store = await openStore();
+    var box = store.box<Vidhansabha>();
+    var output = box.removeAll();
+    store.close();
+    return output;
+  }
+
+  static Future<List<int>> insertAllBooths(List<Vidhansabha> person) async {
+    final store = await openStore();
+    var box = store.box<Vidhansabha>();
+    var output =box.putMany(person);
+    store.close();
+    return output;
+  }
+
+  static Future<Vidhansabha?> getBoothDetails(String wardNo, String partNo, String serialNo) async {
+    final store = await openStore();
+    var box = store.box<Vidhansabha>();
+
+    final query  = (box.query(
+        Vidhansabha_.wardNo.equals(wardNo)
+        & Vidhansabha_.partNo.equals(partNo)
+        .and(Vidhansabha_.from.greaterOrEqual(serialNo)
+        .or(Vidhansabha_.to.lessOrEqual(serialNo))))).build();
+
+    final list = query.find();
+    for(Vidhansabha vidhan in list){
+      print(vidhan.toString());
+    }
+    final output = query.findFirst();
+    query.close();
+    store.close();
+    return output;
+  }
 }

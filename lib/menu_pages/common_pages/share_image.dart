@@ -11,7 +11,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../CommonWidget/widget_to_image.dart';
+import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
+import '../../model/VidhansabhaModel.dart';
 
 class ShareImage extends StatefulWidget {
   final List<EDetails> voterList;
@@ -24,6 +26,22 @@ class ShareImage extends StatefulWidget {
 
 class _ShareImageState extends State<ShareImage> {
   GlobalKey key1 = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    setBoothAddresses();
+  }
+
+  Future<void> setBoothAddresses() async {
+    for (int i = 0; i < widget.voterList.length; i++) {
+      Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
+          widget.voterList[i].wardNo!, widget.voterList[i].partNo!,
+          widget.voterList[i].serialNo!);
+      widget.voterList[i].boothAddressEnglish = boothDetails!.boothAddressEnglish!;
+      widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +77,9 @@ class _ShareImageState extends State<ShareImage> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+
                       Container(
+                        decoration: const BoxDecoration(color: Colors.white),
                         padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

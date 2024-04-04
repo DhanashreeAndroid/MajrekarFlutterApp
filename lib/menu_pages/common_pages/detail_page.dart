@@ -15,6 +15,7 @@ import '../../CommonWidget/utility.dart';
 import '../../controller/MainController.dart';
 import '../../database/ObjectBox.dart';
 import '../../model/UserModel.dart';
+import '../../model/VidhansabhaModel.dart';
 import 'family_voter_list_page.dart';
 
 
@@ -37,6 +38,7 @@ class _DetailPageState extends State<DetailPage> {
   final telephony = Telephony.instance;
   final _recipientNumberformKey = GlobalKey<FormState>();
   UserDetails? userDetails;
+  Vidhansabha? boothDetails;
   bool isLoading = false;
 
   @override
@@ -48,7 +50,12 @@ class _DetailPageState extends State<DetailPage> {
   Future getUserDetails() async {
     setState(() => isLoading = true);
     List<UserDetails> users = await ObjectBox.getUserDetails();
+    print("userDetailCount : ${users.length}");
     userDetails =  users.first;
+
+    boothDetails = await ObjectBox.getBoothDetails(widget.data.wardNo!, widget.data.partNo!,
+    widget.data.serialNo!);
+
     selectedShifted = getShiftedDeath();
     selectedDeath = getShiftedDeath();
     selectedVoted = getVotedNonVoted();
@@ -202,8 +209,8 @@ class _DetailPageState extends State<DetailPage> {
                       "${widget.data.houseNoMarathi!} ${widget.data.buildingNameMarathi!}",
                       screenWidth),
                   customAgeGender("${widget.data.age!} / ${widget.data.sex!}", screenWidth),
-                  customData("Voting Center Address", widget.data.boothAddressEnglish!,
-                      widget.data.boothAddressMarathi!, screenWidth),
+                  customData("Voting Center Address", boothDetails?.boothAddressEnglish,
+                      boothDetails?.boothAddressMarathi, screenWidth),
                   customWardPartSerial(
                       widget.data.wardNo!, widget.data.partNo!, widget.data.serialNo!, screenWidth),
                   customPrintShareButton(),
@@ -247,7 +254,7 @@ class _DetailPageState extends State<DetailPage> {
     }
 
   }
-  Padding customData(String title, String englishValue, String marathiValue,
+  Padding customData(String title, String? englishValue, String? marathiValue,
       double screenWidth) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -268,7 +275,7 @@ class _DetailPageState extends State<DetailPage> {
             height: 5,
           ),
           AutoSizeText(
-            englishValue,
+            englishValue ?? "",
             maxLines: 2,
             style: const TextStyle(
                 color: Colors.black,
@@ -278,11 +285,7 @@ class _DetailPageState extends State<DetailPage> {
           const SizedBox(
             height: 5,
           ),
-          marathiValue.isNotEmpty
-              ? getMarathiTextBox(marathiValue)
-              : const SizedBox(
-                  height: 5,
-                ),
+          getMarathiTextBox(marathiValue),
           divider(screenWidth)
         ],
       ),
@@ -331,11 +334,11 @@ class _DetailPageState extends State<DetailPage> {
   }
 
 
-  Column getMarathiTextBox(String marathiValue) {
+  Column getMarathiTextBox(String? marathiValue) {
     return Column(
       children: <Widget>[
         AutoSizeText(
-          marathiValue,
+          marathiValue ?? "",
           maxLines: 2,
           style: const TextStyle(
               color: Colors.green, fontSize: 20, fontWeight: FontWeight.normal),

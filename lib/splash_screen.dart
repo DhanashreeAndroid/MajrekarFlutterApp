@@ -183,7 +183,7 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset('images/ic_launcher.png',
+                Image.asset('images/logo.jpg',
                   height: 100,
                   width: 100,),
                 const SizedBox(height: 10),

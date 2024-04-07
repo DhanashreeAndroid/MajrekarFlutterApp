@@ -44,7 +44,7 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                         },
                       ),
                       const SizedBox(height: 40,),
-                      Image.asset("images/logom.png",
+                      Image.asset("images/logo.jpg",
                       height: 100,
                           width: 100),
                       const SizedBox(height: 50,),

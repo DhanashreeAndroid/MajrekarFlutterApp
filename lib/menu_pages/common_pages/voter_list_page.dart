@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -212,6 +213,16 @@ class _VoterListPageState extends State<VoterListPage> {
                 )
               ],
             ),
+            const SizedBox(
+              height: 5,
+            ),
+            _foundUsers.isNotEmpty?
+            const AutoSizeText(
+              "Please click on below voter names",
+              maxLines: 1,
+              style: TextStyle(
+                  color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+            ) : const SizedBox(),
             const SizedBox(
               height: 5,
             ),

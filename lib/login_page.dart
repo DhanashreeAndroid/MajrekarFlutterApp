@@ -244,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Image.asset(
-                                'images/ic_launcher.png',
+                                'images/logo.jpg',
                                 height: 100,
                                 width: 100,
                               ),

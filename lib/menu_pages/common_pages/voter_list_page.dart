@@ -189,7 +189,6 @@ class _VoterListPageState extends State<VoterListPage> {
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(width: 5,),
                 Flexible(
                   flex: 1,

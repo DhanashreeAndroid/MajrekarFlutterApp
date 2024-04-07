@@ -10,6 +10,7 @@ import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../CommonWidget/Constant.dart';
 import '../../CommonWidget/utility.dart';
 import '../../CommonWidget/widget_to_image.dart';
 import '../../database/ObjectBox.dart';
@@ -78,14 +79,17 @@ class _ShareImageState extends State<ShareImage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(radius),
-                        ),
-                        child: Image.asset("images/sample.jpg",
-                          width: screenWidth,
-                          height: 200,
-                          fit: BoxFit.fill,
+                      Visibility(
+                        visible : Constant.isShowShareImage,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.horizontal(
+                            left: Radius.circular(radius),
+                          ),
+                          child: Image.asset("images/sample.jpg",
+                            width: screenWidth,
+                            height: 200,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
 

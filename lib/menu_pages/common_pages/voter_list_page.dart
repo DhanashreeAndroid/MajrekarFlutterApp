@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -25,34 +24,35 @@ class VoterListPage extends StatefulWidget {
 }
 
 class _VoterListPageState extends State<VoterListPage> {
-  late List<EDetails> voterList  ;
+  late List<EDetails> voterList;
   bool isLoading = false;
   // This list holds the data for the list view
   List<EDetails> _foundUsers = [];
-  TextEditingController surnameController =
-  TextEditingController();
+  TextEditingController surnameController = TextEditingController();
 
-  TextEditingController nameController =
-  TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   bool isVisible = true;
 
   @override
   void initState() {
-   super.initState();
-   getData();
+    super.initState();
+    getData();
   }
 
   Future getData() async {
     setState(() => isLoading = true);
-    if(widget.searchType == "BuildingWise"){
-      this.voterList = await ObjectBox.getAllBuildingWiseData(widget.buildingName);
+    if (widget.searchType == "BuildingWise") {
+      this.voterList =
+          await ObjectBox.getAllBuildingWiseData(widget.buildingName);
       isVisible = true;
-    }else if(widget.searchType == "SurnameCount"){
-      this.voterList = await ObjectBox.getSurnameCounterVoterList(widget.buildingName);
+    } else if (widget.searchType == "SurnameCount") {
+      this.voterList =
+          await ObjectBox.getSurnameCounterVoterList(widget.buildingName);
       isVisible = true;
-    }else if(widget.searchType == "LanguageWise"){
-      this.voterList = await ObjectBox.getLanguageWiseVoterList(widget.buildingName, widget.language);
+    } else if (widget.searchType == "LanguageWise") {
+      this.voterList = await ObjectBox.getLanguageWiseVoterList(
+          widget.buildingName, widget.language);
       isVisible = true;
     }else if(widget.searchType == "AgeWise"){
       this.voterList = await ObjectBox.getAgeWiseVoterList(widget.buildingName, widget.language);
@@ -71,16 +71,17 @@ class _VoterListPageState extends State<VoterListPage> {
     List<EDetails> results = [];
     if (enteredKeyword.isEmpty) {
       // if the search field is empty or only contains white-space, we'll display all users
-      if(nameController.text.isEmpty){
+      if (nameController.text.isEmpty) {
         results = voterList;
-      }else{
+      } else {
         for (var voter in voterList) {
-          if (voter.fnEnglish!.toLowerCase().contains(nameController.text.toLowerCase())) {
+          if (voter.fnEnglish!
+              .toLowerCase()
+              .contains(nameController.text.toLowerCase())) {
             results.add(voter);
           }
         }
       }
-
     } else {
       // we use the toLowerCase() method to make it case-insensitive
       if(_foundUsers.isNotEmpty) {
@@ -186,6 +187,7 @@ class _VoterListPageState extends State<VoterListPage> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 5,),
@@ -328,9 +330,11 @@ class _VoterListPageState extends State<VoterListPage> {
     document.dispose();
 
     //Get external storage directory
-    Directory? directory = await getExternalStorageDirectory();
+    Directory? directory = Platform.isAndroid
+        ? await getTemporaryDirectory()
+        : await getApplicationSupportDirectory();
     //Get directory path
-    String? path = directory?.path;
+    String? path = directory.path;
     //Create an empty file to write PDF data
     File file = File('$path/Output.pdf');
     //Write PDF data
@@ -418,7 +422,7 @@ class _VoterListPageState extends State<VoterListPage> {
   }
 
   void _addProducts(String partNo, String srNo, String voterName,
-      String voterAdd, String sex,String age, PdfGrid grid) {
+      String voterAdd, String sex, String age, PdfGrid grid) {
     final PdfGridRow row = grid.rows.add();
     row.cells[0].value = partNo;
     row.cells[1].value = srNo;
@@ -448,11 +452,9 @@ class _VoterListPageState extends State<VoterListPage> {
 
   void _drawGrid(
       PdfPage page, PdfGrid grid, PdfLayoutResult result, PdfFont contentFont) {
-
     //Draw the PDF grid and get the result.
     result = grid.draw(
         page: page, bounds: Rect.fromLTWH(0, result.bounds.bottom + 40, 0, 0))!;
-
   }
 
 
@@ -463,7 +465,6 @@ class _VoterListPageState extends State<VoterListPage> {
     }else{
       return Text("${_foundUsers[index].lnEnglish} ${_foundUsers[index].fnEnglish}");
     }
-
   }
   Widget getTextViewMarathi(int index, String searchType){
     if(searchType.contains("Name")){
@@ -471,7 +472,6 @@ class _VoterListPageState extends State<VoterListPage> {
     }else{
       return Text("${_foundUsers[index].lnMarathi} ${_foundUsers[index].fnMarathi}");
     }
-
   }
 
  Widget buildNotes() => ListView.builder(
@@ -489,5 +489,3 @@ class _VoterListPageState extends State<VoterListPage> {
  );
 
 }
-
-

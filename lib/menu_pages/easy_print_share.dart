@@ -14,7 +14,6 @@ import 'common_pages/detail_page.dart';
 import 'common_pages/print_details.dart';
 import 'common_pages/share_image.dart';
 
-
 class EasyPrintShare extends StatefulWidget {
   const EasyPrintShare({Key? key}) : super(key: key);
 
@@ -30,14 +29,12 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
   TextEditingController partNoController = TextEditingController();
   TextEditingController srNoController = TextEditingController();
 
-
   Future getData() async {
-
     try {
       final isRecipientSurnameValid =
-      _recipientPartNoFormKey.currentState!.validate();
+          _recipientPartNoFormKey.currentState!.validate();
       final isRecipientNameValid =
-      _recipientSrNoFormKey.currentState!.validate();
+          _recipientSrNoFormKey.currentState!.validate();
       FocusScope.of(context).unfocus();
       if (isRecipientSurnameValid && isRecipientNameValid) {
         _recipientPartNoFormKey.currentState!.save();
@@ -62,8 +59,6 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
       ShowSnackBar.showSnackBar(context, 'Error occurred.');
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +116,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
                     SizedBox(
                       height: 20,
                     ),
-            
+
                   ],
                 ),
                 const SizedBox(
@@ -143,8 +138,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         children: <Widget>[
           Flexible(
             flex: 1,
-            child:
-            Form(
+            child: Form(
               key: _recipientPartNoFormKey,
               child: TextFormField(
                 autofocus: true,
@@ -173,11 +167,12 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
               ),
             ),
           ),
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
-            child:
-            Form(
+            child: Form(
               key: _recipientSrNoFormKey,
               child: TextFormField(
                 autofocus: true,
@@ -216,31 +211,44 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
       child: Row(
         children: <Widget>[
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
             child: CustomButton(
               onPressed: () {
-                List<EDetails> voterList = List<EDetails>.generate(1, (index) => voterDetails!);
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) =>  PrintDetails(voterList: voterList,searchType: "Surname", )));
-              }, label: 'Print',
+                List<EDetails> voterList =
+                    List<EDetails>.generate(1, (index) => voterDetails!);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PrintDetails(
+                              voterList: voterList,
+                              searchType: "Surname",
+                            )));
+              },
+              label: 'Print',
             ),
           ),
-
-          const SizedBox(width: 10,),
-
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
             child: CustomButton(
               onPressed: () {
-                List<EDetails> voterList = List<EDetails>.generate(1, (index) => voterDetails!);
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) =>  ShareImage(voterList: voterList,searchType: "Surname", )));
-
-              }, label: 'Share',
+                List<EDetails> voterList =
+                    List<EDetails>.generate(1, (index) => voterDetails!);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShareImage(
+                              voterList: voterList,
+                              searchType: "Surname",
+                            )));
+              },
+              label: 'Share',
             ),
           )
         ],
@@ -248,11 +256,10 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
     );
   }
 
-
   Column generateWidgets(EDetails data, double screenWidth) {
     return Column(children: <Widget>[
-      customData("Name", getEnglishName(data),
-          getMarathiName(data), screenWidth),
+      customData(
+          "Name", getEnglishName(data), getMarathiName(data), screenWidth),
       customData(
           "Address",
           "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
@@ -307,12 +314,12 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
     );
   }
 
-  String getEnglishName(EDetails data){
-      return "${data.lnEnglish!} ${data.fnEnglish!}";
+  String getEnglishName(EDetails data) {
+    return "${data.lnEnglish!} ${data.fnEnglish!}";
   }
 
-  String getMarathiName(EDetails data){
-      return "${data.lnMarathi!} ${data.fnMarathi!}";
+  String getMarathiName(EDetails data) {
+    return "${data.lnMarathi!} ${data.fnMarathi!}";
   }
 
   Padding customData(String title, String englishValue, String marathiValue,
@@ -542,5 +549,4 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
       ),
     );
   }
-
 }

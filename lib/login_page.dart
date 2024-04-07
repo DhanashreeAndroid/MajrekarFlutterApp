@@ -66,10 +66,10 @@ class _LoginPageState extends State<LoginPage> {
 
   apiCall(String userId, String password) async {
     alertDailog(context);
-    if(userNameFocus.hasFocus) {
+    if (userNameFocus.hasFocus) {
       userNameFocus.unfocus();
     }
-    if(passwordFocus.hasFocus) {
+    if (passwordFocus.hasFocus) {
       passwordFocus.unfocus();
     }
     await mainController.getToken(userId, password).then((value) {
@@ -84,30 +84,28 @@ class _LoginPageState extends State<LoginPage> {
           callUserDetailsApi(mainController.tokenModel.value.accessToken);
         }
       });
-
     });
   }
 
   void callUserDetailsApi(String? token) async {
-      await mainController.getUserData(token, userNameController.text);
-      int? count = mainController.userModel.value.uDetails?.length;
-      if (mainController.userModel.value.uDetails != null && count! > 0) {
-        UserDetails? user = mainController.userModel.value.uDetails?.first;
-        checkForAnotherDevice(user!, token!);
-      } else {
-        Navigator.of(context, rootNavigator: true).pop();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Getting some technical problem, Please try again."),
-        ));
-      }
-
+    await mainController.getUserData(token, userNameController.text);
+    int? count = mainController.userModel.value.uDetails?.length;
+    if (mainController.userModel.value.uDetails != null && count! > 0) {
+      UserDetails? user = mainController.userModel.value.uDetails?.first;
+      checkForAnotherDevice(user!, token!);
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Getting some technical problem, Please try again."),
+      ));
+    }
   }
 
   Future<void> checkForAnotherDevice(UserDetails user, String token) async {
     final macAddress = await getDeviceIdentifier();
     if (user.macAddress != "0") {
-      print('db mac address : ${user.macAddress!}' );
-      print('device mac address : $macAddress' );
+      print('db mac address : ${user.macAddress!}');
+      print('device mac address : $macAddress');
       if (macAddress == user.macAddress && macAddress != "unknown") {
           user.password = passwordController.text.toString();
           addUserDetails(user);
@@ -117,13 +115,13 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Unable to find mac address."),
         ));
-      }else {
+      } else {
         Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("This User already login in another device"),
         ));
       }
-    }else{
+    } else {
       user.password = passwordController.text.toString();
       addUserDetails(user);
       callMacAddress(user, token, macAddress!);
@@ -143,8 +141,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> updateMacAddress(UserDetails user, String token) async {
     final macAddress = await getDeviceIdentifier();
-    print('db mac address : ${user.macAddress!}' );
-    print('device mac address : $macAddress' );
+    print('db mac address : ${user.macAddress!}');
+    print('device mac address : $macAddress');
 
       await mainController.saveMacAddress(
           token, macAddress!, user!.userName!);
@@ -156,16 +154,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void callLoginApi(String? token) async {
-      await mainController.getAllData(token);
-      int? count = mainController.dataModel.value.eDetails?.length;
-      if (mainController.dataModel.value.eDetails != null && count! > 0) {
-        addOrUpdateEDetails(mainController.dataModel.value.eDetails);
-      } else {
-        Navigator.of(context, rootNavigator: true).pop();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Getting some technical problem, Please try again."),
-        ));
-      }
+    await mainController.getAllData(token);
+    int? count = mainController.dataModel.value.eDetails?.length;
+    if (mainController.dataModel.value.eDetails != null && count! > 0) {
+      addOrUpdateEDetails(mainController.dataModel.value.eDetails);
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Getting some technical problem, Please try again."),
+      ));
+    }
   }
 
   void callBoothDataApi(String? token) async {
@@ -478,6 +476,4 @@ class _LoginPageState extends State<LoginPage> {
         context, MaterialPageRoute(builder: (context) => const MenuPage()));
 
   }
-
-
 }

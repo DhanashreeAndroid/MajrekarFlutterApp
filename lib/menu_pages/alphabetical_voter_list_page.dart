@@ -18,12 +18,12 @@ import '../../CommonWidget/utility.dart';
 import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 
-
 class AlphabeticalVoterListPage extends StatefulWidget {
   const AlphabeticalVoterListPage({Key? key}) : super(key: key);
 
   @override
-  State<AlphabeticalVoterListPage> createState() => _AlphabeticalVoterListPageState();
+  State<AlphabeticalVoterListPage> createState() =>
+      _AlphabeticalVoterListPageState();
 }
 
 class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
@@ -33,11 +33,10 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
   final _recipientPartNoKey = GlobalKey<FormState>();
   TextEditingController partNoController = TextEditingController();
 
-
   Future getData(String type) async {
     try {
       final isRecipientSurnameValid =
-      _recipientPartNoKey.currentState!.validate();
+          _recipientPartNoKey.currentState!.validate();
       FocusScope.of(context).unfocus();
       if (isRecipientSurnameValid) {
         _recipientPartNoKey.currentState!.save();
@@ -45,9 +44,9 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
         voterList = await ObjectBox.getPartWiseData(partNoController.text);
-        if(voterList.isNotEmpty){
+        if (voterList.isNotEmpty) {
           generatePDF(type);
-        }else{
+        } else {
           ShowSnackBar.showSnackBar(context, 'No record found.');
         }
         setState(() => isLoading = false);
@@ -63,7 +62,6 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
         onWillPop: () async {
       Navigator.pop(context);
@@ -149,9 +147,9 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
               }, label: 'Create Marathi PDF',
             ),
           ),
-
-          const SizedBox(height: 20,),
-
+          const SizedBox(
+            height: 20,
+          ),
           CustomButton(
             onPressed: () {
               getData("English");
@@ -187,8 +185,8 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     //Generate PDF grid.
     final PdfGrid grid = _getGrid(contentFont, type);
     //Draw the header section by creating text element
-    final PdfLayoutResult result =
-    _drawHeader(page, pageSize, grid, contentFont, headerFont, footerFont, type);
+    final PdfLayoutResult result = _drawHeader(
+        page, pageSize, grid, contentFont, headerFont, footerFont, type);
     //Draw grid
     _drawGrid(page, grid, result, contentFont);
     //Add invoice footer
@@ -198,9 +196,11 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     document.dispose();
 
     //Get external storage directory
-    Directory? directory = await getExternalStorageDirectory();
+    Directory? directory = Platform.isAndroid
+        ? await getTemporaryDirectory()
+        : await getApplicationSupportDirectory();
     //Get directory path
-    String? path = directory?.path;
+    String? path = directory.path;
     //Create an empty file to write PDF data
     File file = File('$path/Output.pdf');
     //Write PDF data
@@ -232,8 +232,8 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     headerRow.cells[4].value = 'Gender';
     headerRow.cells[5].value = 'Age';
 
-    for(var voter in voterList){
-      if(type == "English") {
+    for (var voter in voterList) {
+      if (type == "English") {
         _addProducts(
             voter.partNo!,
             voter.serialNo!,
@@ -242,7 +242,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
             voter.sex!,
             voter.age!,
             grid);
-      }else{
+      } else {
         _addProducts(
             voter.partNo!,
             voter.serialNo!,
@@ -251,7 +251,6 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
             voter.sex!,
             voter.age!,
             grid);
-
       }
     }
     final PdfPen whitePen = PdfPen(PdfColor.empty, width: 0.5);
@@ -288,7 +287,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
   }
 
   void _addProducts(String partNo, String srNo, String voterName,
-      String voterAdd, String sex,String age, PdfGrid grid) {
+      String voterAdd, String sex, String age, PdfGrid grid) {
     final PdfGridRow row = grid.rows.add();
     row.cells[0].value = partNo;
     row.cells[1].value = srNo;
@@ -305,24 +304,18 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
         brush: PdfSolidBrush(PdfColor.empty),
         bounds: Rect.fromLTWH(0, 0, pageSize.width , 30));
     var str = "MAJREKAR'S Voters Management System";
-    if(type == "Marathi"){
+    if (type == "Marathi") {
       str = "माजरेकर्स वोटर मॅनॅजमेन्ट सिस्टम";
     }
 
-    return PdfTextElement(text: str, font: headerFont).draw(
-        page: page,
-        bounds:  Rect.fromLTWH(10, 10,
-            pageSize.width , 0))!;
-
+    return PdfTextElement(text: str, font: headerFont)
+        .draw(page: page, bounds: Rect.fromLTWH(10, 10, pageSize.width, 0))!;
   }
 
   void _drawGrid(
       PdfPage page, PdfGrid grid, PdfLayoutResult result, PdfFont contentFont) {
-
     //Draw the PDF grid and get the result.
     result = grid.draw(
         page: page, bounds: Rect.fromLTWH(0, result.bounds.bottom + 40, 0, 0))!;
-
   }
-
 }

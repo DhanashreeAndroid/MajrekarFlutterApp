@@ -29,9 +29,9 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final mainController = Get.put(MainController());
   TextEditingController userNameController =
-      TextEditingController(text: "admin");
+      TextEditingController();
   TextEditingController passwordController =
-      TextEditingController(text: "admin123");
+      TextEditingController();
   FocusNode userNameFocus = FocusNode();
   FocusNode passwordFocus = FocusNode();
 
@@ -109,13 +109,9 @@ class _LoginPageState extends State<LoginPage> {
       print('db mac address : ${user.macAddress!}' );
       print('device mac address : $macAddress' );
       if (macAddress == user.macAddress && macAddress != "unknown") {
-        if(Constant.isOffline){
-          getOfflineData(context);
-        }else {
           user.password = passwordController.text.toString();
           addUserDetails(user);
           callBoothDataApi(token);
-        }
       } else if (macAddress == "unknown") {
         Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -140,11 +136,7 @@ class _LoginPageState extends State<LoginPage> {
           token, macAddress, user.userName!);
       if (mainController.isMacSaved) {
         await ObjectBox.updateMacAddress(macAddress);
-        if(Constant.isOffline){
-          getOfflineData(context);
-        }else {
-          callBoothDataApi(token);
-        }
+        callBoothDataApi(token);
       }
 
   }
@@ -351,10 +343,12 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     onPressed: () async {
-
+                                      if(Constant.isOffline){
+                                        offlineDataProcessing(context);
+                                      }else{
                                         apiCall(userNameController.text,
                                             passwordController.text);
-
+                                      }
                                     },
                                     child: const Text(
                                       "Login",
@@ -377,20 +371,74 @@ class _LoginPageState extends State<LoginPage> {
             ),
           )),
     );
-
-
-
   }
 
+  Future<void> offlineDataProcessing(BuildContext context) async {
+    alertDailog(context);
+    String userName = userNameController.text;
+    String pass = passwordController.text;
+    if(userName.isEmpty && pass.isEmpty){
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please add user name or password"),
+      ));
+    }else{
+     if(userName == Constant.userName && pass == Constant.password){
+      await getOfflineVotingAddressData(context);
+
+     }else{
+       Navigator.of(context, rootNavigator: true).pop();
+       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+         content: Text("Invalid user name or password"),
+       ));
+     }
+    }
+  }
+
+  Future getOfflineVotingAddressData(BuildContext context) async{
+
+    List<Vidhansabha> addressList = [];
+    await ObjectBox.deleteAllBooths();
+
+    Directory directory = await getApplicationDocumentsDirectory();
+    var dbPath = "${directory.path}votingaddress1.csv";
+    if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
+      ByteData data = await rootBundle.load("assets/votingaddress.csv");
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await File(dbPath).writeAsBytes(bytes);
+    }
+    final csvFile = File(dbPath).openRead();
+
+    List<List<dynamic>> list = await csvFile.transform(utf8.decoder).transform(const CsvToListConverter()).toList();
+
+    for(int i=1;i<list.length;i++){
+      var eDetails = Vidhansabha(
+          dbId: i.toString(),
+          wardNo:list.elementAt(i).elementAt(0).toString(),
+          partNo: list.elementAt(i).elementAt(1).toString(),
+          from: list.elementAt(i).elementAt(2).toString(),
+          to: list.elementAt(i).elementAt(3).toString(),
+          boothAddressEnglish: list.elementAt(i).elementAt(4).toString(),
+          boothAddressMarathi: list.elementAt(i).elementAt(5).toString()
+      );
+      addressList.add(eDetails);
+    }
+    await ObjectBox.insertAllBooths(addressList);
+    List<Vidhansabha> dblist =  await ObjectBox.getAllBooths();
+    print("db voting address count : ${dblist.length}");
+    await getOfflineData(context);
+  }
+
+
   Future getOfflineData(BuildContext context) async{
-/*
+
     List<EDetails> voterList = [];
     await ObjectBox.deleteAll();
 
     Directory directory = await getApplicationDocumentsDirectory();
-    var dbPath = "${directory.path}fullvidhansabha3.csv";
+    var dbPath = "${directory.path}maindata1.csv";
     if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
-      ByteData data = await rootBundle.load("assets/datautfeight.csv");
+      ByteData data = await rootBundle.load("assets/maindata.csv");
       List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(dbPath).writeAsBytes(bytes);
     }
@@ -428,7 +476,7 @@ class _LoginPageState extends State<LoginPage> {
     print("db data count : ${dblist.length}");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const MenuPage()));
- */
+
   }
 
 

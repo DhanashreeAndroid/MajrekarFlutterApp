@@ -29,7 +29,10 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
   List<EDetails> buildingList = [];
   final _recipientPartNoKey = GlobalKey<FormState>();
   TextEditingController partNoController = TextEditingController();
+  List<EDetails> _foundUsers = [];
 
+  TextEditingController buildingController =
+  TextEditingController();
 
   Future getData() async {
     try {
@@ -40,17 +43,65 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
         _recipientPartNoKey.currentState!.save();
         //to vibrate the phone
         await HapticFeedback.lightImpact();
-        setState(() => isLoading = true);
+        setState(() {
+          isLoading = true;
+          alertDailog(context);
+        });
+        buildingList.clear();
         buildingList = await ObjectBox.getPartWiseBuildings(partNoController.text);
-        setState(() => isLoading = false);
+        _foundUsers = buildingList;
+        setState(() {
+          isLoading = false;
+          Navigator.of(context, rootNavigator: true).pop();
+        });
         return;
       } else {
         await HapticFeedback.heavyImpact();
         return;
       }
     } catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
       ShowSnackBar.showSnackBar(context, 'Error occurred.');
     }
+  }
+
+  Future getDataFullVidhan() async {
+    try {
+      setState(() {
+        isLoading = true;
+        alertDailog(context);
+      });
+        buildingList.clear();
+        buildingList = await ObjectBox.getPartWiseBuildings("All");
+      _foundUsers = buildingList;
+      setState(() {
+        isLoading = false;
+        Navigator.of(context, rootNavigator: true).pop();
+      });
+    } catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
+      ShowSnackBar.showSnackBar(context, 'Error occurred.');
+    }
+  }
+
+  // This function is called whenever the text field changes
+  void _runFilter(String enteredKeyword) {
+    List<EDetails> results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      results = buildingList;
+    } else {
+      results = buildingList
+          .where((voter) =>
+      (voter.buildingNameEnglish!.toLowerCase().contains(enteredKeyword.toLowerCase())))
+          .toList();
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundUsers = results;
+    });
   }
 
 
@@ -73,43 +124,74 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
           body: SafeArea(
             child: Column(
               children: <Widget>[
-                getCommonHeader(context),
-                const SizedBox(
-                  width: 10,
+                CommonHeader(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
                 ),
+                const SizedBox(
+                  height: 5,
+                ),
+              CustomButton(
+                onPressed: () {
+                  getDataFullVidhan();
+                 }, label: 'Search in Full Vidhansabha',
+                ),
+                const Divider(),
                 customInputs(),
-                const SizedBox(
-                  height: 10,
-                ),
                 const Divider(thickness: 2,),
-                const SizedBox(
-                  height: 10,
-                ),
+
+                _foundUsers.isNotEmpty?
+                TextField(
+                  controller: buildingController,
+                  onChanged: (value) => _runFilter(value),
+                  decoration: InputDecoration(
+                    hintText: 'Search Building',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ):const SizedBox(),
+                _foundUsers.isNotEmpty?
+                const AutoSizeText(
+                  "Please click on below building names",
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+                ) : const SizedBox(),
                 Expanded(
-                  child: buildingList.isNotEmpty
+                  child: _foundUsers.isNotEmpty
                       ? ListView.builder(
                     controller: _controller,
-                    itemCount: buildingList.length,
+                    itemCount: _foundUsers.length,
                     itemBuilder: (context, index) => Card(
-                      key: ValueKey(buildingList[index]),
+                      key: ValueKey(_foundUsers[index]),
                       color: const Color.fromRGBO(218,222,224, 1),
                       elevation: 4,
                       margin: const EdgeInsets.symmetric(vertical: 1),
                       child: ListTile(
+                        tileColor: const Color.fromRGBO(218,222,224, 1),
                         leading: const Text( "", style: TextStyle(fontSize: 0),),
                         minLeadingWidth : 1,
-                        title: Text(buildingList[index].buildingNameEnglish!),
-                        subtitle: Text(buildingList[index].buildingNameMarathi!),
+                        title: Text(_foundUsers[index].buildingNameEnglish!),
+                        subtitle: Text(_foundUsers[index].buildingNameMarathi!),
                         onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) =>  VoterListPage(searchType : 'BuildingWise',
-                                  buildingName: buildingList[index].buildingNameEnglish!,language: "",)));
+                                  buildingName: _foundUsers[index].buildingNameEnglish!,language: "",)));
                         },
                       ),
                     ),
                   )
                       :    const Center(
-                child: Text("Please enter Part No then click on search button"),
+                child: Text("Click on Full Vidhansabha button to search buildings in full vidhansabha\nOR\nPlease enter Part No then click on search button", textAlign: TextAlign.center,),
                   ),
                 ),
 
@@ -123,16 +205,19 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
 
   Padding customInputs() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 2.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(10.0, 5.0, 2.0, 0.0),
       child: Row(
         children: <Widget>[
           const SizedBox(width: 5,),
           Flexible(
-            flex: 2,
+            flex: 1,
             child:
             Form(
               key: _recipientPartNoKey,
               child: TextFormField(
+                style: const TextStyle(
+                    height: 1
+                ),
                 controller: partNoController,
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -161,7 +246,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
           ),
           const SizedBox(width: 5,),
           Flexible(
-            flex: 2,
+            flex: 1,
             child:
             CustomButton(
               onPressed: () {
@@ -169,7 +254,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
                 _scrollUp();
               }, label: 'Search',
             ),
-          )
+          ),
         ],
       ),
     );

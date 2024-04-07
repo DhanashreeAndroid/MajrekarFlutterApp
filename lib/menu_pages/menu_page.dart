@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/easy_search.dart';
+import 'package:majrekar_app/menu_pages/epic_search.dart';
 import 'package:majrekar_app/menu_pages/pdfSample.dart';
 import 'package:majrekar_app/menu_pages/surname_counter_page.dart';
 import 'package:majrekar_app/menu_pages/voter_name_search.dart';
 
+import '../CommonWidget/Constant.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
 import 'ageWiseReport/age_wise_search.dart';
@@ -47,13 +49,27 @@ class _MenuPageState extends State<MenuPage> {
               SafeArea(
                 child:
                 SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  reverse: true,
                   child: Column(
                     children: [
-                      getCommonHeader(context),
+                      CommonHeader(
+                        onPressed: () {
+                          showExitPopup(context);
+                        },
+                      ),
                       const SizedBox(height: 40,),
-                      Image.asset("images/logom.png",
+                      Image.asset("images/logo.jpg",
                           height: 100,
                           width: 100),
+                      const SizedBox(height: 10,),
+                      const Text(
+                        Constant.vidhansabhaName,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
                       const SizedBox(height: 20,),
                       CustomButton(
                         onPressed: () {
@@ -77,6 +93,14 @@ class _MenuPageState extends State<MenuPage> {
                               MaterialPageRoute(builder:
                                   (context) =>  const BuildingWiseSearch()));
                         }, label: 'Building wise Search',
+                      ),
+                      const SizedBox(height: 20,),
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const EpicSearch()));
+                        }, label: 'EPIC No. Search ',
                       ),
                       const SizedBox(height: 20,),
                       CustomButton(
@@ -139,6 +163,7 @@ class _MenuPageState extends State<MenuPage> {
                         }, label: 'Age Wise Report',
                       ),
                       const SizedBox(height: 20,),
+
                     ],
                   ),
                 ),

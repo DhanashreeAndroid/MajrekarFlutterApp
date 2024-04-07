@@ -38,7 +38,11 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      getCommonHeader(context),
+                      CommonHeader(
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        },
+                      ),
                       const SizedBox(height: 40,),
                       Image.asset("images/logom.png",
                       height: 100,

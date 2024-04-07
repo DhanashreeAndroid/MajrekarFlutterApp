@@ -72,7 +72,11 @@ class _LanguageWiseSearchSearchState extends State<LanguageWiseSearch> {
           body: SafeArea(
             child: Column(
               children: <Widget>[
-                getCommonHeader(context),
+                CommonHeader(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
                 const SizedBox(
                   width: 10,
                 ),
@@ -81,6 +85,16 @@ class _LanguageWiseSearchSearchState extends State<LanguageWiseSearch> {
                   height: 10,
                 ),
                 const Divider(thickness: 2,),
+                const SizedBox(
+                  height: 10,
+                ),
+                buildingList.isNotEmpty?
+                const AutoSizeText(
+                  "Please click on below building names",
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+                ) : const SizedBox(),
                 const SizedBox(
                   height: 10,
                 ),
@@ -95,6 +109,7 @@ class _LanguageWiseSearchSearchState extends State<LanguageWiseSearch> {
                       elevation: 4,
                       margin: const EdgeInsets.symmetric(vertical: 1),
                       child: ListTile(
+                        tileColor: const Color.fromRGBO(218,222,224, 1),
                         leading: const Text( "", style: TextStyle(fontSize: 0),),
                         minLeadingWidth : 1,
                         title: Text(buildingList[index].buildingNameEnglish!),

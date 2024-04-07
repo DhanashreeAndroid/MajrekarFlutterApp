@@ -157,7 +157,11 @@ class _VoterListPageState extends State<VoterListPage> {
         backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: Column(
           children: [
-            getCommonHeader(context),
+            CommonHeader(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
             const SizedBox(
               height: 5,
             ),
@@ -220,7 +224,7 @@ class _VoterListPageState extends State<VoterListPage> {
                   margin: const EdgeInsets.symmetric(vertical: 1),
                   child: ListTile(
                     tileColor: const Color.fromRGBO(218,222,224, 1),
-                    leading: const Text( "", style: TextStyle(fontSize: 0),),
+                    leading: widget.searchType == "AgeWise"? Text( "Age\n${_foundUsers[index].age!}", style: const TextStyle(fontSize: 15, color: Colors.red),):const Text( "", style: TextStyle(fontSize: 0),),
                     minLeadingWidth : 1,
                     title: getTextViewEnglish(index, widget.searchType),
                     subtitle: getTextViewMarathi(index, widget.searchType),
@@ -263,7 +267,7 @@ class _VoterListPageState extends State<VoterListPage> {
                           ),
                         ),
                         onPressed: () {
-                            generatePDF();
+                            generatePDF("English");
                         },
                         child: const Text(
                           "Create PDF",
@@ -288,7 +292,7 @@ class _VoterListPageState extends State<VoterListPage> {
     );
   }
 
-  Future<void> generatePDF() async {
+  Future<void> generatePDF(String type) async {
     PdfDocument document;
     //Create a new PDF document with conformance A2B.
     document = PdfDocument(conformanceLevel: PdfConformanceLevel.a2b);
@@ -303,15 +307,18 @@ class _VoterListPageState extends State<VoterListPage> {
         pen: PdfPen(PdfColor(142, 170, 219, 255)));
     //Read font file.
     List<int> fontData = await _readData('Roboto-Regular.ttf');
+    if(type == "Marathi"){
+      fontData = await _readData('AnnapurnaSIL-Regular.ttf');
+    }
     //Create a PDF true type font.
-    PdfFont contentFont = PdfTrueTypeFont(fontData, 9);
-    PdfFont headerFont = PdfTrueTypeFont(fontData, 20);
+    PdfFont contentFont = PdfTrueTypeFont(fontData, 6);
+    PdfFont headerFont = PdfTrueTypeFont(fontData, 15);
     PdfFont footerFont = PdfTrueTypeFont(fontData, 18);
     //Generate PDF grid.
-    final PdfGrid grid = _getGrid(contentFont);
+    final PdfGrid grid = _getGrid(contentFont, type);
     //Draw the header section by creating text element
     final PdfLayoutResult result =
-    _drawHeader(page, pageSize, grid, contentFont, headerFont, footerFont);
+    _drawHeader(page, pageSize, grid, contentFont, headerFont, footerFont, type);
     //Draw grid
     _drawGrid(page, grid, result, contentFont);
     //Add invoice footer
@@ -337,7 +344,7 @@ class _VoterListPageState extends State<VoterListPage> {
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   }
 
-  PdfGrid _getGrid(PdfFont contentFont) {
+  PdfGrid _getGrid(PdfFont contentFont, String type) {
     //Create a PDF grid
     final PdfGrid grid = PdfGrid();
     //Secify the columns count to the grid.
@@ -345,24 +352,45 @@ class _VoterListPageState extends State<VoterListPage> {
     //Create the header row of the grid.
     final PdfGridRow headerRow = grid.headers.add(1)[0];
     //Set style
-    headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor(68, 114, 196));
-    headerRow.style.textBrush = PdfBrushes.white;
-    headerRow.cells[0].value = 'Part No';
+    headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor.empty);
+    headerRow.style.textBrush = PdfBrushes.black;
+    headerRow.cells[0].value = 'Part';
     //headerRow.cells[0].stringFormat.alignment = PdfTextAlignment.center;
     headerRow.cells[1].value = 'Sr No';
     headerRow.cells[2].value = 'Voter Name';
     headerRow.cells[3].value = 'Voter Address';
-    headerRow.cells[4].value = 'Sex';
+    headerRow.cells[4].value = 'Gender';
     headerRow.cells[5].value = 'Age';
-    for(var voter in _foundUsers){
-      _addProducts(voter.partNo!, voter.serialNo!, "${voter.lnEnglish!} ${voter.fnEnglish!}", voter.buildingNameEnglish!, voter.sex!, voter.age!, grid);
+
+    for(var voter in voterList){
+      if(type == "English") {
+        _addProducts(
+            voter.partNo!,
+            voter.serialNo!,
+            "${voter.lnEnglish!} ${voter.fnEnglish!}",
+            "${voter.houseNoEnglish!} ${voter.buildingNameEnglish!}",
+            voter.sex!,
+            voter.age!,
+            grid);
+      }else{
+        _addProducts(
+            voter.partNo!,
+            voter.serialNo!,
+            "${voter.lnMarathi!} ${voter.fnMarathi!}",
+            "${voter.houseNoMarathi!} ${voter.buildingNameMarathi!}",
+            voter.sex!,
+            voter.age!,
+            grid);
+
+      }
     }
     final PdfPen whitePen = PdfPen(PdfColor.empty, width: 0.5);
     PdfBorders borders = PdfBorders();
     borders.all = PdfPen(PdfColor(142, 179, 219), width: 0.5);
     grid.rows.applyStyle(PdfGridCellStyle(borders: borders));
-    grid.columns[0].width = 50;
-    grid.columns[1].width = 50;
+    grid.columns[0].width = 22;
+    grid.columns[1].width = 30;
+    grid.columns[2].width = 140;
     grid.columns[4].width = 30;
     grid.columns[5].width = 30;
     for (int i = 0; i < headerRow.cells.count; i++) {
@@ -372,9 +400,9 @@ class _VoterListPageState extends State<VoterListPage> {
     }
     for (int i = 0; i < grid.rows.count; i++) {
       final PdfGridRow row = grid.rows[i];
-      if (i % 2 == 0) {
+      /*if (i % 2 == 0) {
         row.style.backgroundBrush = PdfSolidBrush(PdfColor(217, 226, 243));
-      }
+      }*/
       for (int j = 0; j < row.cells.count; j++) {
         final PdfGridCell cell = row.cells[j];
         if (j == 0) {
@@ -401,12 +429,17 @@ class _VoterListPageState extends State<VoterListPage> {
   }
 
   PdfLayoutResult _drawHeader(PdfPage page, Size pageSize, PdfGrid grid,
-      PdfFont contentFont, PdfFont headerFont, PdfFont footerFont) {
+      PdfFont contentFont, PdfFont headerFont, PdfFont footerFont, String type) {
     //Draw rectangle
     page.graphics.drawRectangle(
-        brush: PdfSolidBrush(PdfColor(91, 126, 215, 255)),
-        bounds: Rect.fromLTWH(0, 0, pageSize.width , 50));
-    return PdfTextElement(text: "MAJREKAR'S Voters Management System", font: headerFont).draw(
+        brush: PdfSolidBrush(PdfColor.empty),
+        bounds: Rect.fromLTWH(0, 0, pageSize.width , 30));
+    var str = "MAJREKAR'S Voters Management System";
+    if(type == "Marathi"){
+      str = "माजरेकर्स वोटर मॅनॅजमेन्ट सिस्टम";
+    }
+
+    return PdfTextElement(text: str, font: headerFont).draw(
         page: page,
         bounds:  Rect.fromLTWH(10, 10,
             pageSize.width , 0))!;
@@ -421,6 +454,8 @@ class _VoterListPageState extends State<VoterListPage> {
         page: page, bounds: Rect.fromLTWH(0, result.bounds.bottom + 40, 0, 0))!;
 
   }
+
+
 
   Widget getTextViewEnglish(int index, String searchType){
     if(searchType.contains("Name")){

@@ -49,8 +49,8 @@ class _AgeWiseSearchSearchState extends State<AgeWiseSearch> {
 
  void callListPage(String ageRange){
    Navigator.push(context,
-       MaterialPageRoute(builder: (context) =>  AgeCountPage(
-         partNo: partNoController.text,ageRange: ageRange,)));
+       MaterialPageRoute(builder:
+           (context) =>  VoterListPage(searchType : "AgeWise" ,buildingName: partNoController.text, language: ageRange ,)));
  }
 
   @override
@@ -65,7 +65,11 @@ class _AgeWiseSearchSearchState extends State<AgeWiseSearch> {
           body: SafeArea(
             child: Column(
               children: <Widget>[
-                getCommonHeader(context),
+                CommonHeader(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
                 const SizedBox(
                   width: 10,
                 ),

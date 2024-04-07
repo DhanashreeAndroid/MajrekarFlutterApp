@@ -1,4 +1,5 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/model/DataModel.dart';
@@ -45,7 +46,11 @@ class _LanguageListPageState extends State<LanguageListPage> {
         backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: Column(
           children: [
-            getCommonHeader(context),
+            CommonHeader(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
             const SizedBox(
               height: 5,
             ),
@@ -58,6 +63,13 @@ class _LanguageListPageState extends State<LanguageListPage> {
                       fontSize: 20)),
             ),
             const Divider(),
+            languageList.isNotEmpty?
+            const AutoSizeText(
+              "Please click on below Language to see voter details",
+              maxLines: 1,
+              style: TextStyle(
+                  color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+            ) : const SizedBox(),
             Expanded(
               child: languageList.isNotEmpty
                   ? ListView.builder(
@@ -68,6 +80,7 @@ class _LanguageListPageState extends State<LanguageListPage> {
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(vertical: 1),
                   child: ListTile(
+                    tileColor: const Color.fromRGBO(218,222,224, 1),
                     leading: const Text( "", style: TextStyle(fontSize: 0),),
                     minLeadingWidth : 1,
                     title: getTitle(languageList[index].name, languageList[index].count),

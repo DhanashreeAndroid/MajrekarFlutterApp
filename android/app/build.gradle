@@ -29,7 +29,11 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
+    project.ext.set("appName", "139-murbad")
 
+    defaultConfig {
+        setProperty("archivesBaseName", "$appName-$versionName-$versionCode")
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

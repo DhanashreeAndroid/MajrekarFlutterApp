@@ -10,6 +10,7 @@ import 'package:majrekar_app/menu_pages/common_pages/share_image.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 import 'package:telephony/telephony.dart';
 
+import '../../CommonWidget/Constant.dart';
 import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
 import '../../controller/MainController.dart';
@@ -49,10 +50,13 @@ class _DetailPageState extends State<DetailPage> {
 
   Future getUserDetails() async {
     setState(() => isLoading = true);
-    List<UserDetails> users = await ObjectBox.getUserDetails();
-    print("userDetailCount : ${users.length}");
-    userDetails =  users.first;
-
+    if(Constant.isOffline){
+      userDetails = UserDetails(isMarkable: 'false');
+    }else{
+      List<UserDetails> users = await ObjectBox.getUserDetails();
+      print("userDetailCount : ${users.length}");
+      userDetails =  users.first;
+    }
     boothDetails = await ObjectBox.getBoothDetails(widget.data.wardNo!, widget.data.partNo!,
     widget.data.serialNo!);
 
@@ -200,7 +204,11 @@ class _DetailPageState extends State<DetailPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  getCommonHeader(context),
+                  CommonHeader(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                  ),
                   customData("Name", getEnglishName(),
                       getMarathiName() , screenWidth),
                   customData(
@@ -209,6 +217,7 @@ class _DetailPageState extends State<DetailPage> {
                       "${widget.data.houseNoMarathi!} ${widget.data.buildingNameMarathi!}",
                       screenWidth),
                   customAgeGender("${widget.data.age!} / ${widget.data.sex!}", screenWidth),
+                  customEpicNumber(widget.data.cardNo!, screenWidth),
                   customData("Voting Center Address", boothDetails?.boothAddressEnglish,
                       boothDetails?.boothAddressMarathi, screenWidth),
                   customWardPartSerial(
@@ -291,6 +300,48 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
+
+  Padding customEpicNumber(String value,  double screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+              children: <Widget>[
+                const AutoSizeText(
+                  "Epic Number : ",
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                AutoSizeText(
+                  value,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal),
+                ),
+              ]
+          ),
+
+          const SizedBox(
+            height: 10,
+          ),
+          divider(screenWidth)
+        ],
+      ),
+    );
+  }
+
 
   Padding customAgeGender(String value,  double screenWidth) {
     return Padding(
@@ -593,6 +644,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       onPressed: () {
                         List<EDetails> voterList = List<EDetails>.generate(1, (index) => widget.data);
+
                         Navigator.push(context,
                             MaterialPageRoute(builder:
                                 (context) =>  ShareImage(voterList: voterList,searchType: widget.searchType, )));

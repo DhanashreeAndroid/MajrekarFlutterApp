@@ -10,6 +10,7 @@ import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../CommonWidget/utility.dart';
 import '../../CommonWidget/widget_to_image.dart';
 import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
@@ -26,7 +27,7 @@ class ShareImage extends StatefulWidget {
 
 class _ShareImageState extends State<ShareImage> {
   GlobalKey key1 = GlobalKey();
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -34,6 +35,9 @@ class _ShareImageState extends State<ShareImage> {
   }
 
   Future<void> setBoothAddresses() async {
+    setState(() {
+      isLoading = true;
+    });
     for (int i = 0; i < widget.voterList.length; i++) {
       Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
           widget.voterList[i].wardNo!, widget.voterList[i].partNo!,
@@ -41,6 +45,9 @@ class _ShareImageState extends State<ShareImage> {
       widget.voterList[i].boothAddressEnglish = boothDetails!.boothAddressEnglish!;
       widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -49,6 +56,10 @@ class _ShareImageState extends State<ShareImage> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(218,222,224, 1),
+        appBar: AppBar(
+          backgroundColor:const Color.fromRGBO(218,222,224, 1) ,
+          title: const Text('Share'),
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
       child: Column(
@@ -74,7 +85,7 @@ class _ShareImageState extends State<ShareImage> {
                         child: Image.asset("images/sample.jpg",
                           width: screenWidth,
                           height: 200,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ),
                       ),
 
@@ -125,7 +136,7 @@ class _ShareImageState extends State<ShareImage> {
                             await File('${tempDir.path}/image.jpg').create();
                         file.writeAsBytesSync(bytes1);
                         Share.shareFiles([(file.path)],
-                            text: 'Majrekar\'s Voters Management System');
+                            text: '');
                       },
                       child: const Text(
                         "Share",
@@ -157,13 +168,56 @@ class _ShareImageState extends State<ShareImage> {
           "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
           "${data.houseNoMarathi!} ${data.buildingNameMarathi!}",
           screenWidth),
-      customAgeGender("${data.age!} / ${data.sex!}", screenWidth),
-      customData("Voting Center Address", data.boothAddressEnglish!,
-          data.boothAddressMarathi!, screenWidth),
       customWardPartSerial(
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
+      customAgeGender("${data.age!} / ${data.sex!}", screenWidth),
+      customEpicNumber(data.cardNo!, screenWidth),
+      customData("Voting Center Address", data.boothAddressEnglish!,
+          data.boothAddressMarathi!, screenWidth),
     ]);
   }
+
+  Padding customEpicNumber(String value,  double screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+              children: <Widget>[
+                const AutoSizeText(
+                  "Epic Number : ",
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                AutoSizeText(
+                  value,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal),
+                ),
+              ]
+          ),
+
+          const SizedBox(
+            height: 10,
+          ),
+          divider(screenWidth)
+        ],
+      ),
+    );
+  }
+
 
   String getEnglishName(EDetails data){
     if(widget.searchType.contains("Surname")){

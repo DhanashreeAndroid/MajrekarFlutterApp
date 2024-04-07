@@ -15,37 +15,32 @@ import 'common_pages/print_details.dart';
 import 'common_pages/share_image.dart';
 
 
-class EasyPrintShare extends StatefulWidget {
-  const EasyPrintShare({Key? key}) : super(key: key);
+class EpicSearch extends StatefulWidget {
+  const EpicSearch({Key? key}) : super(key: key);
 
   @override
-  State<EasyPrintShare> createState() => _EasyPrintShareState();
+  State<EpicSearch> createState() => _EpicSearchState();
 }
 
-class _EasyPrintShareState extends State<EasyPrintShare> {
+class _EpicSearchState extends State<EpicSearch> {
   bool isLoading = false;
   EDetails? voterDetails;
-  final _recipientPartNoFormKey = GlobalKey<FormState>();
-  final _recipientSrNoFormKey = GlobalKey<FormState>();
-  TextEditingController partNoController = TextEditingController();
-  TextEditingController srNoController = TextEditingController();
+  final _recipientEpicFormKey = GlobalKey<FormState>();
+  TextEditingController epicController = TextEditingController();
 
 
   Future getData() async {
 
     try {
-      final isRecipientSurnameValid =
-      _recipientPartNoFormKey.currentState!.validate();
       final isRecipientNameValid =
-      _recipientSrNoFormKey.currentState!.validate();
+      _recipientEpicFormKey.currentState!.validate();
       FocusScope.of(context).unfocus();
-      if (isRecipientSurnameValid && isRecipientNameValid) {
-        _recipientPartNoFormKey.currentState!.save();
-        _recipientSrNoFormKey.currentState!.save();
+      if (isRecipientNameValid) {
+        _recipientEpicFormKey.currentState!.save();
         //to vibrate the phone
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
-        voterDetails = await ObjectBox.getPartSerialWiseData(partNoController.text, srNoController.text);
+        voterDetails = await ObjectBox.getEpicWiseData(epicController.text);
         Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
             voterDetails!.wardNo!, voterDetails!.partNo!,
             voterDetails!.serialNo!);
@@ -59,7 +54,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         return;
       }
     } catch (e) {
-      ShowSnackBar.showSnackBar(context, 'Error occurred.');
+      ShowSnackBar.showSnackBar(context, 'Please enter valid epic number.');
     }
   }
 
@@ -116,7 +111,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
                 const Column(
                   children: [
                     Center(
-                      child: Text("Please enter part no and serial no then click on search button"),
+                      child: Text("Please enter Epic number then click on search button"),
                     ),
                     SizedBox(
                       height: 20,
@@ -145,20 +140,20 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
             flex: 1,
             child:
             Form(
-              key: _recipientPartNoFormKey,
+              key: _recipientEpicFormKey,
               child: TextFormField(
                 autofocus: true,
-                controller: partNoController,
-                keyboardType: TextInputType.number,
+                controller: epicController,
+                keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Please enter part no.";
+                    return "Please enter epic no.";
                   }
                   return null;
                 },
                 onSaved: (String? phoneNumber) {},
                 decoration: InputDecoration(
-                  hintText: 'Enter Part No',
+                  hintText: 'Enter Epic No',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -173,39 +168,6 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
               ),
             ),
           ),
-          const SizedBox(width: 10,),
-          Flexible(
-            flex: 1,
-            child:
-            Form(
-              key: _recipientSrNoFormKey,
-              child: TextFormField(
-                autofocus: true,
-                controller: srNoController,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please enter serial no.";
-                  }
-                  return null;
-                },
-                onSaved: (String? phoneNumber) {},
-                decoration: InputDecoration(
-                  hintText: 'Enter Serial No',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );
@@ -266,6 +228,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
     ]);
   }
+
   Padding customEpicNumber(String value,  double screenWidth) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -306,6 +269,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
       ),
     );
   }
+
 
   String getEnglishName(EDetails data){
       return "${data.lnEnglish!} ${data.fnEnglish!}";

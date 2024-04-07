@@ -76,7 +76,11 @@ class _EasySearchState extends State<EasySearch> {
         body: SafeArea(
           child: Column(
             children: <Widget>[
-              getCommonHeader(context),
+              CommonHeader(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
               customInputs(),
               const SizedBox(
                 height: 10,

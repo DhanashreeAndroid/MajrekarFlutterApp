@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/buildingWiseSearch/partno_drop_list_model.dart';
@@ -72,7 +73,11 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
           body: SafeArea(
             child: Column(
               children: <Widget>[
-                getCommonHeader(context),
+                CommonHeader(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
                 const SizedBox(
                   width: 10,
                 ),
@@ -136,10 +141,13 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
       child: Column(
         children: <Widget>[
           const SizedBox(height: 10,),
-          CustomButton(
-            onPressed: () {
-              getData("Marathi");
-            }, label: 'Create Marathi PDF',
+          Visibility(
+            visible: false,
+            child: CustomButton(
+              onPressed: () {
+                getData("Marathi");
+              }, label: 'Create Marathi PDF',
+            ),
           ),
 
           const SizedBox(height: 20,),
@@ -147,7 +155,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
           CustomButton(
             onPressed: () {
               getData("English");
-            }, label: 'Create English PDF',
+            }, label: 'Create PDF',
           )
         ],
       ),
@@ -170,7 +178,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     //Read font file.
     List<int> fontData = await _readData('Roboto-Regular.ttf');
     if(type == "Marathi"){
-      fontData = await _readData('Noto-Sans-Devanagari-Light.ttf');
+      fontData = await _readData('AnnapurnaSIL-Regular.ttf');
     }
     //Create a PDF true type font.
     PdfFont contentFont = PdfTrueTypeFont(fontData, 6);
@@ -214,14 +222,14 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     //Create the header row of the grid.
     final PdfGridRow headerRow = grid.headers.add(1)[0];
     //Set style
-    headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor(68, 114, 196));
-    headerRow.style.textBrush = PdfBrushes.white;
+    headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor.empty);
+    headerRow.style.textBrush = PdfBrushes.black;
     headerRow.cells[0].value = 'Part';
     //headerRow.cells[0].stringFormat.alignment = PdfTextAlignment.center;
     headerRow.cells[1].value = 'Sr No';
     headerRow.cells[2].value = 'Voter Name';
     headerRow.cells[3].value = 'Voter Address';
-    headerRow.cells[4].value = 'Sex';
+    headerRow.cells[4].value = 'Gender';
     headerRow.cells[5].value = 'Age';
 
     for(var voter in voterList){
@@ -252,6 +260,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     grid.rows.applyStyle(PdfGridCellStyle(borders: borders));
     grid.columns[0].width = 22;
     grid.columns[1].width = 30;
+    grid.columns[2].width = 140;
     grid.columns[4].width = 30;
     grid.columns[5].width = 30;
     for (int i = 0; i < headerRow.cells.count; i++) {
@@ -261,9 +270,9 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
     }
     for (int i = 0; i < grid.rows.count; i++) {
       final PdfGridRow row = grid.rows[i];
-      if (i % 2 == 0) {
+      /*if (i % 2 == 0) {
         row.style.backgroundBrush = PdfSolidBrush(PdfColor(217, 226, 243));
-      }
+      }*/
       for (int j = 0; j < row.cells.count; j++) {
         final PdfGridCell cell = row.cells[j];
         if (j == 0) {
@@ -293,8 +302,8 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
       PdfFont contentFont, PdfFont headerFont, PdfFont footerFont, String type) {
     //Draw rectangle
     page.graphics.drawRectangle(
-        brush: PdfSolidBrush(PdfColor(91, 126, 215, 255)),
-        bounds: Rect.fromLTWH(0, 0, pageSize.width , 50));
+        brush: PdfSolidBrush(PdfColor.empty),
+        bounds: Rect.fromLTWH(0, 0, pageSize.width , 30));
     var str = "MAJREKAR'S Voters Management System";
     if(type == "Marathi"){
       str = "माजरेकर्स वोटर मॅनॅजमेन्ट सिस्टम";

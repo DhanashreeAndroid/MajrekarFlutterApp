@@ -11,12 +11,14 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'CommonWidget/Constant.dart';
 import 'CommonWidget/utility.dart';
 import 'controller/MainController.dart';
 import 'database/ObjectBox.dart';
 import 'menu_pages/menu_page.dart';
 import 'model/DataModel.dart';
 import 'model/UserModel.dart';
+import 'model/VidhansabhaModel.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -103,8 +105,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void callGetData(String? token) async{
-   bool isDataAvailable =  await ObjectBox.isDataAvailable();
-   if(isDataAvailable){
+    List<Vidhansabha> dbList  =  await ObjectBox.getAllBooths();
+   if(dbList.isNotEmpty){
      Navigator.pushReplacement(
          context, MaterialPageRoute(builder: (context) => const MenuPage()));
    }else{
@@ -130,17 +132,31 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   Future<void> loadScreen() async {
-    List<UserDetails> users = await ObjectBox.getUserDetails();
-    if(users.isEmpty || users.first.userName.isNull ||  users.first.password.isNull ) {
-      Timer(const Duration(seconds: 5),
-              () =>
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder:
-                      (context) => const LoginPage()))
-      );
-    }else{
+    if(Constant.isOffline){
+      List<Vidhansabha> dbList  =  await ObjectBox.getAllBooths();
+      if(dbList.isNotEmpty) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const MenuPage()));
+      }else{
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder:
+                (context) => const LoginPage()));
+      }
+
+    }else {
+      List<UserDetails> users = await ObjectBox.getUserDetails();
+      if (users.isEmpty || users.first.userName.isNull ||
+          users.first.password.isNull) {
+        Timer(const Duration(seconds: 1),
+                () =>
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder:
+                        (context) => const LoginPage()))
+        );
+      } else {
         apiCall(users.first.userName, users.first.password);
       }
+    }
 
   }
 

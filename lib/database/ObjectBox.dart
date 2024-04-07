@@ -66,36 +66,24 @@ class ObjectBox {
     return output;
   }
 
-  static Future<bool> isDataAvailable() async {
-    final store = await openStore();
-    var box = store.box<Vidhansabha>();
-    store.close();
-    if(box.isEmpty()){
-      return false;
-    }else{
-      return true;
-    }
-  }
-
   static Future<List<EDetails>> getAll(String searchType) async {
     final store = await openStore();
     var box = store.box<EDetails>();
+    List<EDetails> list = box.getAll();
 
-    if(searchType.contains("Name")){
-      final query  = (box.query(EDetails_.fnEnglish.notEquals(''))..order(EDetails_.fnEnglish, flags:  Order.nullsLast )).build();
-      final output = query.find();
-      query.close();
-      store.close();
-      return output;
-    }else{
-      final query  = (box.query(EDetails_.lnEnglish.notEquals(''))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
-      final output = query.find();
-      query.close();
-      store.close();
-      return output;
-    }
-
-
+      if(searchType.contains("Name")){
+        list = list.where((eDetails) => eDetails.fnEnglish != "").toList();
+        list.sort((a,b) {
+          return  a.fnEnglish!.compareTo(b.fnEnglish!);
+        });
+      }else{
+        list = list.where((eDetails) => eDetails.lnEnglish != "").toList();
+        list.sort((a,b) {
+          return  a.lnEnglish!.compareTo(b.lnEnglish!);
+        });
+      }
+    store.close();
+    return list;
   }
 
   static Future<List<EDetails>> getSearchResult(String searchType, String search) async {
@@ -278,7 +266,7 @@ class ObjectBox {
     final store = await openStore();
     var box = store.box<EDetails>();
 
-    final query  = (box.query(EDetails_.partNo.contains(part, caseSensitive: false) &
+    final query  = (box.query(EDetails_.partNo.equals(part, caseSensitive: false) &
     EDetails_.serialNo.equals(serial, caseSensitive: false) )..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive )).build();
     final output = query.find();
     query.close();
@@ -287,13 +275,25 @@ class ObjectBox {
 
   }
 
+  static Future<EDetails> getEpicWiseData(String epicNumber) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
 
-  static Future<List<SurnameCounterModel>> getSurnameCountData() async {
+    final query  = (box.query(EDetails_.cardNo.equals(epicNumber, caseSensitive: false))..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output.first;
+
+  }
+
+
+  static Future<List<SurnameCounterModel>> getSurnameCountData(String surname) async {
     final store = await openStore();
     var box = store.box<EDetails>();
     List<SurnameCounterModel> listSurname = [];
 
-    final query  = (box.query(EDetails_.lnEnglish.notEquals(''))..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive)).build();
+    final query  = (box.query(EDetails_.lnEnglish.equals(surname, caseSensitive: false))..order(EDetails_.lnEnglish, flags:  Order.nullsLast | Order.caseSensitive)).build();
     PropertyQuery<String> pq = query.property(EDetails_.lnEnglish);
     pq.distinct = true;
     pq.caseSensitive = false;
@@ -451,7 +451,31 @@ class ObjectBox {
     return output;
   }
 
-  static Future<List<EDetails>> getAgeWiseVoterList(String partNo, String filter) async {
+  static Future<List<EDetails>> getAgeWiseVoterList(String partNo, String ageRange) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    int idx = ageRange.indexOf("-");
+    var start = ageRange.substring(0,idx).trim();
+    var end = ageRange.substring(idx+1,ageRange.length).trim();
+    print("age 1" +start );
+    print("age 2" +end );
+
+    final query = box.query(
+        EDetails_.partNo.equals(partNo)
+            .and(EDetails_.age.greaterOrEqual(start)
+            .and(EDetails_.age.lessOrEqual(end)
+        )))
+        .order(EDetails_.age)
+        .build();
+
+    final output = query.find();
+    query.close();
+    store.close();
+    return output;
+
+  }
+
+  static Future<List<EDetails>> getGenderAgeWiseVoterList(String partNo, String filter) async {
     final store = await openStore();
     var box = store.box<EDetails>();
 
@@ -490,19 +514,36 @@ class ObjectBox {
   static Future<Vidhansabha?> getBoothDetails(String wardNo, String partNo, String serialNo) async {
     final store = await openStore();
     var box = store.box<Vidhansabha>();
-
+    print("ward No : $wardNo");
+    print("part No : $partNo");
+    print("serial No : $serialNo");
+    Vidhansabha? vidhansabha;
     final query  = (box.query(
         Vidhansabha_.wardNo.equals(wardNo)
-        & Vidhansabha_.partNo.equals(partNo)
-        .and(Vidhansabha_.from.greaterOrEqual(serialNo)
-        .or(Vidhansabha_.to.lessOrEqual(serialNo))))).build();
+        & Vidhansabha_.partNo.equals(partNo))).build();
 
     final list = query.find();
     for(Vidhansabha vidhan in list){
-      print(vidhan.toString());
+      vidhansabha = vidhan;
+      if(vidhan.from != "" && vidhan.to != ""){
+        final int from = int.parse(vidhan.from!) ;
+        final int to = int.parse(vidhan.to!);
+        final int serial = int.parse(serialNo);
+        if(serial >= from && serial <= to){
+          vidhansabha = vidhan;
+          break;
+        }
+      }
     }
-    final output = query.findFirst();
     query.close();
+    store.close();
+    return vidhansabha;
+  }
+
+  static Future<List<Vidhansabha>> getAllBooths() async {
+    final store = await openStore();
+    var box = store.box<Vidhansabha>();
+    var output = box.getAll();
     store.close();
     return output;
   }

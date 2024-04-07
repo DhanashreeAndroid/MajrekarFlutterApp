@@ -15,7 +15,10 @@ class Constant{
 
   //constant for app flow
 
-static const bool isOffline = false;
+  static const bool isOffline = true;
+  static const String userName = "Murbad";
+  static const String password = "dev99";
+  static const String vidhansabhaName = "139 Murbad";
 
 }
 

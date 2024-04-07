@@ -55,7 +55,11 @@ class _AgeCountPageState extends State<AgeCountPage> {
           body: SafeArea(
             child: Column(
               children: <Widget>[
-                getCommonHeader(context),
+                CommonHeader(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
                 const SizedBox(
                   height: 10,
                 ),

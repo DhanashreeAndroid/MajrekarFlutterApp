@@ -307,6 +307,7 @@ class _PrintDetailsState extends State<PrintDetails> {
     list.add(LineText(type: LineText.TYPE_TEXT, content: 'Name : ${eData.lnEnglish!} ${eData.fnEnglish!}' , weight: 5, align: LineText.ALIGN_LEFT, linefeed: 1));
     list.add(LineText(type: LineText.TYPE_TEXT, content: 'Address : ${eData.houseNoEnglish!} ${eData.buildingNameEnglish!}', weight: 5, align: LineText.ALIGN_LEFT, x: 0, relativeX: 0, linefeed: 1));
     list.add(LineText(type: LineText.TYPE_TEXT, content: 'Age/Gender : ${eData.age!} / ${eData.sex!} ',weight: 5, align: LineText.ALIGN_LEFT, x: 0,relativeX: 0, linefeed: 1));
+    list.add(LineText(type: LineText.TYPE_TEXT, content: 'Epic Number : ${eData.cardNo!}',weight: 5, align: LineText.ALIGN_LEFT, x: 0,relativeX: 0, linefeed: 1));
     list.add(LineText(linefeed: 1));
     list.add(LineText(type: LineText.TYPE_TEXT, content: 'Assembly No. : ${eData.wardNo!}',weight: 5, align: LineText.ALIGN_LEFT, x: 0, relativeX: 0, linefeed: 1));
     list.add(LineText(type: LineText.TYPE_TEXT, content: 'Part No. : ${eData.partNo!}',weight: 5, align: LineText.ALIGN_LEFT, x: 0, relativeX: 0, linefeed: 1));
@@ -329,12 +330,56 @@ class _PrintDetailsState extends State<PrintDetails> {
           "${data.houseNoMarathi!} ${data.buildingNameMarathi!}",
           screenWidth),
       customAgeGender("${data.age!} / ${data.sex!}", screenWidth),
+       customEpicNumber(data.cardNo!, screenWidth),
       customData("Voting Center Address", data.boothAddressEnglish,
           data.boothAddressMarathi, screenWidth),
       customWardPartSerial(
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
     ]);
   }
+
+  Padding customEpicNumber(String value,  double screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+              children: <Widget>[
+                const AutoSizeText(
+                  "Epic Number : ",
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                AutoSizeText(
+                  value,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal),
+                ),
+              ]
+          ),
+
+          const SizedBox(
+            height: 10,
+          ),
+          divider(screenWidth)
+        ],
+      ),
+    );
+  }
+
+
   String getEnglishName(EDetails data){
     if(widget.searchType.contains("Surname")){
       return "${data.lnEnglish!} ${data.fnEnglish!}";

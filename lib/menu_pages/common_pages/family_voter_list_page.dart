@@ -62,7 +62,11 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
         backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: Column(
           children: [
-            getCommonHeader(context),
+            CommonHeader(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
             const SizedBox(
               height: 10,
             ),

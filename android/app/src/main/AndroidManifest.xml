@@ -34,9 +34,9 @@
         android:usesPermissionFlags="neverForLocation"/>
 
     <application
-        android:label="majrekar_app"
+        android:label="139 Murbad"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/logo">
         <activity
             android:name=".MainActivity"
             android:exported="true"

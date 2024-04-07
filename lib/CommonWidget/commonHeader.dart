@@ -3,8 +3,18 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+class CommonHeader extends StatelessWidget {
+  const CommonHeader({super.key, required this.onPressed});
+  final GestureTapCallback onPressed;
 
-Widget getCommonHeader(BuildContext context){
+  @override
+  Widget build(BuildContext context) {
+    return getCommonHeader(context, onPressed);
+  }
+
+}
+
+Widget getCommonHeader(BuildContext context, GestureTapCallback onPressed){
   double screenWidth = MediaQuery.of(context).size.width;
   return Container(
     height: 135,
@@ -32,9 +42,7 @@ Widget getCommonHeader(BuildContext context){
                 icon: Image.asset("images/leftarrow.png",
                     height: 30,
                     width: 30),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
+                onPressed: onPressed,
               ),
             ),
             Expanded(

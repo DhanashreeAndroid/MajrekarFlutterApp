@@ -167,52 +167,9 @@ class _VoterListPageState extends State<VoterListPage> {
             const SizedBox(
               height: 5,
             ),
-
-            Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: TextField(
-                    controller: surnameController,
-                    onChanged: (value) => _runSurNameFilter(value),
-                    decoration: InputDecoration(
-                        hintText: 'Search Surname',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.black,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                    ),
-                  ),
-                const SizedBox(width: 5,),
-                Flexible(
-                  flex: 1,
-                  child: TextField(
-                    controller: nameController,
-                    onChanged: (value) => _runNameFilter(value),
-                    decoration: InputDecoration(
-                      hintText: 'Search Name',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+            widget.searchType.contains("Name")?
+                getNameInputs() :
+                getSurnameInputs(),
             const SizedBox(
               height: 5,
             ),
@@ -303,6 +260,104 @@ class _VoterListPageState extends State<VoterListPage> {
     ),
     );
   }
+
+  Row getSurnameInputs(){
+    return   Row(
+      children: [
+        Flexible(
+          flex: 1,
+          child: TextField(
+            controller: surnameController,
+            onChanged: (value) => _runSurNameFilter(value),
+            decoration: InputDecoration(
+              hintText: 'Surname',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 5,),
+        Flexible(
+          flex: 1,
+          child: TextField(
+            controller: nameController,
+            onChanged: (value) => _runNameFilter(value),
+            decoration: InputDecoration(
+              hintText: 'First name Middle name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Row getNameInputs(){
+    return   Row(
+      children: [
+        Flexible(
+          flex: 1,
+          child: TextField(
+            controller: nameController,
+            onChanged: (value) => _runNameFilter(value),
+            decoration: InputDecoration(
+              hintText: 'First name Middle name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 5,),
+        Flexible(
+          flex: 1,
+          child: TextField(
+            controller: surnameController,
+            onChanged: (value) => _runSurNameFilter(value),
+            decoration: InputDecoration(
+              hintText: 'Surname',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
 
   Future<void> generatePDF(String type) async {
     PdfDocument document;

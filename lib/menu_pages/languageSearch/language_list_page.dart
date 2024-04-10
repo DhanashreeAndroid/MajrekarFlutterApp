@@ -18,7 +18,7 @@ class LanguageListPage extends StatefulWidget {
 }
 
 class _LanguageListPageState extends State<LanguageListPage> {
-  late List<LanguageItem> languageList  ;
+  List<LanguageItem> languageList =[] ;
   bool isLoading = false;
 
   @override

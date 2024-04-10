@@ -58,10 +58,18 @@ class _MenuPageState extends State<MenuPage> {
                           showExitPopup(context);
                         },
                       ),
-                      const SizedBox(height: 40,),
+                      const SizedBox(height: 20,),
                       Image.asset("images/logo.jpg",
                           height: 100,
                           width: 100),
+                      const SizedBox(height: 5,),
+                      const AutoSizeText(
+                        "Copyright © Developed by Majrekar’s Voters Management System",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10),
+                      ),
                       const SizedBox(height: 10,),
                       const Text(
                         Constant.vidhansabhaName,

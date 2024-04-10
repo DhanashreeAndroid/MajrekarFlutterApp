@@ -54,10 +54,12 @@ class _LanguageWiseSearchSearchState extends State<LanguageWiseSearch> {
 
 
   void _scrollUp() {
-    _controller.animateTo(0,
-      duration: const Duration(seconds: 1),
-      curve: Curves.fastOutSlowIn,
-    );
+    if(buildingList.isNotEmpty){
+      _controller.animateTo(0,
+        duration: const Duration(seconds: 1),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
   }
 
   @override

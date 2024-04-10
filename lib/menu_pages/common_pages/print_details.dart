@@ -36,7 +36,7 @@ class _PrintDetailsState extends State<PrintDetails> {
   bool _connected = false;
   BluetoothDevice? _device;
   String tips = 'no device connect';
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -44,6 +44,9 @@ class _PrintDetailsState extends State<PrintDetails> {
     setBoothAddresses();
   }
   Future<void> setBoothAddresses() async {
+    setState(() {
+      isLoading = true;
+    });
     for (int i = 0; i < widget.voterList.length; i++) {
       Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
           widget.voterList[i].wardNo!, widget.voterList[i].partNo!,
@@ -51,6 +54,9 @@ class _PrintDetailsState extends State<PrintDetails> {
       widget.voterList[i].boothAddressEnglish = boothDetails!.boothAddressEnglish!;
       widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> requestAccess() async {

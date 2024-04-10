@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -133,14 +134,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> loadScreen() async {
     if(Constant.isOffline){
-      List<Vidhansabha> dbList  =  await ObjectBox.getAllBooths();
-      if(dbList.isNotEmpty) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const MenuPage()));
+      DateTime valEnd = DateTime.parse("2024-05-25 00:00:00");
+      DateTime date = DateTime.now();
+      bool valDate = date.isBefore(valEnd);
+
+      if(valDate) {
+        List<Vidhansabha> dbList = await ObjectBox.getAllBooths();
+        if (dbList.isNotEmpty) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MenuPage()));
+        } else {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder:
+                  (context) => const LoginPage()));
+        }
       }else{
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder:
-                (context) => const LoginPage()));
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          showAlertDialog(context);
+        });
+
       }
 
     }else {
@@ -158,6 +171,38 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
 
+  }
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: const Text("OK"),
+      onPressed: () {
+        exit(0);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: const Text("App access has expired.",
+          style: TextStyle(
+              color: Colors.red,
+              fontSize: 20,
+              fontFamily: 'Calibri',
+              fontWeight: FontWeight.bold)),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override

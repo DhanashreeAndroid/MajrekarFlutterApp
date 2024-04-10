@@ -85,7 +85,7 @@ class _ShareImageState extends State<ShareImage> {
                           borderRadius: const BorderRadius.horizontal(
                             left: Radius.circular(radius),
                           ),
-                          child: Image.asset("images/sample.jpg",
+                          child: Image.asset("images/sample.jpeg",
                             width: screenWidth,
                             height: 200,
                             fit: BoxFit.fill,

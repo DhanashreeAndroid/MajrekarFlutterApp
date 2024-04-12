@@ -14,7 +14,6 @@ import 'common_pages/detail_page.dart';
 import 'common_pages/print_details.dart';
 import 'common_pages/share_image.dart';
 
-
 class EpicSearch extends StatefulWidget {
   const EpicSearch({Key? key}) : super(key: key);
 
@@ -28,12 +27,10 @@ class _EpicSearchState extends State<EpicSearch> {
   final _recipientEpicFormKey = GlobalKey<FormState>();
   TextEditingController epicController = TextEditingController();
 
-
   Future getData() async {
-
     try {
       final isRecipientNameValid =
-      _recipientEpicFormKey.currentState!.validate();
+          _recipientEpicFormKey.currentState!.validate();
       FocusScope.of(context).unfocus();
       if (isRecipientNameValid) {
         _recipientEpicFormKey.currentState!.save();
@@ -42,7 +39,8 @@ class _EpicSearchState extends State<EpicSearch> {
         setState(() => isLoading = true);
         voterDetails = await ObjectBox.getEpicWiseData(epicController.text);
         Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
-            voterDetails!.wardNo!, voterDetails!.partNo!,
+            voterDetails!.wardNo!,
+            voterDetails!.partNo!,
             voterDetails!.serialNo!);
         voterDetails!.boothAddressEnglish = boothDetails!.boothAddressEnglish!;
         voterDetails!.boothAddressMarathi = boothDetails.boothAddressMarathi!;
@@ -58,8 +56,6 @@ class _EpicSearchState extends State<EpicSearch> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -67,68 +63,69 @@ class _EpicSearchState extends State<EpicSearch> {
         onWillPop: () async {
           Navigator.pop(context);
           return false;
-        }, child: Scaffold(
-        backgroundColor: const Color.fromRGBO(218,222,224, 1),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                CommonHeader(
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                  },
-                ),
-                customInputs(),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomButton(
-                  onPressed: () {
-                    getData();
-                    }, label: 'Search',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Divider(thickness: 2,),
-                const SizedBox(
-                  height: 10,
-                ),
-                voterDetails != null ?
-                customButtons() :
-                const SizedBox(),
-                const SizedBox(
-                  height: 5,
-                ),
-                const AutoSizeText(
-                  'Voter Details',
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                voterDetails != null ?
-                generateWidgets(voterDetails!, screenWidth) :
-                const Column(
-                  children: [
-                    Center(
-                      child: Text("Please enter Epic number then click on search button"),
+        },
+        child: Scaffold(
+            backgroundColor: const Color.fromRGBO(218, 222, 224, 1),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    CommonHeader(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
                     ),
-                    SizedBox(
-                      height: 20,
+                    customInputs(),
+                    const SizedBox(
+                      height: 10,
                     ),
-            
+                    CustomButton(
+                      onPressed: () {
+                        getData();
+                      },
+                      label: 'Search',
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    voterDetails != null ? customButtons() : const SizedBox(),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const AutoSizeText(
+                      'Voter Details',
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    voterDetails != null
+                        ? generateWidgets(voterDetails!, screenWidth)
+                        : Column(
+                            children: [
+                              Center(
+                                child: Text(
+                                    "Please enter Epic number then click on search button"),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-        )
-    )
-    );
-
+              ),
+            )));
   }
 
   Padding customInputs() {
@@ -138,8 +135,7 @@ class _EpicSearchState extends State<EpicSearch> {
         children: <Widget>[
           Flexible(
             flex: 1,
-            child:
-            Form(
+            child: Form(
               key: _recipientEpicFormKey,
               child: TextFormField(
                 autofocus: true,
@@ -178,31 +174,44 @@ class _EpicSearchState extends State<EpicSearch> {
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
       child: Row(
         children: <Widget>[
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
             child: CustomButton(
               onPressed: () {
-                List<EDetails> voterList = List<EDetails>.generate(1, (index) => voterDetails!);
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) =>  PrintDetails(voterList: voterList,searchType: "Surname", )));
-              }, label: 'Print',
+                List<EDetails> voterList =
+                    List<EDetails>.generate(1, (index) => voterDetails!);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PrintDetails(
+                              voterList: voterList,
+                              searchType: "Surname",
+                            )));
+              },
+              label: 'Print',
             ),
           ),
-
-          const SizedBox(width: 10,),
-
+          const SizedBox(
+            width: 10,
+          ),
           Flexible(
             flex: 1,
             child: CustomButton(
               onPressed: () {
-                List<EDetails> voterList = List<EDetails>.generate(1, (index) => voterDetails!);
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) =>  ShareImage(voterList: voterList,searchType: "Surname", )));
-
-              }, label: 'Share',
+                List<EDetails> voterList =
+                    List<EDetails>.generate(1, (index) => voterDetails!);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShareImage(
+                              voterList: voterList,
+                              searchType: "Surname",
+                            )));
+              },
+              label: 'Share',
             ),
           )
         ],
@@ -210,11 +219,10 @@ class _EpicSearchState extends State<EpicSearch> {
     );
   }
 
-
   Column generateWidgets(EDetails data, double screenWidth) {
     return Column(children: <Widget>[
-      customData("Name", getEnglishName(data),
-          getMarathiName(data), screenWidth),
+      customData(
+          "Name", getEnglishName(data), getMarathiName(data), screenWidth),
       customData(
           "Address",
           "${data.houseNoEnglish!} ${data.buildingNameEnglish!}",
@@ -229,7 +237,7 @@ class _EpicSearchState extends State<EpicSearch> {
     ]);
   }
 
-  Padding customEpicNumber(String value,  double screenWidth) {
+  Padding customEpicNumber(String value, double screenWidth) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       child: Column(
@@ -239,28 +247,27 @@ class _EpicSearchState extends State<EpicSearch> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-              children: <Widget>[
-                const AutoSizeText(
-                  "Epic Number : ",
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                AutoSizeText(
-                  value,
-                  maxLines: 2,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal),
-                ),
-              ]
-          ),
-
+          Row(children: <Widget>[
+            const AutoSizeText(
+              "Epic Number : ",
+              maxLines: 1,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              value,
+              maxLines: 2,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal),
+            ),
+          ]),
           const SizedBox(
             height: 10,
           ),
@@ -270,13 +277,12 @@ class _EpicSearchState extends State<EpicSearch> {
     );
   }
 
-
-  String getEnglishName(EDetails data){
-      return "${data.lnEnglish!} ${data.fnEnglish!}";
+  String getEnglishName(EDetails data) {
+    return "${data.lnEnglish!} ${data.fnEnglish!}";
   }
 
-  String getMarathiName(EDetails data){
-      return "${data.lnMarathi!} ${data.fnMarathi!}";
+  String getMarathiName(EDetails data) {
+    return "${data.lnMarathi!} ${data.fnMarathi!}";
   }
 
   Padding customData(String title, String englishValue, String marathiValue,
@@ -506,5 +512,4 @@ class _EpicSearchState extends State<EpicSearch> {
       ),
     );
   }
-
 }

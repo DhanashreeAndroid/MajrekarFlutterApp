@@ -42,9 +42,11 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         //to vibrate the phone
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
-        voterDetails = await ObjectBox.getPartSerialWiseData(partNoController.text, srNoController.text);
+        voterDetails = await ObjectBox.getPartSerialWiseData(
+            partNoController.text, srNoController.text);
         Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
-            voterDetails!.wardNo!, voterDetails!.partNo!,
+            voterDetails!.wardNo!,
+            voterDetails!.partNo!,
             voterDetails!.serialNo!);
         voterDetails!.boothAddressEnglish = boothDetails!.boothAddressEnglish!;
         voterDetails!.boothAddressMarathi = boothDetails.boothAddressMarathi!;
@@ -67,68 +69,69 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         onWillPop: () async {
           Navigator.pop(context);
           return false;
-        }, child: Scaffold(
-        backgroundColor: const Color.fromRGBO(218,222,224, 1),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                CommonHeader(
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                  },
-                ),
-                customInputs(),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomButton(
-                  onPressed: () {
-                    getData();
-                    }, label: 'Search',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Divider(thickness: 2,),
-                const SizedBox(
-                  height: 10,
-                ),
-                voterDetails != null ?
-                customButtons() :
-                const SizedBox(),
-                const SizedBox(
-                  height: 5,
-                ),
-                const AutoSizeText(
-                  'Voter Details',
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                voterDetails != null ?
-                generateWidgets(voterDetails!, screenWidth) :
-                const Column(
-                  children: [
-                    Center(
-                      child: Text("Please enter part no and serial no then click on search button"),
+        },
+        child: Scaffold(
+            backgroundColor: const Color.fromRGBO(218, 222, 224, 1),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    CommonHeader(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
                     ),
-                    SizedBox(
-                      height: 20,
+                    customInputs(),
+                    const SizedBox(
+                      height: 10,
                     ),
-
+                    CustomButton(
+                      onPressed: () {
+                        getData();
+                      },
+                      label: 'Search',
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    voterDetails != null ? customButtons() : const SizedBox(),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const AutoSizeText(
+                      'Voter Details',
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    voterDetails != null
+                        ? generateWidgets(voterDetails!, screenWidth)
+                        : Column(
+                            children: [
+                              Center(
+                                child: Text(
+                                    "Please enter part no and serial no then click on search button"),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-        )
-    )
-    );
-
+              ),
+            )));
   }
 
   Padding customInputs() {
@@ -273,7 +276,8 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
           data.wardNo!, data.partNo!, data.serialNo!, screenWidth),
     ]);
   }
-  Padding customEpicNumber(String value,  double screenWidth) {
+
+  Padding customEpicNumber(String value, double screenWidth) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       child: Column(
@@ -283,28 +287,27 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-              children: <Widget>[
-                const AutoSizeText(
-                  "Epic Number : ",
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                AutoSizeText(
-                  value,
-                  maxLines: 2,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal),
-                ),
-              ]
-          ),
-
+          Row(children: <Widget>[
+            const AutoSizeText(
+              "Epic Number : ",
+              maxLines: 1,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              value,
+              maxLines: 2,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal),
+            ),
+          ]),
           const SizedBox(
             height: 10,
           ),

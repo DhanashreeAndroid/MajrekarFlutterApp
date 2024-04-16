@@ -12,7 +12,6 @@ class Constant{
   static const String markVotedNonVoted = "Vidhansabha/markvotednonvoted";
   static const String getVidhansabhaData = "Vidhansabha/getboothdata";
 
-
   //constant for app flow
 
   static const bool isOffline = true;

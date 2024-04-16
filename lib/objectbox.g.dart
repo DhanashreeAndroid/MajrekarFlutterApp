@@ -145,7 +145,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 3625653354348383543),
       name: 'UserDetails',
-      lastPropertyId: const IdUid(14, 2879495251186326496),
+      lastPropertyId: const IdUid(16, 7172458404123359882),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -211,6 +211,16 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(14, 2879495251186326496),
             name: 'macAddress',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(15, 7605285199971227952),
+            name: 'userRole',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(16, 7172458404123359882),
+            name: 'userEmail',
             type: 9,
             flags: 0)
       ],
@@ -525,7 +535,13 @@ ModelDefinition getObjectBoxModel() {
           final macAddressOffset = object.macAddress == null
               ? null
               : fbb.writeString(object.macAddress!);
-          fbb.startTable(15);
+          final userRoleOffset = object.userRole == null
+              ? null
+              : fbb.writeString(object.userRole!);
+          final userEmailOffset = object.userEmail == null
+              ? null
+              : fbb.writeString(object.userEmail!);
+          fbb.startTable(17);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, userNameOffset);
           fbb.addOffset(2, passwordOffset);
@@ -539,6 +555,8 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(11, smsTimeLimitOffset);
           fbb.addOffset(12, vidhansabhaNameOffset);
           fbb.addOffset(13, macAddressOffset);
+          fbb.addOffset(14, userRoleOffset);
+          fbb.addOffset(15, userEmailOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -549,6 +567,10 @@ ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
           final userNameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 6);
+          final userRoleParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 32);
+          final userEmailParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 34);
           final passwordParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 8);
           final vidhansabhaNameParam =
@@ -581,6 +603,8 @@ ModelDefinition getObjectBoxModel() {
           final object = UserDetails(
               id: idParam,
               userName: userNameParam,
+              userRole: userRoleParam,
+              userEmail: userEmailParam,
               password: passwordParam,
               vidhansabhaName: vidhansabhaNameParam,
               isUpdatable: isUpdatableParam,
@@ -810,6 +834,14 @@ class UserDetails_ {
   /// see [UserDetails.macAddress]
   static final macAddress =
       QueryStringProperty<UserDetails>(_entities[1].properties[12]);
+
+  /// see [UserDetails.userRole]
+  static final userRole =
+      QueryStringProperty<UserDetails>(_entities[1].properties[13]);
+
+  /// see [UserDetails.userEmail]
+  static final userEmail =
+      QueryStringProperty<UserDetails>(_entities[1].properties[14]);
 }
 
 /// [Vidhansabha] entity fields to define ObjectBox queries.

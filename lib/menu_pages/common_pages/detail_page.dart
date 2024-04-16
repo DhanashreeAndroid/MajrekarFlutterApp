@@ -41,6 +41,7 @@ class _DetailPageState extends State<DetailPage> {
   UserDetails? userDetails;
   Vidhansabha? boothDetails;
   bool isLoading = false;
+  bool isOnlineMarking = false;
 
   @override
   void initState() {
@@ -56,6 +57,9 @@ class _DetailPageState extends State<DetailPage> {
       List<UserDetails> users = await ObjectBox.getUserDetails();
       print("userDetailCount : ${users.length}");
       userDetails =  users.first;
+      if(userDetails?.userEmail == widget.data.partNo){
+        isOnlineMarking = true;
+      }
     }
     boothDetails = await ObjectBox.getBoothDetails(widget.data.wardNo!, widget.data.partNo!,
     widget.data.serialNo!);
@@ -230,13 +234,15 @@ class _DetailPageState extends State<DetailPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  userDetails?.isMarkable == "true" ?
+                  isOnlineMarking == true ?
                   Column(
                     children: <Widget>[
                   getRedGreenOrangeRadioButton(screenWidth),
                   getShiftedCheckBox(),
                   getDeathCheckBox(),
-                  getVotedCheckBox()]) :
+                  userDetails?.isMarkable == "true"?
+                  getVotedCheckBox(): const SizedBox()
+                  ]) :
                   const SizedBox(
                     height: 10,
                   ),

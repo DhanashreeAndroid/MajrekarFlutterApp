@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.of(context, rootNavigator: true).pop();
 
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Invalid user name or password"),
+            content: Text("Getting some technical error, Please tyr again."),
           ));
         } else {
           callUserDetailsApi(mainController.tokenModel.value.accessToken, userId);
@@ -56,7 +56,8 @@ class _SplashScreenState extends State<SplashScreen> {
     int? count = mainController.userModel.value.uDetails?.length;
     if (mainController.userModel.value.uDetails != null && count! > 0) {
       UserDetails? user = mainController.userModel.value.uDetails?.first;
-      checkForAnotherDevice(user!, token!);
+      addUserDetails(user);
+      callGetData(token);
     } else {
       Navigator.of(context, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -70,27 +71,6 @@ class _SplashScreenState extends State<SplashScreen> {
       await ObjectBox.updateUserDetails(user!);
   }
 
-  Future<void> checkForAnotherDevice(UserDetails user, String token) async {
-    final macAddress = await getDeviceIdentifier();
-    if (user.macAddress !=  "0") {
-      print('db mac address : ${user.macAddress!}' );
-      print('device mac address : $macAddress' );
-      if (macAddress == user.macAddress && macAddress != "unknown") {
-        addUserDetails(user);
-        callGetData(token);
-      } else if (macAddress == "unknown") {
-        Navigator.of(context, rootNavigator: true).pop();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Unable to find mac address."),
-        ));
-      }else {
-        Navigator.of(context, rootNavigator: true).pop();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("This User already login in another device"),
-        ));
-      }
-    }
-  }
 
   void callGetDataFromApi(String? token) async {
     await mainController.getAllData(token);
@@ -106,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void callGetData(String? token) async{
-    List<Vidhansabha> dbList  =  await ObjectBox.getAllBooths();
+    List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
    if(dbList.isNotEmpty){
      Navigator.pushReplacement(
          context, MaterialPageRoute(builder: (context) => const MenuPage()));
@@ -134,10 +114,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> loadScreen() async {
     if(Constant.isOffline){
-      DateTime valEnd = DateTime.parse("2024-05-25 00:00:00");
+      List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+      if (dbList.isNotEmpty) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MenuPage()));
+      } else {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder:
+                (context) => const LoginPage()));
+      }
+     // App access limit condition
+     /* DateTime valEnd = DateTime.parse("2024-05-25 00:00:00");
       DateTime date = DateTime.now();
       bool valDate = date.isBefore(valEnd);
-
       if(valDate) {
         List<Vidhansabha> dbList = await ObjectBox.getAllBooths();
         if (dbList.isNotEmpty) {
@@ -153,13 +143,11 @@ class _SplashScreenState extends State<SplashScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           showAlertDialog(context);
         });
-
-      }
+      }*/
 
     }else {
-      List<UserDetails> users = await ObjectBox.getUserDetails();
-      if (users.isEmpty || users.first.userName.isNull ||
-          users.first.password.isNull) {
+      List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+      if (dbList.isEmpty) {
         Timer(const Duration(seconds: 1),
                 () =>
                 Navigator.pushReplacement(context,
@@ -167,6 +155,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         (context) => const LoginPage()))
         );
       } else {
+        List<UserDetails> users = await ObjectBox.getUserDetails();
         apiCall(users.first.userName, users.first.password);
       }
     }

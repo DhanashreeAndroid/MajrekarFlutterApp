@@ -1,26 +1,27 @@
 
 class Constant{
   static const String baseUrl =
-      "http://webapi.majrekar-esoftware.com/";
+      "http://api.majrekar-esoftware.com:9001/api/";
 
-  static const String jwtToken = "token";
-  static const String getData = "api/vidhansabha/getdata";
-  static const String getUserData = "api/account/getuserdetail";
-  static const String saveMacAddress = "api/account/savemacaddress";
-  static const String markColor = "api/vidhansabha/markcolor";
-  static const String markShiftedDeath = "api/vidhansabha/markshifteddeath";
-  static const String markVotedNonVoted = "api/vidhansabha/markvotednonvoted";
-  static const String getVidhansabhaData = "api/vidhansabha/getboothdata";
+  static const String jwtToken = "Account/Token";
+  static const String getData = "Vidhansabha/getdata";
+  static const String getUserData = "Account/getuserdetail";
+  static const String saveMacAddress = "Account/savemacaddress";
+  static const String markColor = "Vidhansabha/markcolor";
+  static const String markShiftedDeath = "Vidhansabha/markshifteddeath";
+  static const String markVotedNonVoted = "Vidhansabha/markvotednonvoted";
+  static const String getVidhansabhaData = "Vidhansabha/getboothdata";
 
 
   //constant for app flow
 
   static const bool isOffline = true;
   static const bool isShowShareImage = true;
-  static const bool isShowImageToHeader = true;
-  static const String userName = "Murbad";
-  static const String password = "dev99";
-  static const String vidhansabhaName = "139 Murbad";
+  static const bool isShowImageToHeader = false;
+  static const String userName = "144";
+  static const String password = "kar144";
+  static const String vidhansabhaName = "144 Kalyan Rural";
+
 
 }
 

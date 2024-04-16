@@ -30,6 +30,8 @@ class UserDetails {
   @Id()
   int? id;
   String? userName;
+  String? userRole;
+  String? userEmail;
   String? password;
   String? vidhansabhaName;
   String? isUpdatable;
@@ -46,6 +48,8 @@ class UserDetails {
       {
         this.id,
         this.userName,
+        this.userRole,
+        this.userEmail,
         this.password,
         this.vidhansabhaName,
         this.isUpdatable,
@@ -61,6 +65,8 @@ class UserDetails {
   UserDetails.fromJson(Map<String, dynamic> json) {
 
     userName               = json['userid'].toString().isEmpty? "0" : json['userid'];
+    userRole               = json['userrole'].toString().isEmpty? "0" : json['userrole'];
+    userEmail              = json['useremail'].toString().isEmpty? "0" : json['useremail'];
     vidhansabhaName          = json['vidhansabhaName'].toString().isEmpty? "0" : json['vidhansabhaName'];
     isUpdatable            = json['isUpdatable'].toString();
     isMarkable             = json['isMarkable'].toString();
@@ -76,6 +82,8 @@ class UserDetails {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['userid']= userName;
+    data['userrole']= userRole;
+    data['useremail']= userEmail;
     data['vidhansabhaName']= vidhansabhaName;
     data['isUpdatable']= isUpdatable;
     data['isMarkable']=isMarkable;

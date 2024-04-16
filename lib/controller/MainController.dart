@@ -34,7 +34,6 @@ class MainController extends GetxController{
 
       tokenModel.value = TokenModel.fromJson(jsonDecode(value.body));
     }).onError((error, stackTrace) {
-
     });
   }
 
@@ -43,8 +42,8 @@ class MainController extends GetxController{
           .getAllData(token)
           .then((value) {
             if(value!=null) {
-              String body = value.body;
-              print("dataModel: $body");
+             // String body = value.body;
+             // print("dataModel: $body");
 
               dataModel.value = DataModel.fromJson(jsonDecode(value.body));
               int? count = dataModel.value.eDetails?.length;

@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context, rootNavigator: true).pop();
 
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Invalid user name or password"),
+            content: Text("Getting some technical error, Please tyr again."),
           ));
         } else {
           callUserDetailsApi(mainController.tokenModel.value.accessToken);
@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
     if (isValid) {
       await ObjectBox.deleteAll();
       await ObjectBox.insertAll(eDetails!);
-      Navigator.of(context, rootNavigator: true).pop();
+      //Navigator.of(context, rootNavigator: true).pop();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const MenuPage()));
     }

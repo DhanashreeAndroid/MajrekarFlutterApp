@@ -16,8 +16,9 @@ class AuthService {
     try {
       var data = {
         "username": userid,
-        "password": password,
-        "grant_type" : "password"};
+        "password": password};
+
+      var body = json.encode(data);
 
       print("data:  $data");
 
@@ -30,7 +31,7 @@ class AuthService {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: data,
+        body: body,
       );
       print("Status : ${res.statusCode}");
       return res;

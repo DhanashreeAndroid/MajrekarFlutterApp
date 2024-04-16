@@ -34,12 +34,16 @@ class ObjectBox {
     store.close();
     return output;
   }
-  static Future<List<int>> insertAll(List<EDetails> person) async {
+  static Future<void> insertAll(List<EDetails> person) async {
     final store = await openStore();
     var box = store.box<EDetails>();
-    var output =box.putMany(person);
+    try{
+       box.putMany(person);
+    }catch(e){
+      print("db error : $e");
+    }
     store.close();
-    return output;
+
   }
 
   static Future<bool> delete(int id) async {
@@ -362,6 +366,8 @@ class ObjectBox {
     var box = store.box<UserDetails>();
     var output = box.get(1);
     output!.userName = user.userName;
+    output.userRole = user.userRole;
+    output.userEmail = user.userEmail;
     output.vidhansabhaName = user.vidhansabhaName;
     output.isUpdatable = user.isUpdatable;
     output.isMarkable = user.isMarkable;
@@ -547,4 +553,14 @@ class ObjectBox {
     store.close();
     return output;
   }
+
+  static Future<List<EDetails>> getIsDataAvailable() async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+    final query  = (box.query().build())..limit = 5;
+    final list = query.find();
+    store.close();
+    return list;
+  }
+
 }

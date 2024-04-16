@@ -8,29 +8,37 @@ String tokenModelToJson(TokenModel data) => json.encode(data.toJson());
 class TokenModel {
   TokenModel({
     this.accessToken,
-    this.tokenType,
-    this.expireIn
+    this.validityUTC,
+    this.status,
+    this.message,
+    this.statusCode
   });
 
   String? accessToken;
-  String? tokenType;
-  int? expireIn;
+  String? validityUTC;
+  String? status;
+  String? message;
+  int? statusCode;
 
   factory TokenModel.fromJson(dynamic json) => TokenModel(
-       accessToken: json["access_token"] as String,
-       tokenType: json["token_type"] as String,
-      expireIn: json["expires_in"] as int
+       accessToken: json["token"] as String,
+       validityUTC: json["validityUTC"] as String,
+       status: json["status"] as String,
+       message: json["message"] as String,
+       statusCode: json["status_code"] as int
       );
 
   Map<String, dynamic> toJson() => {
-        "access_token": accessToken,
-        "token_type": tokenType,
-    "expires_in": expireIn
+        "token": accessToken,
+        "validityUTC": validityUTC,
+        "status": status,
+        "message": message,
+        "status_code": statusCode
       };
 
   @override
   String toString() {
-    return '{ ${this.accessToken}, ${this.tokenType}, ${this.expireIn} }';
+    return '{ $accessToken, $message, $validityUTC }';
   }
 }
 

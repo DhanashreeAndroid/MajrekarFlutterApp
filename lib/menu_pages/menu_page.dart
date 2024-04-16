@@ -8,10 +8,13 @@ import 'package:majrekar_app/menu_pages/epic_search.dart';
 import 'package:majrekar_app/menu_pages/pdfSample.dart';
 import 'package:majrekar_app/menu_pages/surname_counter_page.dart';
 import 'package:majrekar_app/menu_pages/voter_name_search.dart';
+import 'package:majrekar_app/menu_pages/votingMakingPages/voting_making_main_page.dart';
 
 import '../CommonWidget/Constant.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
+import '../database/ObjectBox.dart';
+import '../model/UserModel.dart';
 import 'ageWiseReport/age_wise_search.dart';
 import 'alphabetical_voter_list_page.dart';
 import 'buildingWiseSearch/building_wise_search.dart';
@@ -26,6 +29,33 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  UserDetails? userDetails;
+  bool isLoading = false;
+  String vidhan  = "Mantree";
+
+
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
+
+  Future getUserDetails() async {
+    setState(() => isLoading = true);
+    if(Constant.isOffline){
+      userDetails = UserDetails(isMarkable: 'false');
+      userDetails?.vidhansabhaName = Constant.vidhansabhaName;
+    }else{
+      List<UserDetails> users = await ObjectBox.getUserDetails();
+      userDetails =  users.first;
+    }
+    if(userDetails?.vidhansabhaName != ""){
+      vidhan = userDetails!.vidhansabhaName!;
+    }
+    setState(() => isLoading = false);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -63,17 +93,19 @@ class _MenuPageState extends State<MenuPage> {
                           height: 100,
                           width: 100),
                       const SizedBox(height: 5,),
+                      Constant.isShowImageToHeader?
                       const AutoSizeText(
+                        textAlign: TextAlign.center,
                         "Copyright © Developed by Majrekar’s Voters Management System",
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 10),
-                      ),
+                      ): const SizedBox(),
                       const SizedBox(height: 10,),
-                      const Text(
-                        Constant.vidhansabhaName,
-                        style: TextStyle(
+                      Text(
+                        vidhan,
+                        style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
@@ -110,6 +142,19 @@ class _MenuPageState extends State<MenuPage> {
                                   (context) => const EpicSearch()));
                         }, label: 'EPIC No. Search ',
                       ),
+                      const Visibility(
+                          visible: !Constant.isOffline,
+                          child: SizedBox(height: 20,)),
+                      Visibility(
+                        visible: !Constant.isOffline,
+                        child: CustomButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder:
+                                    (context) => const VotingMakingMainPage()));
+                          }, label: 'Voting Making Report',
+                        ),
+                      ),
                       const SizedBox(height: 20,),
                       CustomButton(
                         onPressed: () {
@@ -118,16 +163,7 @@ class _MenuPageState extends State<MenuPage> {
                                   (context) => const AlphabeticalVoterListPage()));
                         }, label: 'Alphabetical Voters List',
                       ),
-                      Visibility(
-                        visible: false,
-                        child: CustomButton(
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder:
-                                    (context) => const VoterNameSearch()));
-                          }, label: 'Voting Making Report',
-                        ),
-                      ),
+
                       const SizedBox(height: 20,),
                       CustomButton(
                         onPressed: () {

@@ -152,7 +152,7 @@ class _MenuPageState extends State<MenuPage> {
                             Navigator.push(context,
                                 MaterialPageRoute(builder:
                                     (context) => const VotingMakingMainPage()));
-                          }, label: 'Voting Making Report',
+                          }, label: 'Voting Marking Report',
                         ),
                       ),
                       const SizedBox(height: 20,),

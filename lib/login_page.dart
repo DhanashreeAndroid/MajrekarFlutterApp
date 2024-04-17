@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
       if (macAddress == user.macAddress && macAddress != "unknown") {
           user.password = passwordController.text.toString();
           addUserDetails(user);
-          callBoothDataApi(token);
+          importDataOffline();
       } else if (macAddress == "unknown") {
         Navigator.of(context, rootNavigator: true).pop();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -134,77 +134,20 @@ class _LoginPageState extends State<LoginPage> {
           token, macAddress, user.userName!);
       if (mainController.isMacSaved) {
         await ObjectBox.updateMacAddress(macAddress);
-        callBoothDataApi(token);
+        importDataOffline();
       }
-
   }
 
-  Future<void> updateMacAddress(UserDetails user, String token) async {
-    final macAddress = await getDeviceIdentifier();
-    print('db mac address : ${user.macAddress!}');
-    print('device mac address : $macAddress');
-
-      await mainController.saveMacAddress(
-          token, macAddress!, user!.userName!);
-      if (mainController.isMacSaved) {
-        await ObjectBox.updateMacAddress(macAddress);
-        callBoothDataApi(token);
-      }
-
-  }
-
-  void callLoginApi(String? token) async {
-    await mainController.getAllData(token);
-    int? count = mainController.dataModel.value.eDetails?.length;
-    if (mainController.dataModel.value.eDetails != null && count! > 0) {
-      addOrUpdateEDetails(mainController.dataModel.value.eDetails);
-    } else {
-      Navigator.of(context, rootNavigator: true).pop();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Getting some technical problem, Please try again."),
-      ));
-    }
-  }
-
-  void callBoothDataApi(String? token) async {
-    await mainController.getBoothData(token);
-    int? count = mainController.boothModel.value.vidhansabhaList?.length;
-    if (count!= null && count > 0) {
-      addOrUpdateBoothDetail(mainController.boothModel.value.vidhansabhaList);
-      callLoginApi(token);
-    } else {
-      Navigator.of(context, rootNavigator: true).pop();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Getting some technical problem, Please try again."),
-      ));
-    }
-  }
-
-  void addOrUpdateBoothDetail(List<Vidhansabha>? boothList) async {
-    final isValid = _formKey.currentState!.validate();
-
-    if (isValid) {
-      await ObjectBox.deleteAllBooths();
-      await ObjectBox.insertAllBooths(boothList!);
-    }
-  }
-
-
-  void addOrUpdateEDetails(List<EDetails>? eDetails) async {
-    final isValid = _formKey.currentState!.validate();
-
-    if (isValid) {
-      await ObjectBox.deleteAll();
-      await ObjectBox.insertAll(eDetails!);
-      //Navigator.of(context, rootNavigator: true).pop();
+  Future<void> importDataOffline() async {
+      await getOfflineVotingAddressData(context);
+      await getOfflineData(context);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const MenuPage()));
-    }
+          context,
+          MaterialPageRoute(builder: (context) => const MenuPage()));
   }
 
   void addUserDetails(UserDetails? user) async {
     final isValid = _formKey.currentState!.validate();
-
     if (isValid) {
       List<UserDetails> users = await ObjectBox.getUserDetails();
       if (users.isEmpty) {
@@ -383,7 +326,7 @@ class _LoginPageState extends State<LoginPage> {
     }else{
      if(userName == Constant.userName && pass == Constant.password){
       await getOfflineVotingAddressData(context);
-
+      await getOfflineData(context);
      }else{
        Navigator.of(context, rootNavigator: true).pop();
        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -424,7 +367,7 @@ class _LoginPageState extends State<LoginPage> {
     await ObjectBox.insertAllBooths(addressList);
     List<Vidhansabha> dblist =  await ObjectBox.getAllBooths();
     print("db voting address count : ${dblist.length}");
-    await getOfflineData(context);
+
   }
 
 
@@ -476,4 +419,52 @@ class _LoginPageState extends State<LoginPage> {
         context, MaterialPageRoute(builder: (context) => const MenuPage()));
 
   }
+
+  //---------- get online data --------
+
+  void callLoginApi(String? token) async {
+    await mainController.getAllData(token);
+    int? count = mainController.dataModel.value.eDetails?.length;
+    if (mainController.dataModel.value.eDetails != null && count! > 0) {
+      addOrUpdateEDetails(mainController.dataModel.value.eDetails);
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Getting some technical problem, Please try again."),
+      ));
+    }
+  }
+
+  void callBoothDataApi(String? token) async {
+    await mainController.getBoothData(token);
+    int? count = mainController.boothModel.value.vidhansabhaList?.length;
+    if (count!= null && count > 0) {
+      addOrUpdateBoothDetail(mainController.boothModel.value.vidhansabhaList);
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Getting some technical problem, Please try again."),
+      ));
+    }
+  }
+
+  void addOrUpdateBoothDetail(List<Vidhansabha>? boothList) async {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      await ObjectBox.deleteAllBooths();
+      await ObjectBox.insertAllBooths(boothList!);
+    }
+  }
+
+  void addOrUpdateEDetails(List<EDetails>? eDetails) async {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      await ObjectBox.deleteAll();
+      await ObjectBox.insertAll(eDetails!);
+      //Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const MenuPage()));
+    }
+  }
+  //---------------------------
 }

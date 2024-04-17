@@ -162,7 +162,7 @@ class AuthService {
         "partno": partNo,
         "serialno": serialNo,
         "wardno": wardNo,
-        "shiftedDeath": type};
+        "shifted": type};
 
       var body = json.encode(data);
       print("data:  $body");
@@ -196,7 +196,7 @@ class AuthService {
         "partno": partNo,
         "serialno": serialNo,
         "wardno": wardNo,
-        "votednonvoted": type};
+        "votetype": type};
 
       var body = json.encode(data);
       print("data:  $body");
@@ -227,6 +227,30 @@ class AuthService {
     try {
 
       var url = Uri.parse("${Constant.baseUrl}${Constant.getVidhansabhaData}");
+
+      print("url $url");
+
+      var res = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "bearer $token",
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=5, max=1000"
+        },
+      );
+      print("Status : ${res.statusCode}");
+      return res;
+    } catch (e) {
+      print(e);
+      return "null";
+    }
+  }
+
+  Future<dynamic> updateUserIsUpdatableFlag(String? token, String? userid) async {
+    try {
+
+      var url = Uri.parse("${Constant.baseUrl}${Constant.updateIsUpdatableFlag}/$userid/false");
 
       print("url $url");
 

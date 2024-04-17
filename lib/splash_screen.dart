@@ -57,26 +57,58 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mainController.userModel.value.uDetails != null && count! > 0) {
       UserDetails? user = mainController.userModel.value.uDetails?.first;
       addUserDetails(user);
-      callGetData(token);
+
+      try{
+        DateTime valEnd = DateTime.parse(user!.electionDate!);
+        DateTime date = DateTime.now();
+        bool valDate = date.isBefore(valEnd);
+        if(valDate){
+          importDataOffline(user, token!);
+        }else{
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            showAlertDialog(context);
+          });
+        }
+      }catch(e){
+        Navigator.of(context, rootNavigator: true).pop();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString()),
+        ));
+      }
+
     } else {
       Navigator.of(context, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Getting some technical problem, Please try again."),
       ));
     }
-
   }
 
   void addUserDetails(UserDetails? user) async {
       await ObjectBox.updateUserDetails(user!);
   }
 
+  Future<void> importDataOffline(UserDetails user, String token) async {
+    if(user.isUpdatable == "true"){
+      callBoothDataApi(token, user.userName!);
+    }else{
+      List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+      if(dbList.isNotEmpty){
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const MenuPage()));
+      }else{
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder:
+                (context) => const LoginPage()));
+      }
+    }
+  }
 
-  void callGetDataFromApi(String? token) async {
-    await mainController.getAllData(token);
-    int? count = mainController.dataModel.value.eDetails?.length;
-    if (mainController.dataModel.value.eDetails != null && count! > 0) {
-      addOrUpdateEDetails(mainController.dataModel.value.eDetails);
+  void callBoothDataApi(String? token, String userId) async {
+    await mainController.getBoothData(token);
+    int? count = mainController.boothModel.value.vidhansabhaList?.length;
+    if (count!= null && count > 0) {
+      addOrUpdateBoothDetail(mainController.boothModel.value.vidhansabhaList, token, userId);
     } else {
       Navigator.of(context, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -85,32 +117,38 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void callGetData(String? token) async{
-    List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
-   if(dbList.isNotEmpty){
-     Navigator.pushReplacement(
-         context, MaterialPageRoute(builder: (context) => const MenuPage()));
-   }else{
-     callGetDataFromApi(token);
-   }
+  void addOrUpdateBoothDetail(List<Vidhansabha>? boothList, String? token, String userId) async {
+      await ObjectBox.deleteAllBooths();
+      await ObjectBox.insertAllBooths(boothList!);
+      saveIsUpdatableFlag(userId, token);
   }
 
-  void addOrUpdateEDetails(List<EDetails>? eDetails) async {
-
-      await ObjectBox.deleteAll();
-      await ObjectBox.insertAll(eDetails!);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const MenuPage()));
-
+  Future<void> saveIsUpdatableFlag(String user, String? token) async {
+    await mainController.updateUserIsUpdatableFlag(
+        token, user);
+    if (mainController.isUpdateFlag) {
+      List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+      if(dbList.isNotEmpty){
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const MenuPage()));
+      }else{
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder:
+                (context) => const LoginPage()));
+      }
+    }else {
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Getting some technical problem, Please try again."),
+      ));
+    }
   }
-
 
   @override
   void initState()  {
     super.initState();
     loadScreen();
   }
-
 
   Future<void> loadScreen() async {
     if(Constant.isOffline){
@@ -242,8 +280,41 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
 
-}
+//-0--------------------
 
+  void callGetDataFromApi(String? token) async {
+    await mainController.getAllData(token);
+    int? count = mainController.dataModel.value.eDetails?.length;
+    if (mainController.dataModel.value.eDetails != null && count! > 0) {
+      addOrUpdateEDetails(mainController.dataModel.value.eDetails);
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Getting some technical problem, Please try again."),
+      ));
+    }
+  }
+
+  void callGetData(String? token) async{
+    List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+    if(dbList.isNotEmpty){
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const MenuPage()));
+    }else{
+      callGetDataFromApi(token);
+    }
+  }
+
+  void addOrUpdateEDetails(List<EDetails>? eDetails) async {
+    await ObjectBox.deleteAll();
+    await ObjectBox.insertAll(eDetails!);
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MenuPage()));
+
+  }
+
+//---------------------------
+}
 
 
 

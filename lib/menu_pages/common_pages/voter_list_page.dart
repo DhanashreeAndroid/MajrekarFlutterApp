@@ -58,6 +58,9 @@ class _VoterListPageState extends State<VoterListPage> {
     }else if(widget.searchType == "AgeWise"){
       this.voterList = await ObjectBox.getAgeWiseVoterList(widget.buildingName, widget.language);
       isVisible = true;
+    }else if(widget.searchType == "SerialWise"){
+      this.voterList = await ObjectBox.getSerialWiseVoterList(widget.buildingName);
+      isVisible = true;
     }else {
       this.voterList = await ObjectBox.getAll(widget.searchType);
       isVisible = false;
@@ -193,7 +196,7 @@ class _VoterListPageState extends State<VoterListPage> {
                   margin: const EdgeInsets.symmetric(vertical: 1),
                   child: ListTile(
                     tileColor: const Color.fromRGBO(218,222,224, 1),
-                    leading: widget.searchType == "AgeWise"? Text( "Age\n${_foundUsers[index].age!}", style: const TextStyle(fontSize: 15, color: Colors.red),):const Text( "", style: TextStyle(fontSize: 0),),
+                    leading: getLeadingText(index),
                     minLeadingWidth : 1,
                     title: getTextViewEnglish(index, widget.searchType),
                     subtitle: getTextViewMarathi(index, widget.searchType),
@@ -260,6 +263,16 @@ class _VoterListPageState extends State<VoterListPage> {
     ),
     );
   }
+
+  Text getLeadingText(int index){
+    if(widget.searchType == "AgeWise"){
+      return Text( "Age\n${_foundUsers[index].age!}", style: const TextStyle(fontSize: 15, color: Colors.red),);
+    }else if(widget.searchType == "SerialWise"){
+      return Text( "SrNo\n${_foundUsers[index].serialNo!}", style: const TextStyle(fontSize: 15, color: Colors.red),);
+    }else{
+      return const Text( "", style: TextStyle(fontSize: 0),);
+    }
+   }
 
   Row getSurnameInputs(){
     return   Row(

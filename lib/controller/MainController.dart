@@ -23,6 +23,7 @@ class MainController extends GetxController{
   bool isColorSaved = false;
   bool isShiftedDeathSaved = false;
   bool isVotedNonVotedSaved = false;
+  bool isUpdateFlag = false;
 
   Future<void> getToken(
       String? userid, String? password) async {
@@ -157,6 +158,24 @@ class MainController extends GetxController{
         boothModel.value = VidhansabhaModel.fromJson(jsonDecode(value.body));
         int? count = boothModel.value.vidhansabhaList?.length;
         print("getBoothData: $count");
+      }
+
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
+
+  }
+
+  Future<void> updateUserIsUpdatableFlag(String? token, String userid) async {
+    await authService
+        .updateUserIsUpdatableFlag(token, userid)
+        .then((value) {
+      if(value!=null) {
+        String body = value.body;
+        print("updateUserIsUpdatableFlag: $body");
+
+        isUpdateFlag = body.contains("Success")? true : false;
+
       }
 
     }).onError((error, stackTrace) {

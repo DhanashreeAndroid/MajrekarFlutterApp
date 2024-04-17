@@ -142,6 +142,22 @@ class ObjectBox {
 
   }
 
+  static Future<List<EDetails>> getPartWiseMarkingData(String partNo) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    final query  = (box.query( EDetails_.partNo.equals(partNo) &
+    (EDetails_.color.notEquals('') |
+    EDetails_.shiftedDeath.notEquals('') |
+    EDetails_.votedNonVoted.notEquals('')))..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    query.close();
+    store.close();
+    return output;
+
+  }
+
+
   static Future<List<EDetails>> getFamilyVoters(String searchType, String surName, String houseNo, String buildingAddress) async {
     final store = await openStore();
     var box = store.box<EDetails>();
@@ -475,6 +491,24 @@ class ObjectBox {
         .build();
 
     final output = query.find();
+    query.close();
+    store.close();
+    return output;
+
+  }
+
+  static Future<List<EDetails>> getSerialWiseVoterList(String partNo) async {
+    final store = await openStore();
+    var box = store.box<EDetails>();
+
+    final query = box.query(
+        EDetails_.partNo.equals(partNo))
+        .build();
+
+    final output = query.find();
+    output.sort((a,b) {
+      return  int.parse(a.serialNo!).compareTo(int.parse(b.serialNo!));
+    });
     query.close();
     store.close();
     return output;

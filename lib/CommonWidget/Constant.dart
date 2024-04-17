@@ -8,13 +8,14 @@ class Constant{
   static const String getUserData = "Account/getuserdetail";
   static const String saveMacAddress = "Account/savemacaddress";
   static const String markColor = "Vidhansabha/markcolor";
-  static const String markShiftedDeath = "Vidhansabha/markshifteddeath";
+  static const String markShiftedDeath = "Vidhansabha/markshifted";
   static const String markVotedNonVoted = "Vidhansabha/markvotednonvoted";
   static const String getVidhansabhaData = "Vidhansabha/getboothdata";
+  static const String updateIsUpdatableFlag = "Account/updateboothflag";
 
   //constant for app flow
 
-  static const bool isOffline = true;
+  static const bool isOffline = false;
   static const bool isShowShareImage = true;
   static const bool isShowImageToHeader = false;
   static const String userName = "144";

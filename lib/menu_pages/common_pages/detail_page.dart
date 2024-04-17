@@ -998,7 +998,9 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> markShiftedDeath(String type) async {
-
+    if(type == "not"){
+      type = "";
+    }
     await mainController.markShiftedDeath(
         mainController.tokenModel.value.accessToken,
         widget.data.partNo!, widget.data.serialNo!, widget.data.wardNo!, type).then((value) =>
@@ -1090,10 +1092,16 @@ class _DetailPageState extends State<DetailPage> {
           value: selectedShifted, onChanged: (bool? value) {
           setState(() {
             selectedShifted = value!;
-            widget.data.shiftedDeath = "Shifted";
-            callApi("", "Shifted","","");
+
             if(value == true) {
               selectedDeath = !value;
+
+              widget.data.shiftedDeath = "Shifted";
+              callApi("", "Shifted","","");
+
+            }else{
+              widget.data.shiftedDeath = "";
+              callApi("", "not","","");
             }
           });
         },
@@ -1123,10 +1131,16 @@ class _DetailPageState extends State<DetailPage> {
       value: selectedDeath, onChanged: (bool? value) {
       setState(() {
         selectedDeath = value!;
-        widget.data.shiftedDeath = "Death";
-        callApi("", "","Death","");
+
         if(value == true) {
           selectedShifted = !value;
+
+          widget.data.shiftedDeath = "Death";
+          callApi("", "","Death","");
+        }else{
+
+          widget.data.shiftedDeath = "";
+          callApi("", "","not","");
         }
       });
     },

@@ -152,22 +152,29 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> loadScreen() async {
     if(Constant.isOffline){
-      List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
-      if (dbList.isNotEmpty) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const MenuPage()));
-      } else {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder:
-                (context) => const LoginPage()));
-      }
-     // App access limit condition
-     /* DateTime valEnd = DateTime.parse("2024-05-25 00:00:00");
-      DateTime date = DateTime.now();
-      bool valDate = date.isBefore(valEnd);
-      if(valDate) {
-        List<Vidhansabha> dbList = await ObjectBox.getAllBooths();
+      if(Constant.isDateLimit){
+        // App access limit condition
+        DateTime valEnd = DateTime.parse(Constant.limitDate);
+        DateTime date = DateTime.now();
+        bool valDate = date.isBefore(valEnd);
+        if(valDate) {
+          List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+          if (dbList.isNotEmpty) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const MenuPage()));
+          } else {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder:
+                    (context) => const LoginPage()));
+          }
+        }else{
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            showAlertDialog(context);
+          });
+        }
+      }else{
+        List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
         if (dbList.isNotEmpty) {
           Navigator.pushReplacement(
               context,
@@ -177,11 +184,7 @@ class _SplashScreenState extends State<SplashScreen> {
               MaterialPageRoute(builder:
                   (context) => const LoginPage()));
         }
-      }else{
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-          showAlertDialog(context);
-        });
-      }*/
+      }
 
     }else {
       List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();

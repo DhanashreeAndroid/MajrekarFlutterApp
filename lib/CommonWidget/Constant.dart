@@ -18,6 +18,9 @@ class Constant{
   static const bool isOffline = false;
   static const bool isShowShareImage = true;
   static const bool isShowImageToHeader = false;
+  static const bool isDateLimit = true;
+  static const String limitDate = "2024-05-25 00:00:00";
+
   static const String userName = "144";
   static const String password = "kar144";
   static const String vidhansabhaName = "144 Kalyan Rural";

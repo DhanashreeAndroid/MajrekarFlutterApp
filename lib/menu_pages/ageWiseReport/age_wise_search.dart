@@ -120,15 +120,13 @@ class _AgeWiseSearchSearchState extends State<AgeWiseSearch> {
                             }
                           }, label: '50 - 59',
                         ),
-                        Visibility(
-                          visible: false,
-                          child: CustomButton(
-                            onPressed: () {
-                              if(isValidate()) {
-                                callListPage("60-69");
-                              }
-                            }, label: '60 - 69',
-                          ),
+                        const SizedBox(height: 20,),
+                        CustomButton(
+                          onPressed: () {
+                            if(isValidate()) {
+                              callListPage("60-69");
+                            }
+                          }, label: '60 - 69',
                         ),
                         const SizedBox(height: 20,),
                         CustomButton(
@@ -146,6 +144,7 @@ class _AgeWiseSearchSearchState extends State<AgeWiseSearch> {
                             };
                           }, label: '80 - 89',
                         ),
+                        const SizedBox(height: 20,),
                          CustomButton(
                             onPressed: () {
                               if(isValidate()) {

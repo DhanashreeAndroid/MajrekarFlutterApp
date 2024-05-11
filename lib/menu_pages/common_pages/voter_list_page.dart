@@ -231,7 +231,7 @@ class _VoterListPageState extends State<VoterListPage> {
             controller: surnameController,
             onChanged: (value) => search(value),
             decoration: InputDecoration(
-              hintText: 'Surname First Name Middle Name',
+              hintText: 'Voter name search',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
               ),

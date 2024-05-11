@@ -70,85 +70,34 @@ class _VoterListPageState extends State<VoterListPage> {
     setState(() => isLoading = false);
   }
 
-  // This function is called whenever the text field changes
-  Future<void> _runSurNameFilter(String enteredKeyword) async {
-    List<EDetails> results = [];
-    if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all users
-      if (nameController.text.isEmpty) {
-        results = voterList;
-      } else {
-        for (var voter in voterList) {
-          if (voter.fnEnglish!
-              .toLowerCase()
-              .contains(nameController.text.toLowerCase())) {
-            results.add(voter);
-          }
-        }
-      }
-    } else {
-      // we use the toLowerCase() method to make it case-insensitive
-      if(_foundUsers.isNotEmpty) {
-        for (var voter in _foundUsers) {
-          if (voter.lnEnglish!.toLowerCase().contains(
-              enteredKeyword.toLowerCase())) {
-            results.add(voter);
-          }
-        }
-      }else{
-        for (var voter in voterList) {
-          if (voter.lnEnglish!.toLowerCase().contains(
-              enteredKeyword.toLowerCase())) {
-            results.add(voter);
-          }
-        }
-      }
-      print(enteredKeyword);
+  void search(String query) {
+    final RegExp english = RegExp(r'^[a-zA-Z]+');
+    if (query.isEmpty) {
+      _foundUsers = voterList;
+      setState(() {});
+      return;
     }
 
-    // Refresh the UI
-    setState(() {
-      _foundUsers = results;
-    });
-  }
-
-  Future<void> _runNameFilter(String enteredKeyword) async {
-    List<EDetails> results = [];
-    if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all users
-      if(surnameController.text.isEmpty){
-        results = voterList;
-      }else{
-        for (var voter in voterList) {
-          if (voter.lnEnglish!.toLowerCase().contains(surnameController.text.toLowerCase())) {
-            results.add(voter);
-          }
-        }
-      }
-    } else {
-      // we use the toLowerCase() method to make it case-insensitive
-      if(_foundUsers.isNotEmpty) {
-        for (var voter in _foundUsers) {
-          if (voter.fnEnglish!.toLowerCase().contains(
-              enteredKeyword.toLowerCase())) {
-            results.add(voter);
-          }
+    query = query.toLowerCase();
+    print(query);
+    List<EDetails> result = [];
+    voterList.forEach((p) {
+      var name = "${p.lnEnglish.toString().toLowerCase()} ${p.fnEnglish.toString().toLowerCase()}";
+      var marathiName = "${p.lnMarathi.toString().toLowerCase()} ${p.fnMarathi.toString().toLowerCase()}";
+      if (english.hasMatch(query)){
+        if (name.contains(query)) {
+          result.add(p);
         }
       }else{
-        for (var voter in voterList) {
-          if (voter.fnEnglish!.toLowerCase().contains(
-              enteredKeyword.toLowerCase())) {
-            results.add(voter);
-          }
+        if (marathiName.contains(query)) {
+          result.add(p);
         }
       }
-      print(enteredKeyword);
-    }
 
-    // Refresh the UI
-    setState(() {
-      _foundUsers = results;
     });
+
+    _foundUsers = result;
+    setState(() {});
   }
 
   @override
@@ -170,9 +119,7 @@ class _VoterListPageState extends State<VoterListPage> {
             const SizedBox(
               height: 5,
             ),
-            widget.searchType.contains("Name")?
-                getNameInputs() :
-                getSurnameInputs(),
+            getSurnameInputs(),
             const SizedBox(
               height: 5,
             ),
@@ -277,13 +224,14 @@ class _VoterListPageState extends State<VoterListPage> {
   Row getSurnameInputs(){
     return   Row(
       children: [
+        const SizedBox(width: 5,),
         Flexible(
           flex: 1,
           child: TextField(
             controller: surnameController,
-            onChanged: (value) => _runSurNameFilter(value),
+            onChanged: (value) => search(value),
             decoration: InputDecoration(
-              hintText: 'Surname',
+              hintText: 'Surname First Name Middle Name',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
               ),
@@ -298,79 +246,10 @@ class _VoterListPageState extends State<VoterListPage> {
           ),
         ),
         const SizedBox(width: 5,),
-        Flexible(
-          flex: 1,
-          child: TextField(
-            controller: nameController,
-            onChanged: (value) => _runNameFilter(value),
-            decoration: InputDecoration(
-              hintText: 'First name Middle name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.black,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
-          ),
-        )
+
       ],
     );
   }
-
-  Row getNameInputs(){
-    return   Row(
-      children: [
-        Flexible(
-          flex: 1,
-          child: TextField(
-            controller: nameController,
-            onChanged: (value) => _runNameFilter(value),
-            decoration: InputDecoration(
-              hintText: 'First name Middle name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.black,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
-          ),
-        ),
-
-        const SizedBox(width: 5,),
-        Flexible(
-          flex: 1,
-          child: TextField(
-            controller: surnameController,
-            onChanged: (value) => _runSurNameFilter(value),
-            decoration: InputDecoration(
-              hintText: 'Surname',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.black,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
 
   Future<void> generatePDF(String type) async {
     PdfDocument document;
@@ -539,8 +418,14 @@ class _VoterListPageState extends State<VoterListPage> {
 
   Widget getTextViewEnglish(int index, String searchType){
     if(searchType.contains("Name")){
+      if (_foundUsers[index].sex=="D"){
+        return Text("${_foundUsers[index].fnEnglish} ${_foundUsers[index].lnEnglish}",style:const TextStyle(color: Colors.red,decoration:TextDecoration.lineThrough));
+      }
       return Text("${_foundUsers[index].fnEnglish} ${_foundUsers[index].lnEnglish}");
     }else{
+      if (_foundUsers[index].sex=="D"){
+        return Text("${_foundUsers[index].lnEnglish} ${_foundUsers[index].fnEnglish}",style:const TextStyle(color: Colors.red,decoration:TextDecoration.lineThrough));
+      }
       return Text("${_foundUsers[index].lnEnglish} ${_foundUsers[index].fnEnglish}");
     }
   }

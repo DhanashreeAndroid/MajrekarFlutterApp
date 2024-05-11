@@ -2,7 +2,6 @@
 class Constant{
   static const String baseUrl =
       "http://api.majrekar-esoftware.com:9001/api/";
-
   static const String jwtToken = "Account/Token";
   static const String getData = "Vidhansabha/getdata";
   static const String getUserData = "Account/getuserdetail";
@@ -15,15 +14,15 @@ class Constant{
 
   //constant for app flow
 
-  static const bool isOffline = false;
-  static const bool isShowShareImage = true;
+  static const bool isOffline = true;
+  static const bool isShowShareImage = false;
   static const bool isShowImageToHeader = false;
   static const bool isDateLimit = true;
   static const String limitDate = "2024-05-25 00:00:00";
 
-  static const String userName = "144";
-  static const String password = "kar144";
-  static const String vidhansabhaName = "144 Kalyan Rural";
+  static const String userName = "143";
+  static const String password = "Rav33";
+  static const String vidhansabhaName = "143 Dombivali";
 
 
 }

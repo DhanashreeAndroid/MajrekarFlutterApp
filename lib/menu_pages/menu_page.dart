@@ -18,6 +18,7 @@ import '../model/UserModel.dart';
 import 'ageWiseReport/age_wise_search.dart';
 import 'alphabetical_voter_list_page.dart';
 import 'buildingWiseSearch/building_wise_search.dart';
+import 'common_pages/voter_list_page.dart';
 import 'easy_print_share.dart';
 import 'languageSearch/language_wise_search.dart';
 
@@ -115,7 +116,7 @@ class _MenuPageState extends State<MenuPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) => const VoterNameSearch()));
+                                  (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "", language: "",)));
                         }, label: 'Search Voters Name',
                       ),
                       const SizedBox(height: 20,),

@@ -34,7 +34,7 @@
         android:usesPermissionFlags="neverForLocation"/>
 
     <application
-        android:label="144 Kalyan Rural"
+        android:label="143 Dombivali"
         android:name="${applicationName}"
         android:icon="@drawable/logo">
         <activity

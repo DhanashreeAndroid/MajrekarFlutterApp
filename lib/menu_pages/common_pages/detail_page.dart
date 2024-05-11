@@ -62,7 +62,7 @@ class _DetailPageState extends State<DetailPage> {
       }
     }
     boothDetails = await ObjectBox.getBoothDetails(widget.data.wardNo!, widget.data.partNo!,
-    widget.data.serialNo!);
+        widget.data.serialNo!);
 
     selectedShifted = getShiftedDeath();
     selectedDeath = getShiftedDeath();
@@ -226,31 +226,48 @@ class _DetailPageState extends State<DetailPage> {
                       boothDetails?.boothAddressMarathi, screenWidth),
                   customWardPartSerial(
                       widget.data.wardNo!, widget.data.partNo!, widget.data.serialNo!, screenWidth),
-                  customPrintShareButton(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  customMobileNumber(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  isOnlineMarking == true ?
-                  Column(
-                    children: <Widget>[
-                  getRedGreenOrangeRadioButton(screenWidth),
-                  getShiftedCheckBox(),
-                  getDeathCheckBox(),
-                  userDetails?.isMarkable == "true"?
-                  getVotedCheckBox(): const SizedBox()
-                  ]) :
-                  const SizedBox(
-                    height: 10,
+                  widget.data.sex!="D"?
+                  getButtonDetails(screenWidth)
+
+                      :const AutoSizeText(
+                    "This Voter is Deleted",
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
           )),
     );
+  }
+
+  Column getButtonDetails(double screenWidth){
+    return Column(
+        children:[
+          customPrintShareButton(),
+          const SizedBox(
+            height: 10,
+          ),
+          customMobileNumber(),
+          const SizedBox(
+            height: 10,
+          ),
+          isOnlineMarking == true ?
+          Column(
+              children: <Widget>[
+                getRedGreenOrangeRadioButton(screenWidth),
+                getShiftedCheckBox(),
+                getDeathCheckBox(),
+                userDetails?.isMarkable == "true"?
+                getVotedCheckBox(): const SizedBox()
+              ]) :
+          const SizedBox(
+            height: 10,
+          ),
+        ]
+    );
+
   }
 
   String getEnglishName(){
@@ -378,6 +395,15 @@ class _DetailPageState extends State<DetailPage> {
                       fontSize: 20,
                       fontWeight: FontWeight.normal),
                 ),
+                widget.data.sex=="D"?
+                const AutoSizeText(
+                  "DELETED",
+                  maxLines: 2,
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
+                ): const SizedBox()
               ]
           ),
 
@@ -679,7 +705,7 @@ class _DetailPageState extends State<DetailPage> {
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 2.0, 0.0),
       child: Row(
         children: <Widget>[
-           Flexible(
+          Flexible(
             flex: 3,
             child:
             Form(
@@ -860,7 +886,7 @@ class _DetailPageState extends State<DetailPage> {
             value: 1,
             groupValue: selectedOption,
             activeColor:
-                Colors.green, // Change the active radio button color here
+            Colors.green, // Change the active radio button color here
             fillColor: MaterialStateProperty.all(
                 Colors.green), // Change the fill color when selected
             splashRadius: 20, // Change the splash radius when clicked
@@ -872,21 +898,21 @@ class _DetailPageState extends State<DetailPage> {
               });
             },
           ),
-           const Text('Green',
-               style: TextStyle(
-                   color: Colors.black,
-                   fontWeight: FontWeight.normal,
-                   fontSize: 18)),
+          const Text('Green',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18)),
           const Text(' (Yes)',
-               style: TextStyle(
-                   color: Colors.black,
-                   fontWeight: FontWeight.normal,
-                   fontSize: 12)),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 12)),
           Radio<int>(
             value: 2,
             groupValue: selectedOption,
             activeColor:
-                Colors.red, // Change the active radio button color here
+            Colors.red, // Change the active radio button color here
             fillColor: MaterialStateProperty.all(
                 Colors.red), // Change the fill color when selected
             splashRadius: 20, // Change the splash radius when clicked
@@ -899,41 +925,41 @@ class _DetailPageState extends State<DetailPage> {
             },
           ),
           const Text('Red',
-               style: TextStyle(
-               color: Colors.black,
-               fontWeight: FontWeight.normal,
-               fontSize: 18)),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18)),
           const Text(' (No)',
-               style: TextStyle(
-                   color: Colors.black,
-                   fontWeight: FontWeight.normal,
-                   fontSize: 12)),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 12)),
           Radio<int>(
             value: 3,
             groupValue: selectedOption,
             activeColor:
-                Colors.yellow, // Change the active radio button color here
+            Colors.yellow, // Change the active radio button color here
             fillColor: MaterialStateProperty.all(
                 Colors.yellow), // Change the fill color when selected
             splashRadius: 20, // Change the splash radius when clicked
             onChanged: (int? value) {
               setState(() {
-               callApi("Yellow", "","","");
-               selectedOption = value!;
-               widget.data.color = "Yellow";
+                callApi("Yellow", "","","");
+                selectedOption = value!;
+                widget.data.color = "Yellow";
               });
             },
           ),
           const Text('Yellow',
-               style: TextStyle(
-                   color: Colors.black,
-                   fontWeight: FontWeight.normal,
-                   fontSize: 18)),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18)),
           const Text(' (Can\'t say)',
-               style: TextStyle(
-                   color: Colors.black,
-                   fontWeight: FontWeight.normal,
-                   fontSize: 12)),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 12)),
         ],
       ),
       const SizedBox(
@@ -1065,21 +1091,21 @@ class _DetailPageState extends State<DetailPage> {
   CheckboxListTile getVotedCheckBox(){
     return CheckboxListTile(
       controlAffinity: ListTileControlAffinity.leading,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-           title: const Text('Voted'),
-            value: selectedVoted, onChanged: (bool? value) {
-                setState(() {
-                  selectedVoted = value!;
-                  if(selectedVoted == true){
-                    widget.data.votedNonVoted = "Voted";
-                    callApi("", "","","Voted");
-                  }else{
-                    widget.data.votedNonVoted = "NonVoted";
-                    callApi("", "","","NonVoted");
-                  }
-                });
-          },
-        );
+      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+      title: const Text('Voted'),
+      value: selectedVoted, onChanged: (bool? value) {
+      setState(() {
+        selectedVoted = value!;
+        if(selectedVoted == true){
+          widget.data.votedNonVoted = "Voted";
+          callApi("", "","","Voted");
+        }else{
+          widget.data.votedNonVoted = "NonVoted";
+          callApi("", "","","NonVoted");
+        }
+      });
+    },
+    );
   }
 
   Column getShiftedCheckBox(){
@@ -1106,7 +1132,7 @@ class _DetailPageState extends State<DetailPage> {
           });
         },
         ),
-       /* selectedShifted == true ?
+        /* selectedShifted == true ?
         const Padding(
           padding: EdgeInsets.all(10.0),
           child: TextField(

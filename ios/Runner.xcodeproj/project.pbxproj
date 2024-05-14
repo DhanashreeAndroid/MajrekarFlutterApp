@@ -361,14 +361,14 @@
 				DEVELOPMENT_TEAM = XTAS93LQCR;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_SOURCE_FILE_NAMES = arm64;
-				FLUTTER_BUILD_NAME = 1.2.0;
+				FLUTTER_BUILD_NAME = 1.1.0;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "143 Dombivali";
+				INFOPLIST_KEY_CFBundleDisplayName = "141 Ulhasnagar";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.143Dombivali;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.141Ulhasnagar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -498,14 +498,14 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
 				EXCLUDED_SOURCE_FILE_NAMES = arm64;
-				FLUTTER_BUILD_NAME = 1.2.0;
+				FLUTTER_BUILD_NAME = 1.1.0;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "143 Dombivali";
+				INFOPLIST_KEY_CFBundleDisplayName = "141 Ulhasnagar";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.143Dombivali;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.141Ulhasnagar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -527,14 +527,14 @@
 				DEVELOPMENT_TEAM = XTAS93LQCR;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_SOURCE_FILE_NAMES = arm64;
-				FLUTTER_BUILD_NAME = 1.2.0;
+				FLUTTER_BUILD_NAME = 1.1.0;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "143 Dombivali";
+				INFOPLIST_KEY_CFBundleDisplayName = "141 Ulhasnagar";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.143Dombivali;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.141Ulhasnagar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

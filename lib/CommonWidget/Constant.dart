@@ -18,7 +18,7 @@ class Constant {
   static const bool isDateLimit = false;
   static const String limitDate = "2024-05-25 00:00:00";
 
-  static const String userName = "143";
-  static const String password = "Rav33";
-  static const String vidhansabhaName = "143 Dombivali";
+  static const String userName = "ulhas";
+  static const String password = "ngr141";
+  static const String vidhansabhaName = "141 Ulhasnagar";
 }

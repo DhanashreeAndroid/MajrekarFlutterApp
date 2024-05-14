@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../database/ObjectBox.dart';
+
 Future<bool?> showExitPopup(context) async{
   return await showDialog<bool>(
       context: context,
@@ -20,7 +22,13 @@ Future<bool?> showExitPopup(context) async{
                       child: ElevatedButton(
                         onPressed: () {
                           print('yes selected');
-                          exit(0);
+                          if(Platform.isWindows){
+                            deleteData ();
+                            exit(0);
+                          }else{
+                            exit(0);
+                          }
+
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white),
@@ -48,4 +56,11 @@ Future<bool?> showExitPopup(context) async{
           ),
         );
       });
+
+
+}
+Future deleteData () async {
+  await ObjectBox.deleteAllBooths();
+  await ObjectBox.deleteAll();
+  await ObjectBox.deleteUserDetails();
 }

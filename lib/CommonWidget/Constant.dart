@@ -15,14 +15,16 @@ class Constant{
   //constant for app flow
 
   static const bool isOffline = true;
-  static const bool isShowShareImage = false;
-  static const bool isShowImageToHeader = false;
+  static const bool isShowShareImage = true;
+  static const bool isShowImageToHeader = true;
   static const bool isDateLimit = true;
   static const String limitDate = "2024-05-25 00:00:00";
+  static const String mainDataCsvTemp = "137Bhiwandieast.csv";
+  static const String votingAddressCsvTemp = "137votingaddress.csv";
 
-  static const String userName = "143"; 
-  static const String password = "Rav33";
-  static const String vidhansabhaName = "143 Dombivali";
+  static const String userName = "Best";
+  static const String password = "rav33";
+  static const String vidhansabhaName = "137 BhiwandiEest";
 
 
 }

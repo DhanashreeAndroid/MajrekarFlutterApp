@@ -9,9 +9,11 @@ import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../../database/ObjectBox.dart';
+import 'VoterItem.dart';
 import 'detail_page.dart';
 
 class VoterListPage extends StatefulWidget {
@@ -25,7 +27,7 @@ class VoterListPage extends StatefulWidget {
 }
 
 class _VoterListPageState extends State<VoterListPage> {
-  late List<EDetails> voterList;
+   List<EDetails> voterList = [];
   bool isLoading = false;
   // This list holds the data for the list view
   List<EDetails> _foundUsers = [];
@@ -119,21 +121,19 @@ class _VoterListPageState extends State<VoterListPage> {
             const SizedBox(
               height: 5,
             ),
-            getSurnameInputs(),
+           /* getSurnameInputs(),
             const SizedBox(
               height: 5,
-            ),
-            _foundUsers.isNotEmpty?
+            ),*/
+            voterList.isNotEmpty?
             const AutoSizeText(
               "Please click on below voter names",
               maxLines: 1,
               style: TextStyle(
                   color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
             ) : const SizedBox(),
-            const SizedBox(
-              height: 5,
-            ),
-            Expanded(
+
+            /*Expanded(
               child: _foundUsers.isNotEmpty
                   ? ListView.builder(
                 itemCount: _foundUsers.length,
@@ -158,6 +158,14 @@ class _VoterListPageState extends State<VoterListPage> {
                   : const Text(
                 'No results found',
                 style: TextStyle(fontSize: 24),
+              ),
+            ),*/
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: voterList.isNotEmpty ?
+                renderAsynchSearchableListview()
+                :const CircularProgressIndicator(),
               ),
             ),
             Visibility(
@@ -251,7 +259,66 @@ class _VoterListPageState extends State<VoterListPage> {
     );
   }
 
-  Future<void> generatePDF(String type) async {
+  Widget renderAsynchSearchableListview() {
+    return SearchableList<EDetails>.async(
+      itemBuilder: (EDetails item) {
+        return VoterItem(actor: item);
+      },
+      asyncListCallback: () async {
+        await Future.delayed(const Duration(seconds: 0));
+        return voterList;
+      },
+      asyncListFilter: (query, list) {
+        return searchFilter(query);
+      },
+      seperatorBuilder: (context, index) {
+        return const Divider();
+      },
+      style: const TextStyle(fontSize: 25),
+      onItemSelected: (EDetails item) {
+        Navigator.push(context,
+            MaterialPageRoute(builder:
+                (context) =>  DetailPage(data : item, searchType: widget.searchType,)));
+
+      },
+      emptyWidget: const EmptyView(),
+      inputDecoration: InputDecoration(
+        labelText: "Voter name search",
+        fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Colors.blue,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
+   List<EDetails> searchFilter(String query) {
+     final RegExp english = RegExp(r'^[a-zA-Z]+');
+     query = query.toLowerCase();
+     List<EDetails> result = [];
+     for (var p in voterList) {
+      if (english.hasMatch(query)){
+         var name = "${p.lnEnglish.toString().toLowerCase()} ${p.fnEnglish.toString().toLowerCase()}";
+         if (name.contains(query)) {
+           result.add(p);
+         }
+       }else{
+        var marathiName = "${p.lnMarathi.toString().toLowerCase()} ${p.fnMarathi.toString().toLowerCase()}";
+        if (marathiName.contains(query)) {
+           result.add(p);
+         }
+       }
+
+     }
+
+     return result;
+   }
+
+   Future<void> generatePDF(String type) async {
     PdfDocument document;
     //Create a new PDF document with conformance A2B.
     document = PdfDocument(conformanceLevel: PdfConformanceLevel.a2b);
@@ -437,18 +504,6 @@ class _VoterListPageState extends State<VoterListPage> {
     }
   }
 
- Widget buildNotes() => ListView.builder(
-   itemCount: voterList.length,
-   itemBuilder: (context , index){
-     return   ListTile(
-       leading: const CircleAvatar(
-         backgroundColor: Colors.black,
-         backgroundImage: NetworkImage('https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?cs=srgb&dl=pexels-pixabay-415829.jpg&fm=jpg'),
-       ),
-       title: Text("${voterList[index].lnEnglish} ${voterList[index].fnEnglish}"),
-       subtitle: Text("${voterList[index].lnMarathi} ${voterList[index].fnMarathi}"),
-     );
-   },
- );
+
 
 }

@@ -108,10 +108,8 @@ class _EasySearchState extends State<EasySearch> {
                     elevation: 4,
                     margin: const EdgeInsets.symmetric(vertical: 1),
                     child: ListTile(
-                      leading: Text(
-                        (index+1).toString(),
-                        style: const TextStyle(fontSize: 24),
-                      ),
+                      leading: const Text( "", style: TextStyle(fontSize: 0),),
+                      minLeadingWidth : 1,
                       title: Text("${voterList[index].lnEnglish} ${voterList[index].fnEnglish}"),
                       subtitle: Text("${voterList[index].lnMarathi} ${voterList[index].fnMarathi}"),
                       onTap: () {

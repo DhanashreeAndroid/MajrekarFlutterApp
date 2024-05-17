@@ -116,7 +116,7 @@ class _MenuPageState extends State<MenuPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "", language: "",)));
+                                  (context) => const VoterNameSearch()));
                         }, label: 'Search Voters Name',
                       ),
                       const SizedBox(height: 20,),

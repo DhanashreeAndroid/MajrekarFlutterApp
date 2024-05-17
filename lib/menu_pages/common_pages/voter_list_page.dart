@@ -297,24 +297,24 @@ class _VoterListPageState extends State<VoterListPage> {
   }
 
    List<EDetails> searchFilter(String query) {
-     final RegExp english = RegExp(r'^[a-zA-Z]+');
      query = query.toLowerCase();
      List<EDetails> result = [];
      for (var p in voterList) {
-      if (english.hasMatch(query)){
-         var name = "${p.lnEnglish.toString().toLowerCase()} ${p.fnEnglish.toString().toLowerCase()}";
+       if (widget.searchType == "Marathi") {
+         var marathiName = "${p.lnMarathi.toString().toLowerCase()} ${p
+             .fnMarathi.toString()
+             .toLowerCase()}";
+         if (marathiName.contains(query)) {
+           result.add(p);
+         }
+       } else {
+         var name = "${p.lnEnglish.toString().toLowerCase()} ${p.fnEnglish
+             .toString().toLowerCase()}";
          if (name.contains(query)) {
            result.add(p);
          }
-       }else{
-        var marathiName = "${p.lnMarathi.toString().toLowerCase()} ${p.fnMarathi.toString().toLowerCase()}";
-        if (marathiName.contains(query)) {
-           result.add(p);
-         }
        }
-
      }
-
      return result;
    }
 

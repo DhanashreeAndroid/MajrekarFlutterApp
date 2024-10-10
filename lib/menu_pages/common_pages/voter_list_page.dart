@@ -12,7 +12,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
-import '../../database/ObjectBox.dart';
 import 'VoterItem.dart';
 import 'detail_page.dart';
 
@@ -46,25 +45,25 @@ class _VoterListPageState extends State<VoterListPage> {
   Future getData() async {
     setState(() => isLoading = true);
     if (widget.searchType == "BuildingWise") {
-      this.voterList =
-          await ObjectBox.getAllBuildingWiseData(widget.buildingName);
+      /*this.voterList =
+          await ObjectBox.getAllBuildingWiseData(widget.buildingName);*/
       isVisible = true;
     } else if (widget.searchType == "SurnameCount") {
-      this.voterList =
-          await ObjectBox.getSurnameCounterVoterList(widget.buildingName);
+      /*this.voterList =
+          await ObjectBox.getSurnameCounterVoterList(widget.buildingName);*/
       isVisible = true;
     } else if (widget.searchType == "LanguageWise") {
-      this.voterList = await ObjectBox.getLanguageWiseVoterList(
-          widget.buildingName, widget.language);
+      /*this.voterList = await ObjectBox.getLanguageWiseVoterList(
+          widget.buildingName, widget.language);*/
       isVisible = true;
     }else if(widget.searchType == "AgeWise"){
-      this.voterList = await ObjectBox.getAgeWiseVoterList(widget.buildingName, widget.language);
+     // this.voterList = await ObjectBox.getAgeWiseVoterList(widget.buildingName, widget.language);
       isVisible = true;
     }else if(widget.searchType == "SerialWise"){
-      this.voterList = await ObjectBox.getSerialWiseVoterList(widget.buildingName);
+     // this.voterList = await ObjectBox.getSerialWiseVoterList(widget.buildingName);
       isVisible = true;
     }else {
-      this.voterList = await ObjectBox.getAll(widget.searchType);
+     // this.voterList = await ObjectBox.getAll(widget.searchType);
       isVisible = false;
     }
     // at the beginning, all users are shown
@@ -275,12 +274,12 @@ class _VoterListPageState extends State<VoterListPage> {
         return const Divider();
       },
       style: const TextStyle(fontSize: 25),
-      onItemSelected: (EDetails item) {
+      /*onItemSelected: (EDetails item) {
         Navigator.push(context,
             MaterialPageRoute(builder:
                 (context) =>  DetailPage(data : item, searchType: widget.searchType,)));
 
-      },
+      },*/
       emptyWidget: const EmptyView(),
       inputDecoration: InputDecoration(
         labelText: "Voter name search",

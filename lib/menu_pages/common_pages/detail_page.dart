@@ -14,7 +14,6 @@ import '../../CommonWidget/Constant.dart';
 import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
 import '../../controller/MainController.dart';
-import '../../database/ObjectBox.dart';
 import '../../model/UserModel.dart';
 import '../../model/VidhansabhaModel.dart';
 import 'family_voter_list_page.dart';
@@ -54,15 +53,15 @@ class _DetailPageState extends State<DetailPage> {
     if(Constant.isOffline){
       userDetails = UserDetails(isMarkable: 'false');
     }else{
-      List<UserDetails> users = await ObjectBox.getUserDetails();
-      print("userDetailCount : ${users.length}");
-      userDetails =  users.first;
+      //List<UserDetails> users = await ObjectBox.getUserDetails();
+      //print("userDetailCount : ${users.length}");
+     //userDetails =  users.first;
       if(userDetails?.userEmail == widget.data.partNo){
         isOnlineMarking = true;
       }
     }
-    boothDetails = await ObjectBox.getBoothDetails(widget.data.wardNo!, widget.data.partNo!,
-        widget.data.serialNo!);
+   // boothDetails = await ObjectBox.getBoothDetails(widget.data.wardNo!, widget.data.partNo!,
+      //  widget.data.serialNo!);
 
     selectedShifted = getShiftedDeath();
     selectedDeath = getShiftedDeath();
@@ -1071,20 +1070,20 @@ class _DetailPageState extends State<DetailPage> {
 
 
   Future<void> updateColorToDB( String color) async {
-    await ObjectBox.updateColor(widget.data.partNo!,
-        widget.data.serialNo!, widget.data.wardNo!, color);
+    //await ObjectBox.updateColor(widget.data.partNo!,
+     //   widget.data.serialNo!, widget.data.wardNo!, color);
 
   }
 
   Future<void> updateShiftedDeathToDB( String type) async {
-    await ObjectBox.updateShiftedDeath(widget.data.partNo!,
-        widget.data.serialNo!, widget.data.wardNo!, type);
+   // await ObjectBox.updateShiftedDeath(widget.data.partNo!,
+    //    widget.data.serialNo!, widget.data.wardNo!, type);
 
   }
 
   Future<void> updateVotedNonVotedToDB( String type) async {
-    await ObjectBox.updateVotedNonVoted(widget.data.partNo!,
-        widget.data.serialNo!, widget.data.wardNo!, type);
+    //await ObjectBox.updateVotedNonVoted(widget.data.partNo!,
+     //   widget.data.serialNo!, widget.data.wardNo!, type);
 
   }
 

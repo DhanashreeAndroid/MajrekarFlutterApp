@@ -9,7 +9,6 @@ import 'package:majrekar_app/menu_pages/buildingWiseSearch/part_no_drop_list_ite
 import '../../CommonWidget/commonButton.dart';
 import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../common_pages/voter_list_page.dart';
 
@@ -48,7 +47,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
           alertDailog(context);
         });
         buildingList.clear();
-        buildingList = await ObjectBox.getPartWiseBuildings(partNoController.text);
+       // buildingList = await ObjectBox.getPartWiseBuildings(partNoController.text);
         _foundUsers = buildingList;
         setState(() {
           isLoading = false;
@@ -72,7 +71,7 @@ class _BuildingWiseSearchSearchState extends State<BuildingWiseSearch> {
         alertDailog(context);
       });
         buildingList.clear();
-        buildingList = await ObjectBox.getPartWiseBuildings("All");
+        //buildingList = await ObjectBox.getPartWiseBuildings("All");
       _foundUsers = buildingList;
       setState(() {
         isLoading = false;

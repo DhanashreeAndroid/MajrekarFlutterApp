@@ -13,7 +13,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../CommonWidget/Constant.dart';
 import '../../CommonWidget/utility.dart';
 import '../../CommonWidget/widget_to_image.dart';
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../../model/VidhansabhaModel.dart';
 
@@ -40,11 +39,11 @@ class _ShareImageState extends State<ShareImage> {
       isLoading = true;
     });
     for (int i = 0; i < widget.voterList.length; i++) {
-      Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
+    /*  Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
           widget.voterList[i].wardNo!, widget.voterList[i].partNo!,
           widget.voterList[i].serialNo!);
       widget.voterList[i].boothAddressEnglish = boothDetails!.boothAddressEnglish!;
-      widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;
+      widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;*/
     }
     setState(() {
       isLoading = false;

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 
-import '../../database/ObjectBox.dart';
 import '../common_pages/detail_page.dart';
 import '../common_pages/voter_list_page.dart';
 import 'language_list_model.dart';
@@ -29,7 +28,7 @@ class _LanguageListPageState extends State<LanguageListPage> {
 
   Future getData() async {
     setState(() => isLoading = true);
-    languageList = await ObjectBox.getLanguageList(widget.buildingName);
+   // languageList = await ObjectBox.getLanguageList(widget.buildingName);
     setState(() => isLoading = false);
   }
 

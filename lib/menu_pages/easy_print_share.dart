@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/show_snak_bar.dart';
@@ -42,14 +41,14 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
         //to vibrate the phone
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
-        voterDetails = await ObjectBox.getPartSerialWiseData(
+        /*voterDetails = await ObjectBox.getPartSerialWiseData(
             partNoController.text, srNoController.text);
         Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
             voterDetails!.wardNo!,
             voterDetails!.partNo!,
             voterDetails!.serialNo!);
         voterDetails!.boothAddressEnglish = boothDetails!.boothAddressEnglish!;
-        voterDetails!.boothAddressMarathi = boothDetails.boothAddressMarathi!;
+        voterDetails!.boothAddressMarathi = boothDetails.boothAddressMarathi!;*/
 
         setState(() => isLoading = false);
         return;

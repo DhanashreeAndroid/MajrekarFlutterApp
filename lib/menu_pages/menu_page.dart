@@ -13,7 +13,6 @@ import 'package:majrekar_app/menu_pages/votingMakingPages/voting_making_main_pag
 import '../CommonWidget/Constant.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/showExitPopup.dart';
-import '../database/ObjectBox.dart';
 import '../model/UserModel.dart';
 import 'ageWiseReport/age_wise_search.dart';
 import 'alphabetical_voter_list_page.dart';
@@ -47,8 +46,8 @@ class _MenuPageState extends State<MenuPage> {
       userDetails = UserDetails(isMarkable: 'false');
       userDetails?.vidhansabhaName = Constant.vidhansabhaName;
     }else{
-      List<UserDetails> users = await ObjectBox.getUserDetails();
-      userDetails =  users.first;
+     /* List<UserDetails> users = await ObjectBox.getUserDetails();
+      userDetails =  users.first;*/
     }
     if(userDetails?.vidhansabhaName != ""){
       vidhan = userDetails!.vidhansabhaName!;

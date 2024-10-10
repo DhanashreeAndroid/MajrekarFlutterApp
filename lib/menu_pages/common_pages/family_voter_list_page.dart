@@ -8,7 +8,6 @@ import 'package:majrekar_app/model/DataModel.dart';
 import 'package:telephony/telephony.dart';
 
 import '../../CommonWidget/show_snak_bar.dart';
-import '../../database/ObjectBox.dart';
 import 'detail_page.dart';
 
 class FamilyVoterListPage extends StatefulWidget {
@@ -45,7 +44,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
 
   Future getData() async {
     setState(() => isLoading = true);
-    voterList = await ObjectBox.getFamilyVoters(searchType, surName, houseNo, buildingAddress);
+  //  voterList = await ObjectBox.getFamilyVoters(searchType, surName, houseNo, buildingAddress);
     setState(() => isLoading = false);
   }
 

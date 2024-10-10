@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/surname_counter_model.dart';
 import 'package:majrekar_app/model/DataModel.dart';
-import '../../database/ObjectBox.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/show_snak_bar.dart';
 import '../CommonWidget/utility.dart';
@@ -37,7 +36,7 @@ class _SurnameCounterPageState extends State<SurnameCounterPage> {
         setState(() {
           isLoading = true;
         });
-        voterList = await ObjectBox.getSurnameCountData(surnameController.text);
+       // voterList = await ObjectBox.getSurnameCountData(surnameController.text);
         setState(() {
           isLoading = false;
         });

@@ -9,20 +9,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:majrekar_app/dao/maindata_dao.dart';
+import 'package:majrekar_app/database/main_data_database.dart';
+import 'package:majrekar_app/entities/MainData.dart';
 import 'package:majrekar_app/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'CommonWidget/Constant.dart';
 import 'CommonWidget/utility.dart';
 import 'controller/MainController.dart';
-import 'database/ObjectBox.dart';
 import 'menu_pages/menu_page.dart';
 import 'model/DataModel.dart';
 import 'model/UserModel.dart';
 import 'model/VidhansabhaModel.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  final MainDataDao dao;
+  final MainDataDatabase database;
+  const SplashScreen({Key? key, required this.dao, required this.database}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -85,14 +89,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void addUserDetails(UserDetails? user) async {
-      await ObjectBox.updateUserDetails(user!);
+      //await ObjectBox.updateUserDetails(user!);
   }
 
   Future<void> importDataOffline(UserDetails user, String token) async {
     if(user.isUpdatable == "true"){
       callBoothDataApi(token, user.userName!);
     }else{
-      List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+      /*List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
       if(dbList.isNotEmpty){
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const MenuPage()));
@@ -100,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder:
                 (context) => const LoginPage()));
-      }
+      }*/
     }
   }
 
@@ -118,8 +122,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void addOrUpdateBoothDetail(List<Vidhansabha>? boothList, String? token, String userId) async {
-      await ObjectBox.deleteAllBooths();
-      await ObjectBox.insertAllBooths(boothList!);
+    /*  await ObjectBox.deleteAllBooths();
+      await ObjectBox.insertAllBooths(boothList!);*/
       saveIsUpdatableFlag(userId, token);
   }
 
@@ -127,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await mainController.updateUserIsUpdatableFlag(
         token, user);
     if (mainController.isUpdateFlag) {
-      List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+      /*List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
       if(dbList.isNotEmpty){
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const MenuPage()));
@@ -135,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder:
                 (context) => const LoginPage()));
-      }
+      }*/
     }else {
       Navigator.of(context, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -151,7 +155,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> loadScreen() async {
-    if(Constant.isOffline){
+    // previous data logic
+   /* if(Constant.isOffline){
       if(Constant.isDateLimit){
         // App access limit condition
         DateTime valEnd = DateTime.parse(Constant.limitDate);
@@ -199,7 +204,8 @@ class _SplashScreenState extends State<SplashScreen> {
         List<UserDetails> users = await ObjectBox.getUserDetails();
         apiCall(users.first.userName, users.first.password);
       }
-    }
+    }*/
+    getOfflineData(context);
 
   }
 
@@ -299,23 +305,80 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void callGetData(String? token) async{
-    List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
+   /* List<EDetails> dbList  =  await ObjectBox.getIsDataAvailable();
     if(dbList.isNotEmpty){
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const MenuPage()));
     }else{
       callGetDataFromApi(token);
-    }
+    }*/
   }
 
   void addOrUpdateEDetails(List<EDetails>? eDetails) async {
-    await ObjectBox.deleteAll();
-    await ObjectBox.insertAll(eDetails!);
+   /* await ObjectBox.deleteAll();
+    await ObjectBox.insertAll(eDetails!);*/
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const MenuPage()));
 
   }
+  Future getOfflineData(BuildContext context) async{
 
+    List<EDetails> voterList = [];
+    // await ObjectBox.deleteAll();
+
+    Directory directory = await getApplicationDocumentsDirectory();
+    var dbPath = "${directory.path}maindata1.csv";
+    if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
+      ByteData data = await rootBundle.load("assets/maindata.csv");
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await File(dbPath).writeAsBytes(bytes);
+    }
+    final csvFile = File(dbPath).openRead();
+
+    List<List<dynamic>> list = await csvFile.transform(utf8.decoder).transform(const CsvToListConverter()).toList();
+
+    for(int i=1;i<list.length;i++){
+      //ward no.,Partno,Serial_No,Cardno,LN_English,FN_English,LN_Marathi,FN_Marathi,Sex,Age,HouseNo_English,HouseNo_Marathi,BuildingName_English,BuildingName_marathi,EnglishBoothAddress,MarathiBoothAddress,Lang,Color,Shifted_death,Voted_Nonvoted
+      var eDetails = EDetails(dbId: i.toString(), wardNo:list.elementAt(i).elementAt(0).toString(),
+          partNo: list.elementAt(i).elementAt(1).toString(),
+          serialNo: list.elementAt(i).elementAt(2).toString(),
+          cardNo: list.elementAt(i).elementAt(3).toString(),
+          lnEnglish: list.elementAt(i).elementAt(4).toString(),
+          fnEnglish: list.elementAt(i).elementAt(5).toString(),
+          lnMarathi: list.elementAt(i).elementAt(6).toString(),
+          fnMarathi: list.elementAt(i).elementAt(7).toString(),
+          sex: list.elementAt(i).elementAt(8).toString(),
+          age: list.elementAt(i).elementAt(9).toString(),
+          houseNoEnglish: list.elementAt(i).elementAt(10).toString(),
+          houseNoMarathi: list.elementAt(i).elementAt(11).toString(),
+          buildingNameEnglish: list.elementAt(i).elementAt(12).toString(),
+          buildingNameMarathi: list.elementAt(i).elementAt(13).toString(),
+          boothAddressEnglish: list.elementAt(i).elementAt(14).toString(),
+          boothAddressMarathi: list.elementAt(i).elementAt(15).toString(),
+          lang: list.elementAt(i).elementAt(16).toString(),
+          color: list.elementAt(i).elementAt(17).toString(),
+          shiftedDeath: list.elementAt(i).elementAt(18).toString(),
+          votedNonVoted: list.elementAt(i).elementAt(19).toString()
+      );
+      voterList.add(eDetails);
+    }
+    var batch = widget.database.database.batch();
+
+    for (var val in voterList) {
+      var mainData = MainData(null,val.dbId,
+          val.wardNo, val.partNo, val.serialNo, val.cardNo, val.lnEnglish, val.fnEnglish, val.lnMarathi,
+          val.fnMarathi, val.sex, val.age, val.houseNoEnglish, val.houseNoMarathi, val.buildingNameEnglish,
+          val.buildingNameMarathi, val.boothAddressEnglish, val.boothAddressMarathi, val.lang,
+          val.color, val.shiftedDeath, val.votedNonVoted);
+      batch.insert("MainData", mainData as Map<String, Object?>);
+
+    }
+    batch.commit();
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MenuPage()));
+
+  }
 //---------------------------
 }
 

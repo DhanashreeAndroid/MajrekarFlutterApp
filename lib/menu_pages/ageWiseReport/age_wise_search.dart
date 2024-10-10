@@ -12,7 +12,6 @@ import 'package:majrekar_app/menu_pages/languageSearch/language_list_page.dart';
 import '../../CommonWidget/commonButton.dart';
 import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../common_pages/voter_list_page.dart';
 

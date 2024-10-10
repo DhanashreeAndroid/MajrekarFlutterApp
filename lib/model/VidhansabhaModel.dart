@@ -1,4 +1,4 @@
-import 'package:objectbox/objectbox.dart';
+
 import 'dart:convert';
 
 VidhansabhaModel authModelFromJson(String str) => VidhansabhaModel.fromJson(json.decode(str));
@@ -27,18 +27,18 @@ class VidhansabhaModel {
     return data;
   }
 }
-@Entity()
+
 class Vidhansabha {
-  @Id()
+
   int? id;
   String? dbId;
   String? wardNo;
   String? partNo;
   String? from;
   String? to;
-  @Index(type: IndexType.value)
+
   String? boothAddressEnglish;
-  @Index(type: IndexType.value)
+
   String? boothAddressMarathi;
 
   Vidhansabha(

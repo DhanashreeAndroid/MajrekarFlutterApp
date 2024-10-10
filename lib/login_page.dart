@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/CommonWidget/Constant.dart';
 import 'package:majrekar_app/controller/MainController.dart';
-import 'package:majrekar_app/database/ObjectBox.dart';
 import 'package:majrekar_app/menu_pages/menu_page.dart';
 import 'package:majrekar_app/model/UserModel.dart';
 import 'package:majrekar_app/model/VidhansabhaModel.dart';
@@ -133,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
       await mainController.saveMacAddress(
           token, macAddress, user.userName!);
       if (mainController.isMacSaved) {
-        await ObjectBox.updateMacAddress(macAddress);
+      //  await ObjectBox.updateMacAddress(macAddress);
         importDataOffline();
       }
   }
@@ -149,10 +148,10 @@ class _LoginPageState extends State<LoginPage> {
   void addUserDetails(UserDetails? user) async {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
-      List<UserDetails> users = await ObjectBox.getUserDetails();
+      /*List<UserDetails> users = await ObjectBox.getUserDetails();
       if (users.isEmpty) {
         await ObjectBox.insertUserDetails(user!);
-      }
+      }*/
     }
   }
 
@@ -339,7 +338,7 @@ class _LoginPageState extends State<LoginPage> {
   Future getOfflineVotingAddressData(BuildContext context) async{
 
     List<Vidhansabha> addressList = [];
-    await ObjectBox.deleteAllBooths();
+    //await ObjectBox.deleteAllBooths();
 
     Directory directory = await getApplicationDocumentsDirectory();
     var dbPath = "${directory.path}votingaddress1.csv";
@@ -364,9 +363,9 @@ class _LoginPageState extends State<LoginPage> {
       );
       addressList.add(eDetails);
     }
-    await ObjectBox.insertAllBooths(addressList);
+   /* await ObjectBox.insertAllBooths(addressList);
     List<Vidhansabha> dblist =  await ObjectBox.getAllBooths();
-    print("db voting address count : ${dblist.length}");
+    print("db voting address count : ${dblist.length}");*/
 
   }
 
@@ -374,7 +373,7 @@ class _LoginPageState extends State<LoginPage> {
   Future getOfflineData(BuildContext context) async{
 
     List<EDetails> voterList = [];
-    await ObjectBox.deleteAll();
+   // await ObjectBox.deleteAll();
 
     Directory directory = await getApplicationDocumentsDirectory();
     var dbPath = "${directory.path}maindata1.csv";
@@ -412,9 +411,9 @@ class _LoginPageState extends State<LoginPage> {
       );
       voterList.add(eDetails);
     }
-    await ObjectBox.insertAll(voterList);
-    List<EDetails> dblist =  await ObjectBox.getAll("Name");
-    print("db data count : ${dblist.length}");
+   // await ObjectBox.insertAll(voterList);
+   /* List<EDetails> dblist =  await ObjectBox.getAll("Name");
+    print("db data count : ${dblist.length}");*/
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const MenuPage()));
 
@@ -451,17 +450,17 @@ class _LoginPageState extends State<LoginPage> {
   void addOrUpdateBoothDetail(List<Vidhansabha>? boothList) async {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
-      await ObjectBox.deleteAllBooths();
-      await ObjectBox.insertAllBooths(boothList!);
+      //await ObjectBox.deleteAllBooths();
+     // await ObjectBox.insertAllBooths(boothList!);
     }
   }
 
   void addOrUpdateEDetails(List<EDetails>? eDetails) async {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
-      await ObjectBox.deleteAll();
-      await ObjectBox.insertAll(eDetails!);
-      //Navigator.of(context, rootNavigator: true).pop();
+      /*await ObjectBox.deleteAll();
+      await ObjectBox.insertAll(eDetails!);*/
+      //Navigator.of(context, rootNavigator: true).pop(); -- already commented
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const MenuPage()));
     }

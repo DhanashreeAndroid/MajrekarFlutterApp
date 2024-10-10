@@ -15,7 +15,6 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../../CommonWidget/commonButton.dart';
 import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 
 class AlphabeticalVoterListPage extends StatefulWidget {
@@ -43,7 +42,7 @@ class _AlphabeticalVoterListPageState extends State<AlphabeticalVoterListPage> {
         //to vibrate the phone
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
-        voterList = await ObjectBox.getPartWiseData(partNoController.text);
+       // voterList = await ObjectBox.getPartWiseData(partNoController.text);
         if (voterList.isNotEmpty) {
           generatePDF(type);
         } else {

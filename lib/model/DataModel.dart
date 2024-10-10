@@ -1,5 +1,7 @@
-import 'package:objectbox/objectbox.dart';
+
 import 'dart:convert';
+
+import 'package:floor/floor.dart';
 
 DataModel authModelFromJson(String str) => DataModel.fromJson(json.decode(str));
 
@@ -27,18 +29,15 @@ class DataModel {
     return data;
   }
 }
-@Entity()
+
 class EDetails {
-  @Id()
   int? id;
   String? dbId;
   String? wardNo;
   String? partNo;
   String? serialNo;
   String? cardNo;
-  @Index(type: IndexType.value)
   String? lnEnglish;
-  @Index(type: IndexType.value)
   String? fnEnglish;
   String? lnMarathi;
   String? fnMarathi;

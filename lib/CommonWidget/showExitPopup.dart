@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-import '../database/ObjectBox.dart';
 
 Future<bool?> showExitPopup(context) async{
   return await showDialog<bool>(
@@ -72,7 +71,7 @@ Future<bool?> showExitPopup(context) async{
 
 }
 Future deleteData () async {
-  await ObjectBox.deleteAllBooths();
-  await ObjectBox.deleteAll();
-  await ObjectBox.deleteUserDetails();
+  //await ObjectBox.deleteAllBooths();
+ // await ObjectBox.deleteAll();
+ // await ObjectBox.deleteUserDetails();
 }

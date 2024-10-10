@@ -16,7 +16,6 @@ import '../../CommonWidget/Constant.dart';
 import '../../CommonWidget/commonButton.dart';
 import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../../model/UserModel.dart';
 import '../common_pages/voter_list_page.dart';
@@ -41,8 +40,8 @@ class _VotingMakingMainPageState extends State<VotingMakingMainPage> {
   
   Future getUserDetails() async {
     setState(() => isLoading = true);
-    List<UserDetails> users = await ObjectBox.getUserDetails();
-    userDetails =  users.first;
+   /* List<UserDetails> users = await ObjectBox.getUserDetails();
+    userDetails =  users.first;*/
     setState(() => isLoading = false);
   }
 
@@ -107,7 +106,7 @@ class _VotingMakingMainPageState extends State<VotingMakingMainPage> {
           CustomButton(
             onPressed: () async {
               final partNo = userDetails?.userEmail;
-              voterList = await ObjectBox.getPartWiseMarkingData(partNo!);
+              //voterList = await ObjectBox.getPartWiseMarkingData(partNo!);
               generatePDF();
             }, label: 'Marking Done Report',
           )

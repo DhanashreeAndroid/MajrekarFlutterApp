@@ -1,4 +1,4 @@
-import 'package:objectbox/objectbox.dart';
+
 import 'dart:convert';
 
 UserModel authModelFromJson(String str) => UserModel.fromJson(json.decode(str));
@@ -25,9 +25,8 @@ class UserModel {
     return data;
   }
 }
-@Entity()
+
 class UserDetails {
-  @Id()
   int? id;
   String? userName;
   String? userRole;

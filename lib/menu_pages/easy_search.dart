@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/show_snak_bar.dart';
@@ -42,7 +41,7 @@ class _EasySearchState extends State<EasySearch> {
         //to vibrate the phone
         await HapticFeedback.lightImpact();
         setState(() => isLoading = true);
-        voterList = await ObjectBox.getEasySearchData(nameController.text, surnameController.text);
+       // voterList = await ObjectBox.getEasySearchData(nameController.text, surnameController.text);
         setState(() => isLoading = false);
         return;
       } else {

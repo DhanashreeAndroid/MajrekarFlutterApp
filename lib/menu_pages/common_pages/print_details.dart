@@ -17,7 +17,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
 
 class PrintDetails extends StatefulWidget {
@@ -48,11 +47,11 @@ class _PrintDetailsState extends State<PrintDetails> {
       isLoading = true;
     });
     for (int i = 0; i < widget.voterList.length; i++) {
-      Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
+     /* Vidhansabha? boothDetails = await ObjectBox.getBoothDetails(
           widget.voterList[i].wardNo!, widget.voterList[i].partNo!,
           widget.voterList[i].serialNo!);
       widget.voterList[i].boothAddressEnglish = boothDetails!.boothAddressEnglish!;
-      widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;
+      widget.voterList[i].boothAddressMarathi = boothDetails.boothAddressMarathi!;*/
     }
     setState(() {
       isLoading = false;

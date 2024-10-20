@@ -1,0 +1,36 @@
+<variant
+    name="app_releaseRelease"
+    package="com.app.majrekar.majrekar_app"
+    minSdkVersion="23"
+    targetSdkVersion="34"
+    shrinking="true"
+    mergedManifest="build\intermediates\merged_manifest\app_releaseRelease\AndroidManifest.xml"
+    proguardFiles="build\intermediates\default_proguard_files\global\proguard-android.txt-8.1.0;D:\fluttersdk\flutter\flutter\packages\flutter_tools\gradle\flutter_proguard_rules.pro;proguard-rules.pro"
+    partialResultsDir="build\intermediates\lint_vital_partial_results\app_releaseRelease\out"
+    desugaredMethodsFiles="C:\Users\ACER\.gradle\caches\transforms-3\65c0c5e1a46dd2074f619deb01dcd57d\transformed\D8BackportedDesugaredMethods.txt">
+  <buildFeatures
+      namespacing="REQUIRED"/>
+  <sourceProviders>
+    <sourceProvider
+        manifests="src\main\AndroidManifest.xml"
+        javaDirectories="src\main\java;src\app_release\java;src\release\java;src\app_releaseRelease\java;src\main\kotlin;src\app_release\kotlin;src\release\kotlin;src\app_releaseRelease\kotlin"
+        resDirectories="src\main\res;src\app_release\res;src\release\res;src\app_releaseRelease\res"
+        assetsDirectories="src\main\assets;src\app_release\assets;src\release\assets;src\app_releaseRelease\assets"/>
+  </sourceProviders>
+  <testSourceProviders>
+  </testSourceProviders>
+  <testFixturesSourceProviders>
+  </testFixturesSourceProviders>
+  <manifestPlaceholders>
+    <placeholder
+        name="applicationName"
+        value="android.app.Application" />
+  </manifestPlaceholders>
+  <mainArtifact
+      classOutputs="build\intermediates\javac\app_releaseRelease\classes;build\tmp\kotlin-classes\app_releaseRelease;build\kotlinToolingMetadata;build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\app_releaseRelease\R.jar"
+      applicationId="com.app.majrekar.majrekar_app"
+      generatedSourceFolders="build\generated\ap_generated_sources\app_releaseRelease\out"
+      generatedResourceFolders="build\generated\res\resValues\app_release\release"
+      desugaredMethodsFiles="C:\Users\ACER\.gradle\caches\transforms-3\65c0c5e1a46dd2074f619deb01dcd57d\transformed\D8BackportedDesugaredMethods.txt">
+  </mainArtifact>
+</variant>

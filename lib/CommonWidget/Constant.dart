@@ -18,7 +18,7 @@ class Constant{
   static const bool isShowShareImage = true;
   static const bool isShowImageToHeader = true;
   static const bool isDateLimit = true;
-  static const String limitDate = "2024-05-25 00:00:00";
+  static const String limitDate = "2028-05-25 00:00:00";
   static const String mainDataCsvTemp = "137Bhiwandieast.csv";
   static const String votingAddressCsvTemp = "137votingaddress.csv";
 

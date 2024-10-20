@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 
 import '../../database/ObjectBox.dart';
@@ -136,73 +138,117 @@ class _EasySearchState extends State<EasySearch> {
   Padding customInputs() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 2.0, 0.0),
-      child: Row(
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            child:
-            Form(
-              key: _recipientSurnameFormKey,
-              child: TextFormField(
-                autofocus: true,
-                controller: surnameController,
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please enter surname";
-                  }
-                  return null;
-                },
-                onSaved: (String? phoneNumber) {},
-                decoration: InputDecoration(
-                  hintText: 'Enter surname',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 2,
+      child: Column(
+        children: [
+          Row(
+            children: <Widget>[
+              const SizedBox(
+                width: 130,
+                child: Text(
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Calibri',
+                        fontWeight: FontWeight.bold),
+                    'Surname '),
+              ),
+
+              Expanded(
+                child:
+                SizedBox(
+                  height: 50,
+                  child: Form(
+                    key: _recipientSurnameFormKey,
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: surnameController,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Calibri',
+                          fontWeight: FontWeight.bold),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter surname";
+                        }
+                        return null;
+                      },
+                      onSaved: (String? phoneNumber) {},
+                      decoration: InputDecoration(
+                        hintText: 'Enter surname',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-          const SizedBox(width: 10,),
-          Flexible(
-            flex: 1,
-            child:
-            Form(
-              key: _recipientNameFormKey,
-              child: TextFormField(
-                autofocus: true,
-                controller: nameController,
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please enter first name";
-                  }
-                  return null;
-                },
-                onSaved: (String? phoneNumber) {},
-                decoration: InputDecoration(
-                  hintText: 'Enter first name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 2,
+          const SizedBox(height: 10,),
+          Row(
+            children: <Widget>[
+              const SizedBox(
+                width: 130,
+                child: Text(
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Calibri',
+                        fontWeight: FontWeight.bold),
+                    'First_Middle Name '),
+              ),
+
+              Expanded(
+                child:
+                SizedBox(
+                  height: 50,
+                  child: Form(
+                    key: _recipientNameFormKey,
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: nameController,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Calibri',
+                          fontWeight: FontWeight.bold),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter first_middle name";
+                        }
+                        return null;
+                      },
+                      onSaved: (String? phoneNumber) {},
+                      decoration: InputDecoration(
+                        hintText: 'Enter first_middle name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-              ),
-            ),
-          )
+              )
+            ],
+          ),
         ],
       ),
     );

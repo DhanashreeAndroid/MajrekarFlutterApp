@@ -89,20 +89,13 @@ class _MenuPageState extends State<MenuPage> {
                           showExitPopup(context);
                         },
                       ),
-                      const SizedBox(height: 20,),
-                      Image.asset("images/logo.jpg",
-                          height: 100,
-                          width: 100),
-                      const SizedBox(height: 5,),
-                      Constant.isShowImageToHeader?
-                      const AutoSizeText(
-                        textAlign: TextAlign.center,
-                        "Copyright © Developed by Majrekar’s Voters Management System",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10),
-                      ): const SizedBox(),
+                      Visibility(
+                        visible: false,
+                        child: Image.asset("images/logo.jpg",
+                            height: 100,
+                            width: 100),
+                      ),
+
                       const SizedBox(height: 10,),
                       Text(
                         vidhan,
@@ -112,22 +105,29 @@ class _MenuPageState extends State<MenuPage> {
                             fontSize: 20),
                       ),
                       const SizedBox(height: 20,),
-                      CustomButton(
+                     /* CustomButton(
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
                                   (context) => const VoterNameSearch()));
                         }, label: 'Search Voters Name',
+                      ),*/
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const EasySearch()));
+                        }, label: 'Search Voters Name',
                       ),
                       const SizedBox(height: 20,),
-                      CustomButton(
+                    /*  CustomButton(
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
                                   (context) => const EasySearch()));
                         }, label: 'Easy Search',
                       ),
-                      const SizedBox(height: 20,),
+                      const SizedBox(height: 20,),*/
                       CustomButton(
                         onPressed: () {
                           Navigator.push(context,
@@ -207,6 +207,16 @@ class _MenuPageState extends State<MenuPage> {
                                   (context) => const AgeWiseSearch()));
                         }, label: 'Age Wise Report',
                       ),
+                      const SizedBox(height: 20,),
+                      Constant.isShowImageToHeader?
+                      const AutoSizeText(
+                        textAlign: TextAlign.center,
+                        "Copyright © Developed by Majrekar’s Voters Management System",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10),
+                      ): const SizedBox(),
                       const SizedBox(height: 20,),
 
                     ],

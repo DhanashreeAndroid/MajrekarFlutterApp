@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> checkForAnotherDevice(UserDetails user, String token) async {
-    final macAddress = await getDeviceIdentifier();
+    final macAddress = await getDeviceIdentifier(context);
     if (user.macAddress != "0") {
       print('db mac address : ${user.macAddress!}');
       print('device mac address : $macAddress');

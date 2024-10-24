@@ -1,6 +1,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 
@@ -41,7 +42,18 @@ class _LanguageListPageState extends State<LanguageListPage> {
        Navigator.pop(context);
        return false;
     },
-    child: SafeArea(
+    child:Focus(
+    autofocus: true,
+    onKeyEvent: (FocusNode node, KeyEvent event) {
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+    // Mimic back button behavior
+    Navigator.pop(context);
+    return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+    },
+    child:
+    SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: Column(
@@ -100,7 +112,7 @@ class _LanguageListPageState extends State<LanguageListPage> {
           ],
         ),
       ),
-    ),
+    )),
     );
   }
 

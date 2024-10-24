@@ -68,6 +68,52 @@ class _ShareImageState extends State<ShareImage> {
             const SizedBox(
               height: 10,
             ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      gradient: const LinearGradient(colors: [
+                        Color.fromRGBO(0, 0, 0, 1),
+                        Color.fromRGBO(0, 0, 0, .6),
+                      ])),
+                  child: SizedBox(
+                    width: 170,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        side: const BorderSide(
+                          width: 1.0,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      onPressed: () async {
+                        final bytes1 = await capture(key1);
+                        final tempDir = await getTemporaryDirectory();
+                        final file =
+                        await File('${tempDir.path}/image.jpg').create();
+                        file.writeAsBytesSync(bytes1);
+                        Share.shareFiles([(file.path)],
+                            text: '');
+                      },
+                      child: const Text(
+                        "Share",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             WidgetToImage(
               builder: (key) {
                 key1 = key;
@@ -111,52 +157,8 @@ class _ShareImageState extends State<ShareImage> {
             const SizedBox(
               height: 20,
             ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      gradient: const LinearGradient(colors: [
-                        Color.fromRGBO(0, 0, 0, 1),
-                        Color.fromRGBO(0, 0, 0, .6),
-                      ])),
-                  child: SizedBox(
-                    width: 170,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        side: const BorderSide(
-                          width: 1.0,
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      onPressed: () async {
-                        final bytes1 = await capture(key1);
-                        final tempDir = await getTemporaryDirectory();
-                        final file =
-                            await File('${tempDir.path}/image.jpg').create();
-                        file.writeAsBytesSync(bytes1);
-                        Share.shareFiles([(file.path)],
-                            text: '');
-                      },
-                      child: const Text(
-                        "Share",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+
+
           ],
       ),
     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 
 import '../CommonWidget/commonButton.dart';
@@ -21,7 +22,18 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
         onWillPop: () async {
       Navigator.pop(context);
       return false;
-    }, child: Scaffold(
+    }, child: Focus(
+    autofocus: true,
+    onKeyEvent: (FocusNode node, KeyEvent event) {
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+    // Mimic back button behavior
+    Navigator.pop(context);
+    return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+    },
+    child:
+    Scaffold(
           body: Stack(
             children: [
               Container(
@@ -52,8 +64,8 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "", language: "",)));
-                        }, label: 'Surname wise Search',
+                                  (context) =>  const VoterListPage(searchType : "English" ,buildingName: "", language: "",)));
+                        }, label: 'English',
                       ),
 
                       const SizedBox(height: 20,),
@@ -61,8 +73,8 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) =>  const VoterListPage(searchType : "Name wise Search" ,buildingName: "", language: "",)));
-                        }, label: 'Name wise Search',
+                                  (context) =>  const VoterListPage(searchType : "Marathi" ,buildingName: "", language: "",)));
+                        }, label: 'Marathi',
                       ),
 
 
@@ -72,7 +84,7 @@ class _VoterNameSearchState extends State<VoterNameSearch> {
               ),
             ],
           )
-      )
+      ))
     );
 
   }

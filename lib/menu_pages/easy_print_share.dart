@@ -70,7 +70,18 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
           Navigator.pop(context);
           return false;
         },
-        child: Scaffold(
+        child: Focus(
+        autofocus: true,
+        onKeyEvent: (FocusNode node, KeyEvent event) {
+        if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+        // Mimic back button behavior
+        Navigator.pop(context);
+        return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+        },
+        child:
+        Scaffold(
             backgroundColor: const Color.fromRGBO(218, 222, 224, 1),
             body: SafeArea(
               child: SingleChildScrollView(
@@ -131,7 +142,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
                   ],
                 ),
               ),
-            )));
+            ))));
   }
 
   Padding customInputs() {

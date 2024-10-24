@@ -58,7 +58,18 @@ class _SurnameCounterPageState extends State<SurnameCounterPage> {
        Navigator.pop(context);
        return false;
     },
-    child: SafeArea(
+    child:Focus(
+    autofocus: true,
+    onKeyEvent: (FocusNode node, KeyEvent event) {
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+    // Mimic back button behavior
+    Navigator.pop(context);
+    return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+    },
+    child:
+    SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(218,222,224, 1),
         body: Column(
@@ -125,7 +136,7 @@ class _SurnameCounterPageState extends State<SurnameCounterPage> {
           ],
         ),
       ),
-    ),
+    )),
     );
   }
 

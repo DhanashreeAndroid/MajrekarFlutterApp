@@ -106,6 +106,7 @@
 
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:encrypt/encrypt.dart' as enc;
  import 'dart:typed_data';
  import 'dart:convert';
@@ -116,7 +117,6 @@ import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/snackBars.dart';
  import 'package:pointycastle/export.dart';
 import 'package:pointycastle/export.dart' as point;
-import 'package:unique_identifier/unique_identifier.dart';
 
 RSAPublicKey getPublicKeyFromBase64EncodedKey(String b64) {
   final pem =
@@ -223,12 +223,18 @@ Future alertDialogWithMessage(BuildContext context, String text) {
   );
 }
 
-Future<String?> getDeviceIdentifier() async {
-  String? deviceIdentifier = "unknown";
-  try {
-    deviceIdentifier = await UniqueIdentifier.serial;
-  } on PlatformException {
-    deviceIdentifier = 'unknown';
+Future<String?> getDeviceIdentifier(BuildContext context) async {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  String? deviceId;
+
+  if (Theme.of(context).platform == TargetPlatform.android) {
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    deviceId = androidInfo.id; // Use `id` instead of `androidId`
+  } else {
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    deviceId = iosInfo.identifierForVendor; // Unique ID for iOS
   }
-  return deviceIdentifier;
+
+  return deviceId;
+
 }

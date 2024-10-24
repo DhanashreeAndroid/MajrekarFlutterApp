@@ -73,9 +73,10 @@ class ObjectBox {
   static Future<List<EDetails>> getAll(String searchType) async {
     final store = await openStore();
     var box = store.box<EDetails>();
-    List<EDetails> list = box.getAll();
-
-      if(searchType.contains("Name")){
+    final query  = (box.query(EDetails_.lnEnglish.notEquals('') )..order(EDetails_.lnEnglish, flags:  Order.nullsLast )).build();
+    final output = query.find();
+    query.close();
+    /*  if(searchType.contains("Name")){
         list = list.where((eDetails) => eDetails.fnEnglish != "").toList();
         list.sort((a,b) {
           return  a.fnEnglish!.compareTo(b.fnEnglish!);
@@ -85,9 +86,9 @@ class ObjectBox {
         list.sort((a,b) {
           return  a.lnEnglish!.compareTo(b.lnEnglish!);
         });
-      }
+      }*/
     store.close();
-    return list;
+    return output;
   }
 
   static Future<List<EDetails>> getSearchResult(String searchType, String search) async {

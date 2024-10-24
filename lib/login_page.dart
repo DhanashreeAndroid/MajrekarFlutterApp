@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> checkForAnotherDevice(UserDetails user, String token) async {
-    final macAddress = await getDeviceIdentifier();
+    final macAddress = await getDeviceIdentifier(context);
     if (user.macAddress != "0") {
       print('db mac address : ${user.macAddress!}');
       print('device mac address : $macAddress');
@@ -342,7 +342,7 @@ class _LoginPageState extends State<LoginPage> {
     await ObjectBox.deleteAllBooths();
 
     Directory directory = await getApplicationDocumentsDirectory();
-    var dbPath = "${directory.path}votingaddress1.csv";
+    var dbPath = "${directory.path}${Constant.votingAddressCsvTemp}";
     if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load("assets/votingaddress.csv");
       List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -377,7 +377,7 @@ class _LoginPageState extends State<LoginPage> {
     await ObjectBox.deleteAll();
 
     Directory directory = await getApplicationDocumentsDirectory();
-    var dbPath = "${directory.path}maindata1.csv";
+    var dbPath = "${directory.path}${Constant.mainDataCsvTemp}";
     if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load("assets/maindata.csv");
       List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);

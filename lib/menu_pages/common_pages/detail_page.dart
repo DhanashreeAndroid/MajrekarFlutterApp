@@ -1,3 +1,4 @@
+import 'package:another_telephony/telephony.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/common_pages/print_details.dart';
+import 'package:majrekar_app/menu_pages/common_pages/print_voter_details.dart';
 import 'package:majrekar_app/menu_pages/common_pages/share_image.dart';
 import 'package:majrekar_app/model/DataModel.dart';
-import 'package:telephony/telephony.dart';
 
 import '../../CommonWidget/Constant.dart';
 import '../../CommonWidget/show_snak_bar.dart';
@@ -202,7 +203,18 @@ class _DetailPageState extends State<DetailPage> {
         Navigator.pop(context);
         return false;
       },
-      child: Scaffold(
+      child:Focus(
+      autofocus: true,
+      onKeyEvent: (FocusNode node, KeyEvent event) {
+      if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+      // Mimic back button behavior
+      Navigator.pop(context);
+      return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+      },
+      child:
+      Scaffold(
           backgroundColor: const Color.fromRGBO(218,222,224, 1),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -238,7 +250,7 @@ class _DetailPageState extends State<DetailPage> {
                 ],
               ),
             ),
-          )),
+          )),),
     );
   }
 
@@ -634,14 +646,16 @@ class _DetailPageState extends State<DetailPage> {
                         Navigator.push(context,
                             MaterialPageRoute(builder:
                                 (context) =>  PrintDetails(voterList: voterList,searchType: widget.searchType, )));
-
+                       /* Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) =>  const PrintVoterDetails()));*/
                       },
                       child: const Text(
                         "Print",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
-                            fontSize: 18),
+                            fontSize: 16),
                       ),
                     ),
                   ),
@@ -687,7 +701,7 @@ class _DetailPageState extends State<DetailPage> {
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
-                            fontSize: 18),
+                            fontSize: 16),
                       ),
                     ),
                   ),

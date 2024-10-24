@@ -22,9 +22,21 @@ Future<bool?> showExitPopup(context) async{
                       child: ElevatedButton(
                         onPressed: () {
                           print('yes selected');
-                          if(Platform.isWindows){
-                            deleteData ();
-                            exit(0);
+                          String os = Platform.operatingSystem;
+
+                          if(os == "windows") {
+                            deleteData();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text("Please click on Ok to close the app."),
+                              action: SnackBarAction(
+                                label: 'OK',
+                                textColor: Colors.white,
+                                onPressed: () {
+                                  exit(0);
+                                },
+                              ),
+                            ));
+                            Navigator.of(context).pop();
                           }else{
                             exit(0);
                           }

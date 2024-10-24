@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
 import 'package:majrekar_app/menu_pages/easy_search.dart';
@@ -63,8 +64,18 @@ class _MenuPageState extends State<MenuPage> {
       onWillPop: () async {
         showExitPopup(context);
         return false;
-      },
-      child: Scaffold(
+      },child:Focus(
+              autofocus: true,
+              onKeyEvent: (FocusNode node, KeyEvent event) {
+              if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+              // Mimic back button behavior
+                showExitPopup(context);
+                return KeyEventResult.handled;
+              }
+              return KeyEventResult.ignored;
+              },
+      child:
+    Scaffold(
           body: Stack(
             children: [
               Container(
@@ -89,20 +100,13 @@ class _MenuPageState extends State<MenuPage> {
                           showExitPopup(context);
                         },
                       ),
-                      const SizedBox(height: 20,),
-                      Image.asset("images/logo.jpg",
-                          height: 100,
-                          width: 100),
-                      const SizedBox(height: 5,),
-                      Constant.isShowImageToHeader?
-                      const AutoSizeText(
-                        textAlign: TextAlign.center,
-                        "Copyright © Developed by Majrekar’s Voters Management System",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10),
-                      ): const SizedBox(),
+                      Visibility(
+                        visible: false,
+                        child: Image.asset("images/logo.jpg",
+                            height: 100,
+                            width: 100),
+                      ),
+
                       const SizedBox(height: 10,),
                       Text(
                         vidhan,
@@ -112,22 +116,29 @@ class _MenuPageState extends State<MenuPage> {
                             fontSize: 20),
                       ),
                       const SizedBox(height: 20,),
+                     /* CustomButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context) => const VoterNameSearch()));
+                        }, label: 'Search Voters Name',
+                      ),*/
                       CustomButton(
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
-                                  (context) =>  const VoterListPage(searchType : "Surname wise Search" ,buildingName: "", language: "",)));
+                                  (context) => const EasySearch()));
                         }, label: 'Search Voters Name',
                       ),
                       const SizedBox(height: 20,),
-                      CustomButton(
+                    /*  CustomButton(
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder:
                                   (context) => const EasySearch()));
                         }, label: 'Easy Search',
                       ),
-                      const SizedBox(height: 20,),
+                      const SizedBox(height: 20,),*/
                       CustomButton(
                         onPressed: () {
                           Navigator.push(context,
@@ -208,6 +219,16 @@ class _MenuPageState extends State<MenuPage> {
                         }, label: 'Age Wise Report',
                       ),
                       const SizedBox(height: 20,),
+                      Constant.isShowImageToHeader?
+                      const AutoSizeText(
+                        textAlign: TextAlign.center,
+                        "Copyright © Developed by Majrekar’s Voters Management System",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10),
+                      ): const SizedBox(),
+                      const SizedBox(height: 20,),
 
                     ],
                   ),
@@ -215,6 +236,6 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ],
           )),
-    );
+    ));
   }
 }

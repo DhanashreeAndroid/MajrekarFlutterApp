@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void addUserDetails(UserDetails? user) async {
-      await ObjectBox.updateUserDetails(user!);
+    await ObjectBox.updateUserDetails(user!);
   }
 
   Future<void> importDataOffline(UserDetails user, String token) async {
@@ -118,9 +118,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void addOrUpdateBoothDetail(List<Vidhansabha>? boothList, String? token, String userId) async {
-      await ObjectBox.deleteAllBooths();
-      await ObjectBox.insertAllBooths(boothList!);
-      saveIsUpdatableFlag(userId, token);
+    await ObjectBox.deleteAllBooths();
+    await ObjectBox.insertAllBooths(boothList!);
+    saveIsUpdatableFlag(userId, token);
   }
 
   Future<void> saveIsUpdatableFlag(String user, String? token) async {
@@ -147,7 +147,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState()  {
     super.initState();
-    loadScreen();
   }
 
   Future<void> loadScreen() async {
@@ -238,46 +237,48 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    return  Scaffold(
 
-      body: Stack(
-        children: [
-          Container(
+    return Scaffold(
+      body: SafeArea(
+        child: SizedBox(
+          width: screenWidth,
+          child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('images/background.jpg'),
+                  alignment: Alignment(0, 0),
+                  image: AssetImage('images/promotional.jpg'),
                   fit: BoxFit.fill),
             ),
-          ),
-          Container(
-            color: const Color.fromRGBO(255, 255, 255, 0.50),
-          ),
-          SizedBox(
-            width: screenWidth,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset('images/logo.jpg',
-                  height: 100,
-                  width: 100,),
-                const SizedBox(height: 10),
-                const Text("Majrekar's Voter Management\n System",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 40,
+            alignment: Alignment.bottomCenter,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.all(3),
+                width: 100,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    side: const BorderSide(
+                      width: 1.0,
                       color: Colors.black,
-                      fontFamily: 'FUTURALC',
-                      decoration: TextDecoration.none),),
-                const Text("Search Mobile Software",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20,
-                      color: Colors.black,
-                      fontFamily: 'LatoRegular',
-                      decoration: TextDecoration.none),)
-              ],
+                    ),
+                  ),
+                  onPressed: () {
+                    loadScreen();
+                  },
+                  child: const Text(
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Calibri',
+                          fontWeight: FontWeight.bold),
+                      'Next '), // trying to move to the bottom
+                ),
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

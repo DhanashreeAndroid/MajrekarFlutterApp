@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="D:\flutterApps\Majrekar\majrekar_app_objectbox\android\app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    agpVersion="8.1.0"
+    buildFolder="build"
+    bootClassPath="C:\Users\ACER\AppData\Local\Android\sdk\platforms\android-34\android.jar;C:\Users\ACER\AppData\Local\Android\sdk\build-tools\33.0.1\core-lambda-stubs.jar"
+    javaSourceLevel="17"
+    compileTarget="android-34">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="app_releaseRelease"/>
+</lint-module>

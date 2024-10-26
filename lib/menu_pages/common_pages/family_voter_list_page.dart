@@ -3,7 +3,7 @@ import 'package:another_telephony/telephony.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
-import 'package:majrekar_app/menu_pages/common_pages/print_details.dart';
+import 'package:majrekar_app/menu_pages/common_pages/print_voter_details.dart';
 import 'package:majrekar_app/menu_pages/common_pages/share_image.dart';
 import 'package:majrekar_app/model/DataModel.dart';
 
@@ -192,7 +192,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  PrintDetails(voterList: voterList,searchType: searchType, )));
+                                (context) =>  PrintVoterDetails(voterList: voterList,searchType: searchType, )));
 
                       },
                       child: const Text(

@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
-import 'package:majrekar_app/menu_pages/common_pages/print_details.dart';
 import 'package:majrekar_app/menu_pages/common_pages/print_voter_details.dart';
 import 'package:majrekar_app/menu_pages/common_pages/share_image.dart';
 import 'package:majrekar_app/model/DataModel.dart';
@@ -64,6 +63,8 @@ class _DetailPageState extends State<DetailPage> {
     }
     boothDetails = await ObjectBox.getBoothDetails(widget.data.wardNo!, widget.data.partNo!,
         widget.data.serialNo!);
+    widget.data.boothAddressEnglish = boothDetails?.boothAddressEnglish;
+    widget.data.boothAddressMarathi = boothDetails?.boothAddressMarathi;
 
     selectedShifted = getShiftedDeath();
     selectedDeath = getShiftedDeath();
@@ -643,12 +644,12 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       onPressed: () {
                         List<EDetails> voterList = List<EDetails>.generate(1, (index) => widget.data);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder:
-                                (context) =>  PrintDetails(voterList: voterList,searchType: widget.searchType, )));
                        /* Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context) =>  const PrintVoterDetails()));*/
+                                (context) =>  PrintDetails(voterList: voterList,searchType: widget.searchType, )));
+                    */    Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) =>  PrintVoterDetails(voterList: voterList,searchType: widget.searchType,)));
                       },
                       child: const Text(
                         "Print",

@@ -6,7 +6,7 @@ enum Size {
   extraLarge //extra large
 }
 
-enum Align {
+enum PrinterAlign {
   left, //ESC_ALIGN_LEFT
   center, //ESC_ALIGN_CENTER
   right, //ESC_ALIGN_RIGHT
@@ -31,14 +31,14 @@ extension PrintSize on Size {
   }
 }
 
-extension PrintAlign on Align {
+extension PrintAlign on PrinterAlign {
   int get val {
     switch (this) {
-      case Align.left:
+      case PrinterAlign.left:
         return 0;
-      case Align.center:
+      case PrinterAlign.center:
         return 1;
-      case Align.right:
+      case PrinterAlign.right:
         return 2;
       default:
         return 0;

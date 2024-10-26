@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
+import 'package:majrekar_app/menu_pages/common_pages/print_voter_details.dart';
 
 import '../../database/ObjectBox.dart';
 import '../../model/DataModel.dart';
@@ -11,7 +12,6 @@ import '../CommonWidget/commonButton.dart';
 import '../CommonWidget/show_snak_bar.dart';
 import '../model/VidhansabhaModel.dart';
 import 'common_pages/detail_page.dart';
-import 'common_pages/print_details.dart';
 import 'common_pages/share_image.dart';
 
 class EasyPrintShare extends StatefulWidget {
@@ -237,7 +237,7 @@ class _EasyPrintShareState extends State<EasyPrintShare> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PrintDetails(
+                        builder: (context) => PrintVoterDetails(
                               voterList: voterList,
                               searchType: "Surname",
                             )));

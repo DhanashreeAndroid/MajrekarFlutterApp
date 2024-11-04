@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:6636755008911549707",
-      "lastPropertyId": "22:782532491152360915",
+      "lastPropertyId": "23:7623298576649919824",
       "name": "EDetails",
       "properties": [
         {
@@ -121,6 +121,11 @@
         {
           "id": "22:782532491152360915",
           "name": "votedNonVoted",
+          "type": 9
+        },
+        {
+          "id": "23:7623298576649919824",
+          "name": "mobileNumber",
           "type": 9
         }
       ],

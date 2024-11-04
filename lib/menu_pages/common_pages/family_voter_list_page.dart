@@ -1,5 +1,5 @@
 
-import 'package:another_telephony/telephony.dart';
+//import 'package:another_telephony/telephony.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:majrekar_app/CommonWidget/commonHeader.dart';
@@ -33,7 +33,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
   _FamilyVoterListPageState(this.searchType,  this.surName, this.houseNo, this.buildingAddress);
   late List<EDetails> voterList  ;
   bool isLoading = false;
-  final telephony = Telephony.instance;
+  //final telephony = Telephony.instance;
   final _recipientNumberformKey = GlobalKey<FormState>();
   TextEditingController mobileController = TextEditingController();
 
@@ -360,14 +360,14 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
                           color: Colors.transparent,
                         ),
                       ),
-                      onPressed: () async {
+                      /*onPressed: () async {
                         await openDialer();
-                      },
+                      },*/
                       icon:  const Icon(
                         Icons.call,
                         color: Colors.black,
                         size: 25.0,
-                      ),
+                      ), onPressed: () {  },
                     ),
                   ),
                 ),
@@ -415,10 +415,10 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
   void generateMessage(EDetails data) async{
     String strMessage1 = "Name:${data.lnEnglish!} ${data.fnEnglish!}\nAssembly No:${data.wardNo!}\nPart No:${data.partNo!}\nSerial No:${data.serialNo!}";
     String strMessage2 = "${data.fnEnglish!} ${data.lnEnglish!}\nVoting Center Address: ${data.boothAddressEnglish!} ";
-    await sendDirectSmS(strMessage1);
-    await sendDirectSmS(strMessage2);
+   // await sendDirectSmS(strMessage1);
+    //await sendDirectSmS(strMessage2);
   }
-  void showRequestStatus(SendStatus status) {
+ /* void showRequestStatus(SendStatus status) {
     switch (status) {
       case SendStatus.SENT:
         ShowSnackBar.showSnackBar(context, ShowSnackBar.sent);
@@ -491,7 +491,7 @@ class _FamilyVoterListPageState extends State<FamilyVoterListPage> {
     } catch (e) {
       ShowSnackBar.showSnackBar(context, 'Error occured while sending SMS.');
     }
-  }
+  }*/
 
 
 }

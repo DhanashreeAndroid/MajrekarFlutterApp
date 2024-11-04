@@ -54,6 +54,7 @@ class EDetails {
   String? color;
   String? shiftedDeath;
   String? votedNonVoted;
+  String? mobileNumber;
 
   EDetails(
       {
@@ -78,7 +79,8 @@ class EDetails {
         this.lang,
         this.color,
         this.shiftedDeath,
-        this.votedNonVoted      });
+        this.votedNonVoted ,
+      this.mobileNumber});
 
   EDetails.fromJson(Map<String, dynamic> json) {
 
@@ -103,6 +105,7 @@ class EDetails {
     color                 = json['color'];
     shiftedDeath          = json['shifted_death'];
     votedNonVoted         = json['voted_nonvoted'];
+    mobileNumber         = json['mobile_number'];
 
 
   }
@@ -130,6 +133,7 @@ class EDetails {
     data['color']=color;
     data['shifted_death']=shiftedDeath;
     data['voted_nonvoted']=votedNonVoted;
+    data['mobile_number']=mobileNumber;
     return data;
   }
 

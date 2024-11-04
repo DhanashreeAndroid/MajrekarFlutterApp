@@ -196,7 +196,14 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       } else {
         List<UserDetails> users = await ObjectBox.getUserDetails();
-        apiCall(users.first.userName, users.first.password);
+        if(users.isEmpty){
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder:
+                  (context) => const LoginPage()));
+        }else{
+          apiCall(users.first.userName, users.first.password);
+        }
+
       }
     }
 

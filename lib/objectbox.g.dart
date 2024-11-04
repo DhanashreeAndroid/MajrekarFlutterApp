@@ -24,7 +24,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 6636755008911549707),
       name: 'EDetails',
-      lastPropertyId: const IdUid(22, 782532491152360915),
+      lastPropertyId: const IdUid(23, 7623298576649919824),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -137,6 +137,11 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(22, 782532491152360915),
             name: 'votedNonVoted',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(23, 7623298576649919824),
+            name: 'mobileNumber',
             type: 9,
             flags: 0)
       ],
@@ -383,7 +388,10 @@ ModelDefinition getObjectBoxModel() {
           final votedNonVotedOffset = object.votedNonVoted == null
               ? null
               : fbb.writeString(object.votedNonVoted!);
-          fbb.startTable(23);
+          final mobileNumberOffset = object.mobileNumber == null
+              ? null
+              : fbb.writeString(object.mobileNumber!);
+          fbb.startTable(24);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, dbIdOffset);
           fbb.addOffset(2, wardNoOffset);
@@ -406,6 +414,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(19, colorOffset);
           fbb.addOffset(20, shiftedDeathOffset);
           fbb.addOffset(21, votedNonVotedOffset);
+          fbb.addOffset(22, mobileNumberOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -464,6 +473,9 @@ ModelDefinition getObjectBoxModel() {
           final votedNonVotedParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 46);
+          final mobileNumberParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 48);
           final object = EDetails(
               id: idParam,
               dbId: dbIdParam,
@@ -486,7 +498,8 @@ ModelDefinition getObjectBoxModel() {
               lang: langParam,
               color: colorParam,
               shiftedDeath: shiftedDeathParam,
-              votedNonVoted: votedNonVotedParam);
+              votedNonVoted: votedNonVotedParam,
+              mobileNumber: mobileNumberParam);
 
           return object;
         }),
@@ -779,6 +792,10 @@ class EDetails_ {
   /// see [EDetails.votedNonVoted]
   static final votedNonVoted =
       QueryStringProperty<EDetails>(_entities[0].properties[21]);
+
+  /// see [EDetails.mobileNumber]
+  static final mobileNumber =
+      QueryStringProperty<EDetails>(_entities[0].properties[22]);
 }
 
 /// [UserDetails] entity fields to define ObjectBox queries.

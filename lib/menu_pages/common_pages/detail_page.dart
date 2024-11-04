@@ -1,4 +1,4 @@
-import 'package:another_telephony/telephony.dart';
+//import 'package:another_telephony/telephony.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class _DetailPageState extends State<DetailPage> {
   bool selectedVoted = false;
   bool selectedShifted = false;
   bool selectedDeath = false;
-  final telephony = Telephony.instance;
+  //final telephony = Telephony.instance;
   final _recipientNumberformKey = GlobalKey<FormState>();
   UserDetails? userDetails;
   Vidhansabha? boothDetails;
@@ -114,7 +114,7 @@ class _DetailPageState extends State<DetailPage> {
     }
   }
 
-  void showRequestStatus(SendStatus status) {
+ /* void showRequestStatus(SendStatus status) {
     switch (status) {
       case SendStatus.SENT:
         ShowSnackBar.showSnackBar(context, ShowSnackBar.sent);
@@ -130,9 +130,9 @@ class _DetailPageState extends State<DetailPage> {
         );
         return;
     }
-  }
+  }*/
 
-  Future<void> openDialer() async {
+ /* Future<void> openDialer() async {
     try {
       final isRecipientNumberValid =
       _recipientNumberformKey.currentState!.validate();
@@ -187,7 +187,7 @@ class _DetailPageState extends State<DetailPage> {
     } catch (e) {
       ShowSnackBar.showSnackBar(context, 'Error occured while sending SMS.');
     }
-  }
+  }*/
 
   @override
   void dispose() {
@@ -821,14 +821,14 @@ class _DetailPageState extends State<DetailPage> {
                           color: Colors.transparent,
                         ),
                       ),
-                      onPressed: () async {
+                      /*onPressed: () async {
                         await openDialer();
-                      },
+                      },*/
                       icon:  const Icon(
                         Icons.call,
                         color: Colors.black,
                         size: 25.0,
-                      ),
+                      ), onPressed: () {  },
                     ),
                   ),
                 ),
@@ -852,17 +852,17 @@ class _DetailPageState extends State<DetailPage> {
                   SizedBox(
                     width: 50,
                     child: IconButton(
-                      onPressed: ()async {
+                     /* onPressed: ()async {
                         String strMessage1 = "Name:${widget.data.lnEnglish!} ${widget.data.fnEnglish!}\nAssembly No:${widget.data.wardNo!}\nPart No:${widget.data.partNo!}\nSerial No:${widget.data.serialNo!}";
                         String strMessage2 = "Voting Center Address:${widget.data.boothAddressEnglish!}";
                         await sendDirectSmS(strMessage1);
                         await sendDirectSmS(strMessage2);
-                      },
+                      },*/
                       icon: const Icon(
                         Icons.message,
                         color: Colors.black,
                         size: 25.0,
-                      ),
+                      ), onPressed: () {  },
                     ),
                   ),
                 ),

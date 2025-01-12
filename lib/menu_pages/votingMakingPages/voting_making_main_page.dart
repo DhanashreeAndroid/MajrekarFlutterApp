@@ -14,6 +14,7 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../../CommonWidget/Constant.dart';
 import '../../CommonWidget/commonButton.dart';
+import '../../CommonWidget/commonButtonCustomBorder.dart';
 import '../../CommonWidget/show_snak_bar.dart';
 import '../../CommonWidget/utility.dart';
 import '../../database/ObjectBox.dart';
@@ -104,14 +105,14 @@ class _VotingMakingMainPageState extends State<VotingMakingMainPage> {
       child: Column(
         children: <Widget>[
           const SizedBox(height: 10,),
-          CustomButton(
+          CustomButtonCustomBorder(
             onPressed: () {
               final partNo = userDetails?.userEmail;
               Navigator.push(context,
                   MaterialPageRoute(builder:
                       (context) =>  VoterListPage(searchType : "SerialWise" ,buildingName: partNo!, language: "" ,)));
 
-            }, label: 'Serial wise All Names',
+            }, label: 'Serial wise All Names', borderColor: Colors.red,
           ),
           const SizedBox(
             height: 20,

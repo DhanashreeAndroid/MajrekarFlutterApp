@@ -29,7 +29,7 @@ class AuthService {
       var res = await http.post(
         url,
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
+          "Content-Type": "application/json"
         },
         body: body,
       );

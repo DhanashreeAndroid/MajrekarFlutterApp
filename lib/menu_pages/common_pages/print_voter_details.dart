@@ -76,7 +76,7 @@ class _PrintVoterDetails extends State<PrintVoterDetails> {
           break;
         case BlueThermalPrinter.STATE_ON:
           setState(() {
-            //_connected = false;
+            _connected = false;
             print("bluetooth device state: bluetooth on");
           });
           break;

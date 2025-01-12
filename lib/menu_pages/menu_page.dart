@@ -13,6 +13,7 @@ import 'package:majrekar_app/menu_pages/votingMakingPages/voting_making_main_pag
 
 import '../CommonWidget/Constant.dart';
 import '../CommonWidget/commonButton.dart';
+import '../CommonWidget/commonButtonCustomBorder.dart';
 import '../CommonWidget/showExitPopup.dart';
 import '../database/ObjectBox.dart';
 import '../model/UserModel.dart';
@@ -159,12 +160,12 @@ class _MenuPageState extends State<MenuPage> {
                           child: SizedBox(height: 20,)),
                       Visibility(
                         visible: !Constant.isOffline,
-                        child: CustomButton(
+                        child: CustomButtonCustomBorder(
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder:
                                     (context) => const VotingMakingMainPage()));
-                          }, label: 'Voting Marking Report',
+                          }, label: 'Voting Marking Report', borderColor: Colors.red,
                         ),
                       ),
                       const SizedBox(height: 20,),
